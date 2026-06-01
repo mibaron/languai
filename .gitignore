@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Environment
+.env
+.env.local
+.env.*.local
+*.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Frontend
+frontend/.next/
+frontend/out/
+frontend/.turbo/
+
+# Backend
+backend/db.sqlite3
+backend/staticfiles/
+backend/mediafiles/
+*.log
+
+# Testing
+coverage/
+htmlcov/
+.coverage
+.pytest_cache/
+
+# Type checking
+.mypy_cache/
+
+# Claude local settings
+.claude/settings.local.json

@@ -1,0 +1,66 @@
+[project]
+name = "languai-backend"
+version = "0.1.0"
+description = "LinguAI - German language learning platform backend"
+requires-python = ">=3.12"
+dependencies = [
+    "django>=6.0,<6.1",
+    "djangorestframework>=3.17,<4.0",
+    "django-cors-headers>=4.9,<5.0",
+    "django-filter>=25.2,<26.0",
+    "python-decouple>=3.8,<4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-django>=4.9",
+    "ruff>=0.11",
+    "mypy>=1.14",
+    "django-stubs>=6.0",
+]
+prod = [
+    "gunicorn>=23.0",
+]
+
+[tool.setuptools]
+py-modules = []
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "B",    # bugbear
+    "UP",   # pyupgrade
+    "DJ",   # django-specific
+]
+ignore = [
+    "E501",  # line length handled by formatter
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/migrations/*.py" = ["I001", "E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["apps", "api", "config"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.development"
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+
+[tool.mypy]
+python_version = "3.12"
+plugins = ["mypy_django_plugin.main"]
+ignore_missing_imports = true
+
+[tool.django-stubs]
+django_settings_module = "config.settings.development"
