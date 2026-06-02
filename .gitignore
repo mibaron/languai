@@ -29,6 +29,10 @@ frontend/.next/
 frontend/out/
 frontend/.turbo/
 
+# Generated API client (regenerated from backend schema)
+frontend/src/lib/api/orval/api/generated/
+frontend/src/lib/api/orval/schema.json
+
 # Backend
 backend/db.sqlite3
 backend/staticfiles/

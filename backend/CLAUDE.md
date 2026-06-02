@@ -47,7 +47,15 @@ backend/
 - Permissions: default `IsAuthenticated`, override per-view as needed
 - Pagination: `PageNumberPagination`, page_size=20
 - Filtering: django-filter for list endpoints
-- Consistent response envelope (see root CLAUDE.md API Contract)
+
+### OpenAPI Schema (drf-spectacular)
+- Schema is the single source of truth — the frontend API client is generated from it
+- Use `@extend_schema` and `@extend_schema_view` on all viewsets for accurate schema
+- Use `@extend_schema_field` on SerializerMethodField to explicitly type JSON fields
+- Always use `tags` in schema decorators to organize endpoints (Orval splits by tag)
+- After any serializer/viewset change, run `make generate-api` to update the frontend
+- Verify schema with `make schema` — must produce 0 warnings, 0 errors
+- For auth-gated viewsets, add `swagger_fake_view` guard in `get_queryset()`
 
 ### Database & Models
 - SQLite for now — avoid PostgreSQL-specific features (ArrayField, JSONField with lookups)

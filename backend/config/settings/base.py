@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "django_filters",
+    "drf_spectacular",
     # Local apps
     "apps.users",
     "apps.content",
@@ -98,4 +99,19 @@ REST_FRAMEWORK = {
         "rest_framework.filters.SearchFilter",
         "rest_framework.filters.OrderingFilter",
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+# drf-spectacular
+SPECTACULAR_SETTINGS = {
+    "TITLE": "LinguAI API",
+    "DESCRIPTION": "API for the LinguAI German language learning platform",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "COMPONENT_SPLIT_REQUEST": True,
+    "ENUM_NAME_OVERRIDES": {
+        "CategoryEnum": "apps.content.models.Category",
+        "ContentTypeEnum": "apps.content.models.ContentType",
+    },
+    "SCHEMA_PATH_PREFIX": r"/api/v1/",
 }

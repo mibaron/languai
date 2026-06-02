@@ -9,6 +9,7 @@
         format frontend-format backend-format \
         test frontend-test backend-test \
         migrate makemigrations seed createsuperuser \
+        generate-api schema \
         clean
 
 # ── Help ──────────────────────────────────────
@@ -89,6 +90,14 @@ seed: ## Seed database with German learning content
 
 createsuperuser: ## Create Django admin superuser
 	cd backend && uv run python manage.py createsuperuser
+
+# ── API Generation ────────────────────────────
+
+generate-api: ## Download OpenAPI schema and generate typed API client (backend must be running)
+	cd frontend && npm run generate-api
+
+schema: ## Export OpenAPI schema to file (no server needed)
+	cd backend && uv run python manage.py spectacular --color --file schema.yaml
 
 # ── Type Check ────────────────────────────────
 

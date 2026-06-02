@@ -33,17 +33,37 @@ frontend/
 ```
 
 ### Component Guidelines
+- **One component per .tsx file** — no exceptions. File name matches component name in kebab-case.
 - Use shadcn/ui components as the base — customize via Tailwind, don't override internals
 - Server Components by default; add `"use client"` only when needed (interactivity, hooks, browser APIs)
 - Keep components small and focused — extract when a component exceeds ~100 lines
-- Props interfaces defined inline for simple components, extracted to `types/` when shared
 - Use `cn()` utility (from shadcn) for conditional class merging — never string concatenation
+
+### TypeScript Types
+- **All types must be in dedicated .ts files** — never define interfaces/types inline in .tsx files
+- Component-local types: `types.ts` file next to the component (e.g., `components/learning/types.ts`)
+- Shared types used across pages/features: `src/types/*.ts`
+- **Never use `any`** — every value must have an explicit type. Use `unknown` + type guards if truly dynamic.
+
+### Styling Architecture
+- **Page components (`src/app/**/page.tsx`) must be Tailwind-free** — pure composition of UI components
+  - If a page needs custom Tailwind, it requires explicit permission (rare exception)
+  - Pages should only compose existing components — all styling lives in the components themselves
+- Feature components (`src/components/**`) use Tailwind freely
+- Follow DRY: if the same Tailwind pattern appears 3+ times, extract a component
+
+### API Client (Orval — auto-generated)
+- **All API types, hooks, and Zod schemas are auto-generated** from the backend OpenAPI schema
+- Generated files live in `src/lib/api/orval/api/generated/` — NEVER edit these manually
+- Run `make generate-api` (backend must be running) after any backend API change
+- Orval generates: React Query hooks, TypeScript types, Zod validation schemas
+- Custom axios client with auth interceptor in `src/lib/api/orval/client.ts`
 
 ### Data Fetching
 - Server Components: fetch directly in the component (with `cache` and `revalidate`)
-- Client Components: React Query (TanStack Query) for server state
-- API client in `lib/api/` — typed request/response, centralized error handling
-- Never fetch in `useEffect` — use React Query or Server Components
+- Client Components: use the Orval-generated React Query hooks (e.g., `useSectionsList()`)
+- Never hand-write fetch calls or API types — use the generated hooks
+- Never fetch in `useEffect` — use the generated React Query hooks or Server Components
 
 ### State Management
 - URL state (search params) for shareable/bookmarkable state (current book, tab, search)
