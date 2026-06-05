@@ -1,11 +1,11 @@
 import type { SectionGridProps } from "./types";
 
-export function SectionGrid({ rows }: SectionGridProps) {
+export function SectionGrid({ items }: SectionGridProps) {
   return (
     <div className="grid gap-1.5">
-      {rows.map((row, i) => (
-        <div key={i} className="grid grid-cols-6 gap-1">
-          {row.map((cell, j) =>
+      {items.map((item, i) => (
+        <div key={item.id ?? i} className="grid grid-cols-6 gap-1">
+          {item.cells.map((cell, j) =>
             cell ? (
               <div
                 key={j}

@@ -33,14 +33,14 @@ export function SectionCard({ section }: SectionCardProps) {
           <CardContent className="p-4">
             {section.note && <NoteBox text={section.note} variant="warning" />}
             {section.note2 && <NoteBox text={section.note2} variant="info" />}
-            {section.type === "table" && section.headers && section.rows && (
-              <SectionTable headers={section.headers} rows={section.rows} />
+            {section.type === "table" && section.headers && (
+              <SectionTable headers={section.headers} items={section.items} />
             )}
-            {section.type === "grid" && section.rows && (
-              <SectionGrid rows={section.rows} />
+            {section.type === "grid" && (
+              <SectionGrid items={section.items} />
             )}
-            {section.type === "notes" && section.notes && (
-              <SectionNotes notes={section.notes} />
+            {section.type === "notes" && (
+              <SectionNotes items={section.items} />
             )}
           </CardContent>
         </CollapsibleContent>

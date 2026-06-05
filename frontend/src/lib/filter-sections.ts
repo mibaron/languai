@@ -7,7 +7,6 @@ export function filterSections(sections: Section[], query: string): Section[] {
   return sections.filter(
     (s) =>
       s.title.toLowerCase().includes(term) ||
-      s.rows?.some((row) => row.some((cell) => cell.toLowerCase().includes(term))) ||
-      s.notes?.some((note) => note.toLowerCase().includes(term)),
+      s.items.some((item) => item.cells.some((cell) => cell.toLowerCase().includes(term))),
   );
 }

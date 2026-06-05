@@ -1,4 +1,4 @@
-import type { CategoryId, LevelCode, Section } from "@/types/content";
+import type { CategoryId, LevelCode, Section, SectionItem } from "@/types/content";
 
 export interface LevelSwitcherProps {
   currentLevel: LevelCode;
@@ -28,15 +28,15 @@ export interface SectionCardProps {
 
 export interface SectionTableProps {
   headers: string[];
-  rows: string[][];
+  items: SectionItem[];
 }
 
 export interface SectionGridProps {
-  rows: string[][];
+  items: SectionItem[];
 }
 
 export interface SectionNotesProps {
-  notes: string[];
+  items: SectionItem[];
 }
 
 export interface NoteBoxProps {

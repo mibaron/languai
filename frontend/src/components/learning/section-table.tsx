@@ -9,7 +9,7 @@ import {
 
 import type { SectionTableProps } from "./types";
 
-export function SectionTable({ headers, rows }: SectionTableProps) {
+export function SectionTable({ headers, items }: SectionTableProps) {
   return (
     <div className="overflow-x-auto">
       <Table>
@@ -26,9 +26,9 @@ export function SectionTable({ headers, rows }: SectionTableProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {rows.map((row, i) => (
-            <TableRow key={i} className={i % 2 === 0 ? "bg-stone-50" : "bg-white"}>
-              {row.map((cell, j) => (
+          {items.map((item, i) => (
+            <TableRow key={item.id ?? i} className={i % 2 === 0 ? "bg-stone-50" : "bg-white"}>
+              {item.cells.map((cell, j) => (
                 <TableCell
                   key={j}
                   className={

@@ -1,11 +1,12 @@
-"""Seed the database with German learning content from the reference JSX data."""
+"""Seed the database with German learning content from seed_data.json."""
 
 import json
 from pathlib import Path
 
 from django.core.management.base import BaseCommand
+from django.db import transaction
 
-from apps.content.models import Level, Section
+from apps.content.models import Level, Section, SectionItem
 
 LEVELS = [
     {"code": "A1.1", "name": "Beginner 1", "order": 1},
@@ -30,9 +31,11 @@ class Command(BaseCommand):
             help="Clear existing content before seeding",
         )
 
+    @transaction.atomic
     def handle(self, *args, **options):
         if options["clear"]:
             self.stdout.write("Clearing existing content...")
+            SectionItem.objects.all().delete()
             Section.objects.all().delete()
             Level.objects.all().delete()
 
@@ -61,30 +64,59 @@ class Command(BaseCommand):
             if created:
                 levels_created += 1
 
-        self.stdout.write(f"Levels: {levels_created} created")
-
         sections_created = 0
+        items_created = 0
+
         for level_code, categories in content_data.items():
             level = Level.objects.get(code=level_code)
+
             for category, sections in categories.items():
-                for i, section_data in enumerate(sections):
-                    _, created = Section.objects.get_or_create(
+                for section_order, section_data in enumerate(sections):
+                    content_type = section_data.get("type", "notes")
+
+                    section, created = Section.objects.get_or_create(
                         level=level,
                         category=category,
                         title=section_data["title"],
                         defaults={
-                            "order": i,
-                            "content_type": section_data.get("type", "notes"),
+                            "order": section_order,
+                            "content_type": content_type,
                             "note": section_data.get("note", ""),
                             "note2": section_data.get("note2", ""),
                             "headers": section_data.get("headers", []),
-                            "rows": section_data.get("rows", []),
-                            "notes": section_data.get("notes", []),
                         },
                     )
                     if created:
                         sections_created += 1
 
+                    if not section.items.exists():
+                        items_to_create = []
+
+                        if content_type in ("table", "grid"):
+                            for item_order, row in enumerate(section_data.get("rows", [])):
+                                items_to_create.append(
+                                    SectionItem(
+                                        section=section,
+                                        order=item_order,
+                                        cells=row,
+                                    )
+                                )
+                        elif content_type == "notes":
+                            for item_order, note_text in enumerate(section_data.get("notes", [])):
+                                items_to_create.append(
+                                    SectionItem(
+                                        section=section,
+                                        order=item_order,
+                                        cells=[note_text],
+                                    )
+                                )
+
+                        SectionItem.objects.bulk_create(items_to_create)
+                        items_created += len(items_to_create)
+
         self.stdout.write(
-            self.style.SUCCESS(f"Seeding complete: {sections_created} sections created")
+            self.style.SUCCESS(
+                f"Seeding complete: {levels_created} levels, "
+                f"{sections_created} sections, {items_created} items"
+            )
         )

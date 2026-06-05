@@ -4,14 +4,20 @@ export type CategoryId = "grammar" | "vocab" | "verbs" | "phrases";
 
 export type SectionContentType = "table" | "notes" | "grid";
 
+export interface SectionItem {
+  id?: string;
+  order: number;
+  cells: string[];
+}
+
 export interface Section {
+  id?: string;
   title: string;
   type: SectionContentType;
   note?: string;
   note2?: string;
   headers?: string[];
-  rows?: string[][];
-  notes?: string[];
+  items: SectionItem[];
 }
 
 export type LevelContent = Record<CategoryId, Section[]>;

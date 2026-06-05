@@ -1,5 +1,6 @@
 import uuid
 
+from django.conf import settings
 from django.db import models
 
 
@@ -12,8 +13,6 @@ class TimeStampedModel(models.Model):
 
 
 class Level(TimeStampedModel):
-    """A learning level like A1.1, A1.2, A2.1, A2.2, B1.1, etc."""
-
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     code = models.CharField(max_length=10, unique=True, db_index=True)
     name = models.CharField(max_length=100)
@@ -42,8 +41,6 @@ class ContentType(models.TextChoices):
 
 
 class Section(TimeStampedModel):
-    """A single learning section within a level and category."""
-
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     level = models.ForeignKey(
         Level,
@@ -61,8 +58,13 @@ class Section(TimeStampedModel):
     note = models.TextField(blank=True, default="")
     note2 = models.TextField(blank=True, default="")
     headers = models.JSONField(default=list, blank=True)
-    rows = models.JSONField(default=list, blank=True)
-    notes = models.JSONField(default=list, blank=True)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="created_sections",
+    )
 
     class Meta:
         ordering = ["level", "category", "order"]
@@ -74,3 +76,33 @@ class Section(TimeStampedModel):
 
     def __str__(self) -> str:
         return f"{self.level.code} / {self.get_category_display()} / {self.title}"
+
+
+class SectionItem(TimeStampedModel):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    section = models.ForeignKey(
+        Section,
+        on_delete=models.CASCADE,
+        related_name="items",
+    )
+    order = models.PositiveIntegerField(default=0)
+    cells = models.JSONField(default=list)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="created_items",
+    )
+
+    class Meta:
+        ordering = ["section", "order"]
+        verbose_name = "section item"
+        verbose_name_plural = "section items"
+        indexes = [
+            models.Index(fields=["section", "order"]),
+        ]
+
+    def __str__(self) -> str:
+        preview = str(self.cells[:2]) if len(self.cells) > 2 else str(self.cells)
+        return f"{self.section.title} #{self.order} — {preview}"
