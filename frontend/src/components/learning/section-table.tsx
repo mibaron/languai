@@ -11,14 +11,14 @@ import type { SectionTableProps } from "./types";
 
 export function SectionTable({ headers, items }: SectionTableProps) {
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto rounded-md border">
       <Table>
         <TableHeader>
-          <TableRow className="border-b-2 border-emerald-900">
+          <TableRow className="bg-muted/50">
             {headers.map((header, i) => (
               <TableHead
                 key={i}
-                className="whitespace-nowrap font-serif text-xs uppercase tracking-wider text-emerald-900"
+                className="whitespace-nowrap text-xs font-semibold uppercase tracking-wider"
               >
                 {header}
               </TableHead>
@@ -27,15 +27,11 @@ export function SectionTable({ headers, items }: SectionTableProps) {
         </TableHeader>
         <TableBody>
           {items.map((item, i) => (
-            <TableRow key={item.id ?? i} className={i % 2 === 0 ? "bg-stone-50" : "bg-white"}>
+            <TableRow key={item.id ?? i}>
               {item.cells.map((cell, j) => (
                 <TableCell
                   key={j}
-                  className={
-                    j === 0
-                      ? "font-serif text-sm font-bold text-emerald-950"
-                      : "text-sm text-emerald-800"
-                  }
+                  className={j === 0 ? "font-medium" : "text-muted-foreground"}
                 >
                   {cell}
                 </TableCell>

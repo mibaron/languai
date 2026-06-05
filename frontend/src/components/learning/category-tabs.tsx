@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { CategoryId } from "@/types/content";
 
 import { CATEGORY_TABS } from "@/data/tabs";
@@ -9,21 +9,21 @@ import type { CategoryTabsProps } from "./types";
 
 export function CategoryTabs({ currentCategory, onCategoryChange }: CategoryTabsProps) {
   return (
-    <div className="flex gap-0.5">
-      {CATEGORY_TABS.map((tab) => (
-        <button
-          key={tab.id}
-          onClick={() => onCategoryChange(tab.id as CategoryId)}
-          className={cn(
-            "cursor-pointer rounded-t-lg border-none px-3 py-2 text-sm font-semibold transition-colors",
-            currentCategory === tab.id
-              ? "bg-stone-200 text-emerald-900"
-              : "bg-transparent text-emerald-400 hover:text-emerald-300",
-          )}
-        >
-          {tab.icon} {tab.label}
-        </button>
-      ))}
-    </div>
+    <Tabs
+      value={currentCategory}
+      onValueChange={(value) => onCategoryChange(value as CategoryId)}
+    >
+      <TabsList className="h-auto flex-wrap gap-1 bg-transparent p-0">
+        {CATEGORY_TABS.map((tab) => (
+          <TabsTrigger
+            key={tab.id}
+            value={tab.id}
+            className="rounded-md px-3 py-1.5 text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-none"
+          >
+            {tab.icon} {tab.label}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+    </Tabs>
   );
 }

@@ -5,7 +5,7 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
-import { getUserToken } from "../../utils/auth/cookie-utils";
+import { getUserToken, setUserToken } from "../../utils/auth/cookie-utils";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -30,11 +30,16 @@ export const client = axios.create({
   },
 });
 
+const PUBLIC_PATHS = ["/auth/login/", "/auth/register/"];
+
 client.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
-    const token = getUserToken();
-    if (token) {
-      config.headers.Authorization = `Token ${token}`;
+    const isPublic = PUBLIC_PATHS.some((path) => config.url?.includes(path));
+    if (!isPublic) {
+      const token = getUserToken();
+      if (token) {
+        config.headers.Authorization = `Token ${token}`;
+      }
     }
     return config;
   },
@@ -46,6 +51,9 @@ client.interceptors.request.use(
 client.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error: AxiosError) => {
+    if (error.response?.status === 401) {
+      setUserToken(undefined);
+    }
     return Promise.reject(error);
   },
 );

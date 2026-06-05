@@ -4,22 +4,24 @@ import type { SectionNotesProps } from "./types";
 
 export function SectionNotes({ items }: SectionNotesProps) {
   return (
-    <ul className="m-0 list-none p-0">
+    <div className="space-y-0 rounded-md border divide-y">
       {items.map((item, i) => {
         const text = item.cells[0] ?? "";
+        const isDivider = text.startsWith("─");
         return (
-          <li
+          <div
             key={item.id ?? i}
             className={cn(
-              "px-2 py-1.5 text-sm leading-relaxed text-emerald-950",
-              i < items.length - 1 && "border-b border-stone-200",
-              text.startsWith("─") && "font-serif font-bold",
+              "px-3 py-2 text-sm leading-relaxed",
+              isDivider
+                ? "bg-muted/50 font-semibold text-foreground"
+                : "text-muted-foreground",
             )}
           >
             {text}
-          </li>
+          </div>
         );
       })}
-    </ul>
+    </div>
   );
 }
