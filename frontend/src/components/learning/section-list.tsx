@@ -15,7 +15,7 @@ import { usePersistedSet } from "@/hooks/use-persisted-set";
 import { SectionCard } from "./section-card";
 import type { SectionListProps } from "./types";
 
-export function SectionList({ sections, storageKey }: SectionListProps) {
+export function SectionList({ sections, storageKey, levelCode, category }: SectionListProps) {
   const { openIndices, setOpenIndices, expandAll, collapseAll, allExpanded } =
     usePersistedSet(storageKey, sections.length);
 
@@ -57,7 +57,7 @@ export function SectionList({ sections, storageKey }: SectionListProps) {
                 {section.title}
               </AccordionTrigger>
               <AccordionContent className="px-4 pb-4">
-                <SectionCard section={section} />
+                <SectionCard section={section} levelCode={levelCode} category={category} />
               </AccordionContent>
             </AccordionItem>
           ))}

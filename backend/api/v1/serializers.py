@@ -2,7 +2,8 @@ from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
-from apps.content.models import Level, Section, SectionItem
+from apps.ai_content.models import AIContent, ActionType, UserAIContent
+from apps.content.models import Category, Level, Section, SectionItem
 from apps.progress.models import SectionProgress
 
 User = get_user_model()
@@ -161,3 +162,70 @@ class SectionProgressSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
         read_only_fields = ["id", "completed_at", "updated_at"]
+
+
+# ── AI Content ───────────────────────────────
+
+
+class AIGenerateRequestSerializer(serializers.Serializer):
+    level_code = serializers.CharField(max_length=10)
+    category = serializers.ChoiceField(choices=Category.choices)
+    section_title = serializers.CharField(max_length=255)
+    section_headers = serializers.ListField(child=serializers.CharField(), required=False, default=list)
+    item_cells = serializers.ListField(child=serializers.CharField(), min_length=1)
+    action_type = serializers.ChoiceField(choices=ActionType.choices)
+
+
+class AIContentSerializer(serializers.ModelSerializer):
+    is_saved = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AIContent
+        fields = [
+            "id",
+            "action_type",
+            "level_code",
+            "category",
+            "section_title",
+            "item_cells",
+            "section_headers",
+            "response_text",
+            "response_json",
+            "is_saved",
+            "created_at",
+        ]
+        read_only_fields = fields
+
+    @extend_schema_field(serializers.BooleanField())
+    def get_is_saved(self, obj: AIContent) -> bool:
+        request = self.context.get("request")
+        if not request or not request.user.is_authenticated:
+            return False
+        return obj.saved_by.filter(user=request.user).exists()
+
+
+class UserAIContentSerializer(serializers.ModelSerializer):
+    ai_content = AIContentSerializer(read_only=True)
+
+    class Meta:
+        model = UserAIContent
+        fields = ["id", "ai_content", "share_key", "created_at"]
+        read_only_fields = fields
+
+
+class SharedAIContentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AIContent
+        fields = [
+            "id",
+            "action_type",
+            "level_code",
+            "category",
+            "section_title",
+            "item_cells",
+            "section_headers",
+            "response_text",
+            "response_json",
+            "created_at",
+        ]
+        read_only_fields = fields

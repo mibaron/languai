@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "apps.users",
     "apps.content",
     "apps.progress",
+    "apps.ai_content",
 ]
 
 MIDDLEWARE = [
@@ -119,3 +120,7 @@ SPECTACULAR_SETTINGS = {
 
 # Google OAuth
 GOOGLE_CLIENT_ID = config("GOOGLE_CLIENT_ID", default="")
+
+# OpenRouter AI
+OPENROUTER_API_KEY = config("OPENROUTER_API_KEY", default="")
+OPENROUTER_MODEL = "google/gemini-2.0-flash-001"

@@ -1,3 +1,4 @@
+import { AIButton } from "@/components/ai/ai-button";
 import {
   Table,
   TableBody,
@@ -9,7 +10,7 @@ import {
 
 import type { SectionTableProps } from "./types";
 
-export function SectionTable({ headers, items }: SectionTableProps) {
+export function SectionTable({ headers, items, sectionTitle, levelCode, category }: SectionTableProps) {
   return (
     <div className="overflow-x-auto rounded-md border">
       <Table>
@@ -23,6 +24,7 @@ export function SectionTable({ headers, items }: SectionTableProps) {
                 {header}
               </TableHead>
             ))}
+            <TableHead className="w-10" />
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -36,6 +38,18 @@ export function SectionTable({ headers, items }: SectionTableProps) {
                   {cell}
                 </TableCell>
               ))}
+              <TableCell className="w-10 px-1">
+                <AIButton
+                  context={{
+                    levelCode,
+                    category,
+                    sectionTitle,
+                    sectionHeaders: headers,
+                    itemOrder: item.order ?? i,
+                    itemCells: item.cells,
+                  }}
+                />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

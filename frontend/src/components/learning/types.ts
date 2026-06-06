@@ -23,20 +23,28 @@ export interface ContentPanelProps {
   onCategoryChange: (category: CategoryId) => void;
 }
 
-export interface SectionCardProps {
+export interface SectionContextProps {
+  levelCode: string;
+  category: string;
+}
+
+export interface SectionCardProps extends SectionContextProps {
   section: Section;
 }
 
-export interface SectionTableProps {
+export interface SectionTableProps extends SectionContextProps {
+  sectionTitle: string;
   headers: string[];
   items: SectionItem[];
 }
 
-export interface SectionGridProps {
+export interface SectionGridProps extends SectionContextProps {
+  sectionTitle: string;
   items: SectionItem[];
 }
 
-export interface SectionNotesProps {
+export interface SectionNotesProps extends SectionContextProps {
+  sectionTitle: string;
   items: SectionItem[];
 }
 
@@ -45,7 +53,7 @@ export interface NoteBoxProps {
   variant?: "warning" | "info";
 }
 
-export interface SectionListProps {
+export interface SectionListProps extends SectionContextProps {
   sections: Section[];
   storageKey: string;
 }

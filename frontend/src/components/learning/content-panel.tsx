@@ -37,7 +37,12 @@ export function ContentPanel({
         <CategoryTabs currentCategory={currentCategory} onCategoryChange={onCategoryChange} />
       </div>
 
-      <SectionList sections={sections} storageKey={`sections:${currentLevel}:${currentCategory}`} />
+      <SectionList
+        sections={sections}
+        storageKey={`sections:${currentLevel}:${currentCategory}`}
+        levelCode={currentLevel}
+        category={currentCategory}
+      />
     </div>
   );
 }
