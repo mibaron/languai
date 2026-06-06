@@ -3,6 +3,17 @@ export interface LoginCredentials {
   password: string;
 }
 
+export interface RegisterCredentials {
+  username: string;
+  email: string;
+  password: string;
+  native_language?: string;
+}
+
+export interface GoogleCredential {
+  credential: string;
+}
+
 export interface AuthResponse {
   user: AuthUser;
   token: string;
@@ -23,6 +34,7 @@ export interface AuthError {
     message: string;
   };
   username?: string[];
+  email?: string[];
   password?: string[];
   non_field_errors?: string[];
 }

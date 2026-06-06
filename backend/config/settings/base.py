@@ -116,3 +116,6 @@ SPECTACULAR_SETTINGS = {
     },
     "SCHEMA_PATH_PREFIX": r"/api/v1/",
 }
+
+# Google OAuth
+GOOGLE_CLIENT_ID = config("GOOGLE_CLIENT_ID", default="")

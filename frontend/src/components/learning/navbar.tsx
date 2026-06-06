@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { BookOpen, LogOut, Search, User, X } from "lucide-react";
 
@@ -13,10 +14,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { logout } from "@/lib/api/auth";
+import { setUserToken } from "@/lib/utils/auth/cookie-utils";
 
 import type { NavbarProps } from "./types";
 
 export function Navbar({ search, onSearchChange }: NavbarProps) {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } finally {
+      setUserToken(undefined);
+      router.push("/login");
+    }
+  };
   return (
     <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="mx-auto flex h-14 max-w-7xl items-center gap-4 px-6">
@@ -59,7 +72,7 @@ export function Navbar({ search, onSearchChange }: NavbarProps) {
               Profile
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />
               Log out
             </DropdownMenuItem>

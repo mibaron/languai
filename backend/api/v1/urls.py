@@ -2,6 +2,7 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from .views import (
+    GoogleLoginView,
     LevelViewSet,
     LoginView,
     LogoutView,
@@ -23,6 +24,7 @@ items_router.register("", SectionItemViewSet, basename="section-item")
 urlpatterns = [
     path("auth/register/", RegisterView.as_view(), name="auth-register"),
     path("auth/login/", LoginView.as_view(), name="auth-login"),
+    path("auth/google/", GoogleLoginView.as_view(), name="auth-google"),
     path("auth/logout/", LogoutView.as_view(), name="auth-logout"),
     path("auth/me/", MeView.as_view(), name="auth-me"),
     path("sections/<uuid:section_pk>/items/", include(items_router.urls)),

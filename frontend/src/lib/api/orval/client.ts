@@ -30,7 +30,7 @@ export const client = axios.create({
   },
 });
 
-const PUBLIC_PATHS = ["/auth/login/", "/auth/register/"];
+const PUBLIC_PATHS = ["/auth/login/", "/auth/register/", "/auth/google/"];
 
 client.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {

@@ -8,16 +8,18 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { getAuthErrorMessage, login } from "@/lib/api/auth";
+import { getAuthErrorMessage, register } from "@/lib/api/auth";
 import { setUserToken } from "@/lib/utils/auth/cookie-utils";
 
 import { GoogleSignInButton } from "./google-sign-in-button";
-import type { LoginFormProps, LoginFormState } from "./types";
+import type { RegisterFormProps, RegisterFormState } from "./types";
 
-export function LoginForm({ onSuccess }: LoginFormProps) {
-  const [state, setState] = useState<LoginFormState>({
+export function RegisterForm({ onSuccess }: RegisterFormProps) {
+  const [state, setState] = useState<RegisterFormState>({
     username: "",
+    email: "",
     password: "",
+    confirmPassword: "",
     error: null,
     isLoading: false,
   });
@@ -34,11 +36,18 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (state.password !== state.confirmPassword) {
+      setState((prev) => ({ ...prev, error: "Passwords do not match" }));
+      return;
+    }
+
     setState((prev) => ({ ...prev, error: null, isLoading: true }));
 
     try {
-      const response = await login({
+      const response = await register({
         username: state.username,
+        email: state.email,
         password: state.password,
       });
       setUserToken(response.token);
@@ -52,14 +61,17 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
     }
   };
 
+  const isFormValid =
+    state.username && state.email && state.password && state.confirmPassword;
+
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-2 text-center">
         <h1 className="text-3xl font-bold tracking-tight">
-          Deutsch Spickzettel
+          Create an account
         </h1>
         <p className="text-sm text-muted-foreground">
-          Sign in to track your German learning progress
+          Start your German learning journey
         </p>
       </CardHeader>
 
@@ -89,12 +101,29 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
             <Input
               id="username"
               type="text"
-              placeholder="Enter your username"
+              placeholder="Choose a username"
               value={state.username}
-              onChange={(e) => setState((prev) => ({ ...prev, username: e.target.value }))}
+              onChange={(e) =>
+                setState((prev) => ({ ...prev, username: e.target.value }))
+              }
               required
               autoComplete="username"
               autoFocus
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="Enter your email"
+              value={state.email}
+              onChange={(e) =>
+                setState((prev) => ({ ...prev, email: e.target.value }))
+              }
+              required
+              autoComplete="email"
             />
           </div>
 
@@ -103,28 +132,52 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
             <Input
               id="password"
               type="password"
-              placeholder="Enter your password"
+              placeholder="Create a password (min. 8 characters)"
               value={state.password}
-              onChange={(e) => setState((prev) => ({ ...prev, password: e.target.value }))}
+              onChange={(e) =>
+                setState((prev) => ({ ...prev, password: e.target.value }))
+              }
               required
-              autoComplete="current-password"
+              autoComplete="new-password"
+              minLength={8}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="confirmPassword">Confirm Password</Label>
+            <Input
+              id="confirmPassword"
+              type="password"
+              placeholder="Confirm your password"
+              value={state.confirmPassword}
+              onChange={(e) =>
+                setState((prev) => ({
+                  ...prev,
+                  confirmPassword: e.target.value,
+                }))
+              }
+              required
+              autoComplete="new-password"
             />
           </div>
         </CardContent>
 
-        <CardFooter className="flex flex-col gap-4 mt-8 pt-8">
+        <CardFooter className="flex flex-col gap-4">
           <Button
             type="submit"
             className="w-full"
-            disabled={state.isLoading || !state.username || !state.password}
+            disabled={state.isLoading || !isFormValid}
           >
-            {state.isLoading ? "Signing in..." : "Sign in"}
+            {state.isLoading ? "Creating account..." : "Create account"}
           </Button>
 
           <p className="text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{" "}
-            <Link href="/register" className="font-medium text-primary hover:underline">
-              Create one
+            Already have an account?{" "}
+            <Link
+              href="/login"
+              className="font-medium text-primary hover:underline"
+            >
+              Sign in
             </Link>
           </p>
         </CardFooter>

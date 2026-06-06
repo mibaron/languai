@@ -1,17 +1,25 @@
+import logging
+
+from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model
 from django.db.models import Count
 from drf_spectacular.utils import extend_schema, extend_schema_view
+from google.auth.transport import requests as google_requests
+from google.oauth2 import id_token as google_id_token
 from rest_framework import generics, permissions, status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+logger = logging.getLogger(__name__)
+
 from apps.content.models import Level, Section, SectionItem
 from apps.progress.models import SectionProgress
 
 from .permissions import IsAdminOrReadOnly, IsOwnerOrAdminOrReadOnly
 from .serializers import (
+    GoogleLoginSerializer,
     LevelSerializer,
     LevelWriteSerializer,
     LoginSerializer,
@@ -80,6 +88,60 @@ class LogoutView(APIView):
     def post(self, request: Request) -> Response:
         request.user.auth_token.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class GoogleLoginView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = GoogleLoginSerializer
+
+    @extend_schema(
+        summary="Login or register with Google",
+        tags=["auth"],
+        request=GoogleLoginSerializer,
+        responses={200: UserSerializer},
+    )
+    def post(self, request: Request) -> Response:
+        serializer = GoogleLoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        if not settings.GOOGLE_CLIENT_ID:
+            return Response(
+                {"error": {"code": "google_not_configured", "message": "Google login is not configured"}},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
+            )
+
+        try:
+            idinfo = google_id_token.verify_oauth2_token(
+                serializer.validated_data["credential"],
+                google_requests.Request(),
+                settings.GOOGLE_CLIENT_ID,
+            )
+        except ValueError:
+            logger.warning("Invalid Google token received")
+            return Response(
+                {"error": {"code": "invalid_token", "message": "Invalid Google credential"}},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        email = idinfo["email"]
+        user = User.objects.filter(email=email).first()
+
+        if user is None:
+            username = email.split("@")[0]
+            base_username = username
+            counter = 1
+            while User.objects.filter(username=username).exists():
+                username = f"{base_username}{counter}"
+                counter += 1
+
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=None,
+            )
+
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response({"user": UserSerializer(user).data, "token": token.key})
 
 
 class MeView(generics.RetrieveUpdateAPIView):
