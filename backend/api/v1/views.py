@@ -15,7 +15,7 @@ from rest_framework.views import APIView
 
 logger = logging.getLogger(__name__)
 
-from apps.ai_content.models import AIContent, UserAIContent
+from apps.ai_content.models import AIContent, LLMModel, UserAIContent
 from apps.ai_content.services import generate_ai_content
 from apps.content.models import Level, Section, SectionItem
 from apps.progress.models import SectionProgress
@@ -27,6 +27,7 @@ from .serializers import (
     GoogleLoginSerializer,
     LevelSerializer,
     LevelWriteSerializer,
+    LLMModelSerializer,
     LoginSerializer,
     RegisterSerializer,
     SectionDetailSerializer,
@@ -145,6 +146,7 @@ class GoogleLoginView(APIView):
                 username=username,
                 email=email,
                 password=None,
+                credit_balance=settings.WELCOME_CREDIT_EUR,
             )
 
         token, _ = Token.objects.get_or_create(user=user)
@@ -317,6 +319,15 @@ class AIGenerateView(APIView):
                 status=status.HTTP_503_SERVICE_UNAVAILABLE,
             )
 
+        if request.user.credit_balance <= 0:
+            return Response(
+                {"error": {"code": "insufficient_credit", "message": "You have no credit remaining"}},
+                status=status.HTTP_402_PAYMENT_REQUIRED,
+            )
+
+        model_id = data.get("model")
+        save_as_default = data.get("save_as_default", False)
+
         try:
             ai_content = generate_ai_content(
                 user=request.user,
@@ -326,6 +337,7 @@ class AIGenerateView(APIView):
                 section_headers=data.get("section_headers", []),
                 item_cells=data["item_cells"],
                 action_type=data["action_type"],
+                model_id=model_id,
             )
         except Exception:
             logger.exception("AI generation failed")
@@ -333,6 +345,12 @@ class AIGenerateView(APIView):
                 {"error": {"code": "ai_error", "message": "Failed to generate AI content"}},
                 status=status.HTTP_502_BAD_GATEWAY,
             )
+
+        if save_as_default and model_id:
+            llm_model = LLMModel.objects.filter(model_id=model_id, is_active=True).first()
+            if llm_model:
+                request.user.preferred_model = llm_model
+                request.user.save(update_fields=["preferred_model"])
 
         return Response(AIContentSerializer(ai_content, context={"request": request}).data)
 
@@ -411,3 +429,30 @@ class SharedAIContentView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         return Response(SharedAIContentSerializer(saved.ai_content).data)
+
+
+# ── LLM Models ──────────────────────────────
+
+
+class LLMModelListView(generics.ListAPIView):
+    serializer_class = LLMModelSerializer
+    permission_classes = [permissions.AllowAny]
+    pagination_class = None
+
+    @extend_schema(summary="List active LLM models", tags=["ai-content"])
+    def get(self, request: Request, *args: object, **kwargs: object) -> Response:
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return LLMModel.objects.filter(is_active=True)
+
+
+class UserCreditView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @extend_schema(summary="Get user credit balance", tags=["ai-content"])
+    def get(self, request: Request) -> Response:
+        return Response({
+            "credit_balance": str(request.user.credit_balance),
+            "currency": "EUR",
+        })

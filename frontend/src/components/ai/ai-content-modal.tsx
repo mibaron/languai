@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
-import { Bookmark, BookOpen, HelpCircle, Lightbulb, Loader2 } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Bookmark, BookOpen, Cpu, HelpCircle, Lightbulb, Loader2 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,12 +13,20 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { generateAIContent, saveAIContent } from "@/lib/api/ai";
-import type { AIActionType, AIContentResponse, AIExamplesResponse, AIExplanationResponse, AIQuizResponse } from "@/types/ai-content";
+import { generateAIContent, getCredit, listModels, saveAIContent } from "@/lib/api/ai";
+import type {
+  AIActionType,
+  AIContentResponse,
+  AIExamplesResponse,
+  AIExplanationResponse,
+  AIQuizResponse,
+  LLMModelOption,
+} from "@/types/ai-content";
 
 import { AIExamplesView } from "./ai-examples-view";
 import { AIExplanationView } from "./ai-explanation-view";
 import { AIQuizView } from "./ai-quiz-view";
+import { ModelSelect } from "./model-select";
 import type { AIContentModalProps } from "./types";
 
 const ACTION_BUTTONS = [
@@ -33,6 +41,32 @@ export function AIContentModal({ open, onOpenChange, context }: AIContentModalPr
   const [isSaved, setIsSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeAction, setActiveAction] = useState<AIActionType | null>(null);
+
+  const [models, setModels] = useState<LLMModelOption[]>([]);
+  const [selectedModel, setSelectedModel] = useState<string>("");
+  const [saveAsDefault, setSaveAsDefault] = useState(false);
+  const [creditBalance, setCreditBalance] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    listModels().then((data) => {
+      setModels(data);
+      const defaultModel = data.find((m) => m.is_default);
+      if (defaultModel && !selectedModel) {
+        setSelectedModel(defaultModel.model_id);
+      }
+    }).catch(() => {});
+    getCredit().then((data) => {
+      setCreditBalance(parseFloat(data.credit_balance));
+    }).catch(() => {});
+  }, [open]);
+
+  const promptsRemaining = useMemo(() => {
+    if (creditBalance === null || !selectedModel) return null;
+    const model = models.find((m) => m.model_id === selectedModel);
+    if (!model || model.approx_cost_eur <= 0) return null;
+    return Math.floor(creditBalance / model.approx_cost_eur);
+  }, [creditBalance, selectedModel, models]);
 
   const handleAction = useCallback(async (actionType: AIActionType) => {
     setIsLoading(true);
@@ -49,15 +83,24 @@ export function AIContentModal({ open, onOpenChange, context }: AIContentModalPr
         section_headers: context.sectionHeaders,
         item_cells: context.itemCells,
         action_type: actionType,
+        model: selectedModel || undefined,
+        save_as_default: saveAsDefault || undefined,
       });
       setContent(response);
       setIsSaved(response.is_saved);
-    } catch {
-      setError("Failed to generate AI content. Please try again.");
+      getCredit().then((data) => setCreditBalance(parseFloat(data.credit_balance))).catch(() => {});
+    } catch (err: unknown) {
+      const errorObj = err as { response?: { data?: { error?: { code?: string } } } };
+      if (errorObj?.response?.data?.error?.code === "insufficient_credit") {
+        setError("You're out of credit. This content hasn't been generated before for this model.");
+        setCreditBalance(0);
+      } else {
+        setError("Failed to generate AI content. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }
-  }, [context]);
+  }, [context, selectedModel, saveAsDefault]);
 
   const handleSave = useCallback(async () => {
     if (!content) return;
@@ -75,13 +118,14 @@ export function AIContentModal({ open, onOpenChange, context }: AIContentModalPr
       setError(null);
       setActiveAction(null);
       setIsSaved(false);
+      setSaveAsDefault(false);
     }
     onOpenChange(nextOpen);
   }, [onOpenChange]);
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{context.sectionTitle}</DialogTitle>
           <DialogDescription>
@@ -93,6 +137,26 @@ export function AIContentModal({ open, onOpenChange, context }: AIContentModalPr
         </DialogHeader>
 
         <Separator />
+
+        {models.length > 0 && (
+          <div className="space-y-2">
+            <ModelSelect
+              models={models}
+              value={selectedModel}
+              onChange={setSelectedModel}
+              promptsRemaining={promptsRemaining}
+            />
+            <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer">
+              <input
+                type="checkbox"
+                checked={saveAsDefault}
+                onChange={(e) => setSaveAsDefault(e.target.checked)}
+                className="rounded border-input"
+              />
+              Save as my default model
+            </label>
+          </div>
+        )}
 
         <div className="flex gap-2">
           {ACTION_BUTTONS.map(({ type, label, icon: Icon }) => (
@@ -124,6 +188,14 @@ export function AIContentModal({ open, onOpenChange, context }: AIContentModalPr
 
         {content && !isLoading && (
           <div className="space-y-4">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <Cpu className="h-3.5 w-3.5" />
+              <span>Generated by</span>
+              <Badge variant="outline" className="text-xs">
+                {content.model_used}
+              </Badge>
+            </div>
+
             {content.action_type === "examples" && content.response_json && (
               <AIExamplesView data={content.response_json as AIExamplesResponse} />
             )}

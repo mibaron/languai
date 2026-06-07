@@ -123,4 +123,8 @@ GOOGLE_CLIENT_ID = config("GOOGLE_CLIENT_ID", default="")
 
 # OpenRouter AI
 OPENROUTER_API_KEY = config("OPENROUTER_API_KEY", default="")
-OPENROUTER_MODEL = "google/gemini-2.0-flash-001"
+OPENROUTER_DEFAULT_MODEL = "google/gemini-2.5-flash"
+
+# Credits
+WELCOME_CREDIT_EUR = config("WELCOME_CREDIT_EUR", default=0.50, cast=float)
+USD_TO_EUR_RATE = config("USD_TO_EUR_RATE", default=0.92, cast=float)

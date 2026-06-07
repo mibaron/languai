@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
-from apps.ai_content.models import AIContent, ActionType, UserAIContent
+from apps.ai_content.models import AIContent, ActionType, LLMModel, UserAIContent
 from apps.content.models import Category, Level, Section, SectionItem
 from apps.progress.models import SectionProgress
 
@@ -20,7 +20,12 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ["username", "email", "password", "native_language"]
 
     def create(self, validated_data: dict) -> User:
-        return User.objects.create_user(**validated_data)
+        from django.conf import settings
+
+        user = User.objects.create_user(**validated_data)
+        user.credit_balance = settings.WELCOME_CREDIT_EUR
+        user.save(update_fields=["credit_balance"])
+        return user
 
 
 class LoginSerializer(serializers.Serializer):
@@ -33,10 +38,17 @@ class GoogleLoginSerializer(serializers.Serializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    preferred_model_id = serializers.CharField(
+        source="preferred_model.model_id", read_only=True, default=None
+    )
+
     class Meta:
         model = User
-        fields = ["id", "username", "email", "native_language", "current_level", "date_joined"]
-        read_only_fields = ["id", "date_joined"]
+        fields = [
+            "id", "username", "email", "native_language", "current_level",
+            "credit_balance", "preferred_model_id", "date_joined",
+        ]
+        read_only_fields = ["id", "date_joined", "credit_balance", "preferred_model_id"]
 
 
 # ── Levels ────────────────────────────────────
@@ -174,6 +186,8 @@ class AIGenerateRequestSerializer(serializers.Serializer):
     section_headers = serializers.ListField(child=serializers.CharField(), required=False, default=list)
     item_cells = serializers.ListField(child=serializers.CharField(), min_length=1)
     action_type = serializers.ChoiceField(choices=ActionType.choices)
+    model = serializers.CharField(max_length=100, required=False, default=None)
+    save_as_default = serializers.BooleanField(required=False, default=False)
 
 
 class AIContentSerializer(serializers.ModelSerializer):
@@ -191,6 +205,7 @@ class AIContentSerializer(serializers.ModelSerializer):
             "section_headers",
             "response_text",
             "response_json",
+            "model_used",
             "is_saved",
             "created_at",
         ]
@@ -226,6 +241,28 @@ class SharedAIContentSerializer(serializers.ModelSerializer):
             "section_headers",
             "response_text",
             "response_json",
+            "model_used",
             "created_at",
         ]
         read_only_fields = fields
+
+
+# ── LLM Models ──────────────────────────────
+
+
+class LLMModelSerializer(serializers.ModelSerializer):
+    approx_cost_eur = serializers.SerializerMethodField()
+
+    class Meta:
+        model = LLMModel
+        fields = ["id", "model_id", "name", "provider", "is_default", "approx_cost_eur"]
+        read_only_fields = fields
+
+    @extend_schema_field(serializers.FloatField())
+    def get_approx_cost_eur(self, obj: LLMModel) -> float:
+        from django.conf import settings
+
+        avg_input_tokens = 500
+        avg_output_tokens = 1500
+        cost_usd = float(obj.prompt_price) * avg_input_tokens + float(obj.completion_price) * avg_output_tokens
+        return round(cost_usd * settings.USD_TO_EUR_RATE, 8)

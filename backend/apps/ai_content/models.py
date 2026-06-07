@@ -1,9 +1,35 @@
 import uuid
+from decimal import Decimal
 
 from django.conf import settings
 from django.db import models
 
 from apps.content.models import TimeStampedModel
+
+
+class LLMModel(TimeStampedModel):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    model_id = models.CharField(max_length=100, unique=True, db_index=True)
+    name = models.CharField(max_length=200)
+    provider = models.CharField(max_length=100)
+    prompt_price = models.DecimalField(max_digits=20, decimal_places=12, default=Decimal("0"))
+    completion_price = models.DecimalField(max_digits=20, decimal_places=12, default=Decimal("0"))
+    context_length = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=False)
+    is_default = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ["provider", "name"]
+        verbose_name = "LLM model"
+        verbose_name_plural = "LLM models"
+
+    def __str__(self) -> str:
+        return f"{self.name} ({self.model_id})"
+
+    def save(self, *args: object, **kwargs: object) -> None:
+        if self.is_default:
+            LLMModel.objects.filter(is_default=True).exclude(pk=self.pk).update(is_default=False)
+        super().save(*args, **kwargs)
 
 
 class ActionType(models.TextChoices):
@@ -23,9 +49,11 @@ class AIContent(TimeStampedModel):
     item_cells = models.JSONField(default=list)
     section_headers = models.JSONField(default=list, blank=True)
 
+    prompt_messages = models.JSONField(default=list)
     response_text = models.TextField()
     response_json = models.JSONField(null=True, blank=True)
-    model_used = models.CharField(max_length=50, default="")
+    model_used = models.CharField(max_length=100, default="")
+    cost_usd = models.DecimalField(max_digits=10, decimal_places=8, default=Decimal("0"))
 
     class Meta:
         ordering = ["-created_at"]
@@ -33,16 +61,16 @@ class AIContent(TimeStampedModel):
         verbose_name_plural = "AI content"
         constraints = [
             models.UniqueConstraint(
-                fields=["item_fingerprint", "action_type"],
-                name="unique_fingerprint_action",
+                fields=["item_fingerprint", "action_type", "model_used"],
+                name="unique_fingerprint_action_model",
             ),
         ]
         indexes = [
-            models.Index(fields=["item_fingerprint", "action_type"]),
+            models.Index(fields=["item_fingerprint", "action_type", "model_used"]),
         ]
 
     def __str__(self) -> str:
-        return f"{self.section_title} — {self.get_action_type_display()}"
+        return f"{self.section_title} — {self.get_action_type_display()} ({self.model_used})"
 
 
 class UserAIContent(TimeStampedModel):
@@ -86,6 +114,7 @@ class AIInteraction(TimeStampedModel):
         on_delete=models.CASCADE,
         related_name="interactions",
     )
+    cost_usd = models.DecimalField(max_digits=10, decimal_places=8, default=Decimal("0"))
 
     class Meta:
         ordering = ["-created_at"]

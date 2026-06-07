@@ -1,11 +1,12 @@
 import hashlib
 import json
 import logging
+from decimal import Decimal
 
 from django.conf import settings
 from openai import OpenAI
 
-from .models import AIContent, AIInteraction
+from .models import AIContent, AIInteraction, LLMModel
 
 logger = logging.getLogger(__name__)
 
@@ -51,6 +52,18 @@ def compute_fingerprint(
     return hashlib.sha256(payload.encode()).hexdigest()
 
 
+def resolve_model(model_id: str | None, user: object) -> str:
+    if model_id:
+        if LLMModel.objects.filter(model_id=model_id, is_active=True).exists():
+            return model_id
+    if hasattr(user, "preferred_model") and user.preferred_model:
+        return user.preferred_model.model_id
+    default = LLMModel.objects.filter(is_default=True, is_active=True).first()
+    if default:
+        return default.model_id
+    return settings.OPENROUTER_DEFAULT_MODEL
+
+
 def generate_ai_content(
     *,
     user: object,
@@ -60,16 +73,19 @@ def generate_ai_content(
     section_headers: list[str],
     item_cells: list[str],
     action_type: str,
+    model_id: str | None = None,
 ) -> AIContent:
+    resolved_model = resolve_model(model_id, user)
     fingerprint = compute_fingerprint(level_code, category, section_title, item_cells)
 
     existing = AIContent.objects.filter(
         item_fingerprint=fingerprint,
         action_type=action_type,
+        model_used=resolved_model,
     ).first()
 
     if existing:
-        AIInteraction.objects.create(user=user, ai_content=existing)
+        AIInteraction.objects.create(user=user, ai_content=existing, cost_usd=Decimal("0"))
         return existing
 
     system_prompt = SYSTEM_PROMPTS[action_type].format(level_code=level_code)
@@ -86,23 +102,36 @@ def generate_ai_content(
         item_cells=" | ".join(item_cells),
     )
 
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_message},
+    ]
+
     client = OpenAI(
         base_url="https://openrouter.ai/api/v1",
         api_key=settings.OPENROUTER_API_KEY,
     )
 
     response = client.chat.completions.create(
-        model=settings.OPENROUTER_MODEL,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_message},
-        ],
+        model=resolved_model,
+        messages=messages,
         max_tokens=1500,
         temperature=0.7,
     )
 
     response_text = response.choices[0].message.content or ""
-    model_used = response.model or settings.OPENROUTER_MODEL
+    model_used = response.model or resolved_model
+
+    cost_usd = Decimal("0")
+    raw = response.model_dump() if hasattr(response, "model_dump") else {}
+    usage = raw.get("usage", {}) or {}
+    if usage.get("cost") is not None:
+        cost_usd = Decimal(str(usage["cost"]))
+
+    cost_eur = cost_usd * Decimal(str(settings.USD_TO_EUR_RATE))
+    if hasattr(user, "credit_balance"):
+        user.credit_balance = max(Decimal("0"), user.credit_balance - cost_eur)
+        user.save(update_fields=["credit_balance"])
 
     response_json = None
     try:
@@ -121,11 +150,13 @@ def generate_ai_content(
         section_title=section_title,
         item_cells=item_cells,
         section_headers=section_headers,
+        prompt_messages=messages,
         response_text=response_text,
         response_json=response_json,
         model_used=model_used,
+        cost_usd=cost_usd,
     )
 
-    AIInteraction.objects.create(user=user, ai_content=ai_content)
+    AIInteraction.objects.create(user=user, ai_content=ai_content, cost_usd=cost_usd)
 
     return ai_content

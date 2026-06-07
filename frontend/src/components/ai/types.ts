@@ -5,6 +5,7 @@ import type {
   AIExplanationResponse,
   AIItemContext,
   AIQuizResponse,
+  LLMModelOption,
 } from "@/types/ai-content";
 
 export interface AIButtonProps {
@@ -33,4 +34,11 @@ export interface AIResponseViewProps {
   content: AIContentResponse;
   onSave: () => void;
   isSaved: boolean;
+}
+
+export interface ModelSelectProps {
+  models: LLMModelOption[];
+  value: string;
+  onChange: (value: string) => void;
+  promptsRemaining: number | null;
 }

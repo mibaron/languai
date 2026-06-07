@@ -16,6 +16,8 @@ export interface AIGenerateRequest {
   section_headers?: string[];
   item_cells: string[];
   action_type: AIActionType;
+  model?: string;
+  save_as_default?: boolean;
 }
 
 export interface AIContentResponse {
@@ -28,6 +30,7 @@ export interface AIContentResponse {
   section_headers: string[];
   response_text: string;
   response_json: AIExamplesResponse | AIQuizResponse | AIExplanationResponse | null;
+  model_used: string;
   is_saved: boolean;
   created_at: string;
 }
@@ -52,6 +55,20 @@ export interface AIExplanationResponse {
   explanation: string;
   key_points: string[];
   common_mistakes: string[];
+}
+
+export interface LLMModelOption {
+  id: string;
+  model_id: string;
+  name: string;
+  provider: string;
+  is_default: boolean;
+  approx_cost_eur: number;
+}
+
+export interface UserCreditResponse {
+  credit_balance: string;
+  currency: string;
 }
 
 export interface UserAIContentItem {
