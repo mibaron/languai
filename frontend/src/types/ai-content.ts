@@ -9,6 +9,13 @@ export interface AIItemContext {
   itemCells: string[];
 }
 
+export interface AIItemContentRequest {
+  level_code: string;
+  category: string;
+  section_title: string;
+  item_cells: string[];
+}
+
 export interface AIGenerateRequest {
   level_code: string;
   category: string;
@@ -18,6 +25,7 @@ export interface AIGenerateRequest {
   action_type: AIActionType;
   model?: string;
   save_as_default?: boolean;
+  regenerate?: boolean;
 }
 
 export interface AIContentResponse {

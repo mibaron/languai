@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Bookmark, BookOpen, Cpu, HelpCircle, Lightbulb, Loader2 } from "lucide-react";
+import { BookOpen, HelpCircle, Lightbulb, Loader2, Plus } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,19 +13,21 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { generateAIContent, getCredit, listModels, saveAIContent } from "@/lib/api/ai";
+import {
+  deleteAIContent,
+  generateAIContent,
+  getCredit,
+  listItemContent,
+  listModels,
+  saveAIContent,
+} from "@/lib/api/ai";
 import type {
   AIActionType,
   AIContentResponse,
-  AIExamplesResponse,
-  AIExplanationResponse,
-  AIQuizResponse,
   LLMModelOption,
 } from "@/types/ai-content";
 
-import { AIExamplesView } from "./ai-examples-view";
-import { AIExplanationView } from "./ai-explanation-view";
-import { AIQuizView } from "./ai-quiz-view";
+import { AIContentCard } from "./ai-content-card";
 import { ModelSelect } from "./model-select";
 import type { AIContentModalProps } from "./types";
 
@@ -36,9 +38,10 @@ const ACTION_BUTTONS = [
 ];
 
 export function AIContentModal({ open, onOpenChange, context }: AIContentModalProps) {
-  const [content, setContent] = useState<AIContentResponse | null>(null);
+  const [allContent, setAllContent] = useState<AIContentResponse[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeAction, setActiveAction] = useState<AIActionType | null>(null);
 
@@ -47,8 +50,29 @@ export function AIContentModal({ open, onOpenChange, context }: AIContentModalPr
   const [saveAsDefault, setSaveAsDefault] = useState(false);
   const [creditBalance, setCreditBalance] = useState<number | null>(null);
 
+  const loadExistingContent = useCallback(async () => {
+    setIsInitialLoading(true);
+    try {
+      const data = await listItemContent({
+        level_code: context.levelCode,
+        category: context.category,
+        section_title: context.sectionTitle,
+        item_cells: context.itemCells,
+      });
+      setAllContent(data);
+      if (data.length > 0 && !activeAction) {
+        setActiveAction(data[0].action_type);
+      }
+    } catch {
+      // silent — empty state is fine
+    } finally {
+      setIsInitialLoading(false);
+    }
+  }, [context, activeAction]);
+
   useEffect(() => {
     if (!open) return;
+    loadExistingContent();
     listModels().then((data) => {
       setModels(data);
       const defaultModel = data.find((m) => m.is_default);
@@ -68,12 +92,25 @@ export function AIContentModal({ open, onOpenChange, context }: AIContentModalPr
     return Math.floor(creditBalance / model.approx_cost_eur);
   }, [creditBalance, selectedModel, models]);
 
-  const handleAction = useCallback(async (actionType: AIActionType) => {
+  const contentByAction = useMemo(() => {
+    const map: Record<string, AIContentResponse[]> = {};
+    for (const c of allContent) {
+      if (!map[c.action_type]) map[c.action_type] = [];
+      map[c.action_type].push(c);
+    }
+    return map;
+  }, [allContent]);
+
+  const activeContent = activeAction ? contentByAction[activeAction] ?? [] : [];
+
+  const hasContentForSelectedModel = activeAction
+    ? activeContent.some((c) => c.model_used === selectedModel)
+    : false;
+
+  const handleGenerate = useCallback(async (actionType: AIActionType, regenerate = false) => {
     setIsLoading(true);
     setError(null);
     setActiveAction(actionType);
-    setContent(null);
-    setIsSaved(false);
 
     try {
       const response = await generateAIContent({
@@ -85,9 +122,21 @@ export function AIContentModal({ open, onOpenChange, context }: AIContentModalPr
         action_type: actionType,
         model: selectedModel || undefined,
         save_as_default: saveAsDefault || undefined,
+        regenerate: regenerate || undefined,
       });
-      setContent(response);
-      setIsSaved(response.is_saved);
+
+      setAllContent((prev) => {
+        if (regenerate) {
+          const filtered = prev.filter(
+            (c) => !(c.action_type === actionType && c.model_used === response.model_used)
+          );
+          return [response, ...filtered];
+        }
+        const exists = prev.some((c) => c.id === response.id);
+        if (exists) return prev;
+        return [response, ...prev];
+      });
+
       getCredit().then((data) => setCreditBalance(parseFloat(data.credit_balance))).catch(() => {});
     } catch (err: unknown) {
       const errorObj = err as { response?: { data?: { error?: { code?: string } } } };
@@ -102,22 +151,32 @@ export function AIContentModal({ open, onOpenChange, context }: AIContentModalPr
     }
   }, [context, selectedModel, saveAsDefault]);
 
-  const handleSave = useCallback(async () => {
-    if (!content) return;
+  const handleDelete = useCallback(async (id: string) => {
+    setIsDeleting(true);
     try {
-      await saveAIContent(content.id);
-      setIsSaved(true);
+      await deleteAIContent(id);
+      setAllContent((prev) => prev.filter((c) => c.id !== id));
     } catch {
-      setError("Failed to save. Please try again.");
+      setError("Failed to delete. Please try again.");
+    } finally {
+      setIsDeleting(false);
     }
-  }, [content]);
+  }, []);
+
+  const handleRegenerate = useCallback(async (content: AIContentResponse) => {
+    setSelectedModel(content.model_used);
+    await handleGenerate(content.action_type, true);
+  }, [handleGenerate]);
+
+  const handleSave = useCallback(async (id: string) => {
+    await saveAIContent(id);
+  }, []);
 
   const handleOpenChange = useCallback((nextOpen: boolean) => {
     if (!nextOpen) {
-      setContent(null);
+      setAllContent([]);
       setError(null);
       setActiveAction(null);
-      setIsSaved(false);
       setSaveAsDefault(false);
     }
     onOpenChange(nextOpen);
@@ -159,24 +218,39 @@ export function AIContentModal({ open, onOpenChange, context }: AIContentModalPr
         )}
 
         <div className="flex gap-2">
-          {ACTION_BUTTONS.map(({ type, label, icon: Icon }) => (
-            <Button
-              key={type}
-              variant={activeAction === type ? "default" : "outline"}
-              size="sm"
-              onClick={() => handleAction(type)}
-              disabled={isLoading}
-              className="flex-1"
-            >
-              <Icon className="mr-1.5 h-4 w-4" />
-              {label}
-            </Button>
-          ))}
+          {ACTION_BUTTONS.map(({ type, label, icon: Icon }) => {
+            const count = contentByAction[type]?.length ?? 0;
+            return (
+              <Button
+                key={type}
+                variant={activeAction === type ? "default" : "outline"}
+                size="sm"
+                onClick={() => {
+                  if (activeAction === type) return;
+                  setActiveAction(type);
+                  setError(null);
+                }}
+                disabled={isLoading}
+                className="flex-1 gap-1.5"
+              >
+                <Icon className="h-4 w-4" />
+                {label}
+                {count > 0 && (
+                  <Badge
+                    variant={activeAction === type ? "secondary" : "outline"}
+                    className="ml-1 h-5 min-w-5 px-1 text-[10px]"
+                  >
+                    {count}
+                  </Badge>
+                )}
+              </Button>
+            );
+          })}
         </div>
 
-        {isLoading && (
-          <div className="flex items-center justify-center py-8">
-            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        {isInitialLoading && (
+          <div className="flex items-center justify-center py-6">
+            <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
           </div>
         )}
 
@@ -186,46 +260,46 @@ export function AIContentModal({ open, onOpenChange, context }: AIContentModalPr
           </div>
         )}
 
-        {content && !isLoading && (
-          <div className="space-y-4">
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Cpu className="h-3.5 w-3.5" />
-              <span>Generated by</span>
-              <Badge variant="outline" className="text-xs">
-                {content.model_used}
-              </Badge>
-            </div>
+        {activeAction && !isInitialLoading && (
+          <div className="space-y-3">
+            {activeContent.map((c) => (
+              <AIContentCard
+                key={c.id}
+                content={c}
+                onSave={handleSave}
+                onDelete={handleDelete}
+                onRegenerate={handleRegenerate}
+                isDeleting={isDeleting}
+              />
+            ))}
 
-            {content.action_type === "examples" && content.response_json && (
-              <AIExamplesView data={content.response_json as AIExamplesResponse} />
-            )}
-            {content.action_type === "quiz" && content.response_json && (
-              <AIQuizView data={content.response_json as AIQuizResponse} />
-            )}
-            {content.action_type === "explanation" && content.response_json && (
-              <AIExplanationView data={content.response_json as AIExplanationResponse} />
-            )}
-
-            {!content.response_json && (
-              <div className="whitespace-pre-wrap rounded-md border bg-muted/50 p-3 text-sm">
-                {content.response_text}
+            {isLoading && (
+              <div className="flex items-center justify-center py-6">
+                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
               </div>
             )}
 
-            <Button
-              variant={isSaved ? "secondary" : "outline"}
-              size="sm"
-              onClick={handleSave}
-              disabled={isSaved}
-              className="w-full"
-            >
-              <Bookmark className="mr-1.5 h-4 w-4" />
-              {isSaved ? "Saved" : "Save to my collection"}
-            </Button>
+            {!isLoading && !hasContentForSelectedModel && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleGenerate(activeAction)}
+                className="w-full"
+              >
+                <Plus className="mr-1.5 h-4 w-4" />
+                Generate with {models.find((m) => m.model_id === selectedModel)?.name ?? selectedModel}
+              </Button>
+            )}
+
+            {!isLoading && activeContent.length === 0 && (
+              <p className="py-2 text-center text-sm text-muted-foreground">
+                No content generated yet. Click the button above to generate.
+              </p>
+            )}
           </div>
         )}
 
-        {!content && !isLoading && !error && (
+        {!activeAction && !isInitialLoading && allContent.length === 0 && (
           <p className="py-4 text-center text-sm text-muted-foreground">
             Choose an action above to get AI-powered help with this item.
           </p>

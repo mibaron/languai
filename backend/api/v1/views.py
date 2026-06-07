@@ -16,7 +16,7 @@ from rest_framework.views import APIView
 logger = logging.getLogger(__name__)
 
 from apps.ai_content.models import AIContent, LLMModel, UserAIContent
-from apps.ai_content.services import generate_ai_content
+from apps.ai_content.services import InsufficientCreditError, compute_fingerprint, generate_ai_content
 from apps.content.models import Level, Section, SectionItem
 from apps.progress.models import SectionProgress
 
@@ -24,6 +24,7 @@ from .permissions import IsAdminOrReadOnly, IsOwnerOrAdminOrReadOnly
 from .serializers import (
     AIContentSerializer,
     AIGenerateRequestSerializer,
+    AIItemContentRequestSerializer,
     GoogleLoginSerializer,
     LevelSerializer,
     LevelWriteSerializer,
@@ -319,14 +320,9 @@ class AIGenerateView(APIView):
                 status=status.HTTP_503_SERVICE_UNAVAILABLE,
             )
 
-        if request.user.credit_balance <= 0:
-            return Response(
-                {"error": {"code": "insufficient_credit", "message": "You have no credit remaining"}},
-                status=status.HTTP_402_PAYMENT_REQUIRED,
-            )
-
         model_id = data.get("model")
         save_as_default = data.get("save_as_default", False)
+        regenerate = data.get("regenerate", False)
 
         try:
             ai_content = generate_ai_content(
@@ -338,6 +334,12 @@ class AIGenerateView(APIView):
                 item_cells=data["item_cells"],
                 action_type=data["action_type"],
                 model_id=model_id,
+                regenerate=regenerate,
+            )
+        except InsufficientCreditError:
+            return Response(
+                {"error": {"code": "insufficient_credit", "message": "You have no credit remaining"}},
+                status=status.HTTP_402_PAYMENT_REQUIRED,
             )
         except Exception:
             logger.exception("AI generation failed")
@@ -429,6 +431,50 @@ class SharedAIContentView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         return Response(SharedAIContentSerializer(saved.ai_content).data)
+
+
+class AIItemContentView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @extend_schema(
+        summary="List all generated content for a learning item",
+        tags=["ai-content"],
+        request=AIItemContentRequestSerializer,
+        responses={200: AIContentSerializer(many=True)},
+    )
+    def post(self, request: Request) -> Response:
+        serializer = AIItemContentRequestSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        fingerprint = compute_fingerprint(
+            level_code=data["level_code"],
+            category=data["category"],
+            section_title=data["section_title"],
+            item_cells=data["item_cells"],
+        )
+
+        contents = AIContent.objects.filter(item_fingerprint=fingerprint)
+        return Response(
+            AIContentSerializer(contents, many=True, context={"request": request}).data
+        )
+
+
+class AIContentDeleteView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @extend_schema(
+        summary="Delete a generated AI content entry",
+        tags=["ai-content"],
+        responses={204: None},
+    )
+    def delete(self, request: Request, pk: str) -> Response:
+        try:
+            ai_content = AIContent.objects.get(pk=pk)
+        except AIContent.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        ai_content.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # ── LLM Models ──────────────────────────────

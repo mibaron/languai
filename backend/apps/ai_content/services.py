@@ -64,6 +64,10 @@ def resolve_model(model_id: str | None, user: object) -> str:
     return settings.OPENROUTER_DEFAULT_MODEL
 
 
+class InsufficientCreditError(Exception):
+    pass
+
+
 def generate_ai_content(
     *,
     user: object,
@@ -74,19 +78,30 @@ def generate_ai_content(
     item_cells: list[str],
     action_type: str,
     model_id: str | None = None,
+    regenerate: bool = False,
 ) -> AIContent:
     resolved_model = resolve_model(model_id, user)
     fingerprint = compute_fingerprint(level_code, category, section_title, item_cells)
 
-    existing = AIContent.objects.filter(
-        item_fingerprint=fingerprint,
-        action_type=action_type,
-        model_used=resolved_model,
-    ).first()
+    if regenerate:
+        AIContent.objects.filter(
+            item_fingerprint=fingerprint,
+            action_type=action_type,
+            model_used=resolved_model,
+        ).delete()
+    else:
+        existing = AIContent.objects.filter(
+            item_fingerprint=fingerprint,
+            action_type=action_type,
+            model_used=resolved_model,
+        ).first()
 
-    if existing:
-        AIInteraction.objects.create(user=user, ai_content=existing, cost_usd=Decimal("0"))
-        return existing
+        if existing:
+            AIInteraction.objects.create(user=user, ai_content=existing, cost_usd=Decimal("0"))
+            return existing
+
+    if hasattr(user, "credit_balance") and user.credit_balance <= 0:
+        raise InsufficientCreditError
 
     system_prompt = SYSTEM_PROMPTS[action_type].format(level_code=level_code)
 

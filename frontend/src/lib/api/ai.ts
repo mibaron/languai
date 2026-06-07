@@ -1,9 +1,25 @@
 import { client } from "@/lib/api/orval/client";
-import type { AIContentResponse, AIGenerateRequest, LLMModelOption, UserAIContentItem, UserCreditResponse } from "@/types/ai-content";
+import type {
+  AIContentResponse,
+  AIGenerateRequest,
+  AIItemContentRequest,
+  LLMModelOption,
+  UserAIContentItem,
+  UserCreditResponse,
+} from "@/types/ai-content";
 
 export async function generateAIContent(request: AIGenerateRequest): Promise<AIContentResponse> {
   const response = await client.post<AIContentResponse>("/ai/generate/", request);
   return response.data;
+}
+
+export async function listItemContent(request: AIItemContentRequest): Promise<AIContentResponse[]> {
+  const response = await client.post<AIContentResponse[]>("/ai/item-content/", request);
+  return response.data;
+}
+
+export async function deleteAIContent(id: string): Promise<void> {
+  await client.delete(`/ai/content/${id}/`);
 }
 
 export async function saveAIContent(aiContentId: string): Promise<void> {

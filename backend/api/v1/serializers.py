@@ -179,6 +179,13 @@ class SectionProgressSerializer(serializers.ModelSerializer):
 # ── AI Content ───────────────────────────────
 
 
+class AIItemContentRequestSerializer(serializers.Serializer):
+    level_code = serializers.CharField(max_length=10)
+    category = serializers.CharField(max_length=20)
+    section_title = serializers.CharField(max_length=255)
+    item_cells = serializers.ListField(child=serializers.CharField(), min_length=1)
+
+
 class AIGenerateRequestSerializer(serializers.Serializer):
     level_code = serializers.CharField(max_length=10)
     category = serializers.ChoiceField(choices=Category.choices)
@@ -188,6 +195,7 @@ class AIGenerateRequestSerializer(serializers.Serializer):
     action_type = serializers.ChoiceField(choices=ActionType.choices)
     model = serializers.CharField(max_length=100, required=False, default=None)
     save_as_default = serializers.BooleanField(required=False, default=False)
+    regenerate = serializers.BooleanField(required=False, default=False)
 
 
 class AIContentSerializer(serializers.ModelSerializer):

@@ -36,6 +36,14 @@ export interface AIResponseViewProps {
   isSaved: boolean;
 }
 
+export interface AIContentCardProps {
+  content: AIContentResponse;
+  onSave: (id: string) => Promise<void>;
+  onDelete: (id: string) => void;
+  onRegenerate: (content: AIContentResponse) => void;
+  isDeleting: boolean;
+}
+
 export interface ModelSelectProps {
   models: LLMModelOption[];
   value: string;

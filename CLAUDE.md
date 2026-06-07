@@ -61,6 +61,48 @@ The `german-cheatsheet.jsx` file defines the core domain:
 - **Content types**: table (headers + rows), notes (bullet list), grid (matrix layout)
 - Each section has: title, type, optional note/note2, and type-specific data
 
+### AI-Powered Learning Assistance
+
+The app provides AI help for every learning item (verbs, grammar, phrases). Users click an AI button next to any item to open a modal where they can request examples, quizzes, or explanations.
+
+#### Architecture
+- **LLM Provider**: OpenRouter.ai (OpenAI-compatible SDK with custom `base_url`)
+- **Backend service**: `apps/ai_content/services.py` — builds prompts, calls OpenRouter, parses JSON responses
+- **Model catalog**: `LLMModel` table synced from OpenRouter's `/api/v1/models` endpoint via `python manage.py sync_models`. Admin enables specific models (`is_active=True`) and sets one as platform default (`is_default=True`)
+- **Caching/dedup**: Content-addressable fingerprinting (SHA-256 of `level_code + category + section_title + sorted(item_cells)`). Unique constraint on `(fingerprint, action_type, model_used)` — same item can have responses from different models without collision
+- **Prompt storage**: Every OpenRouter call saves the exact `messages` array (`prompt_messages` JSONField on `AIContent`) for analysis
+- **Cost tracking**: OpenRouter returns `usage.cost` (USD) in response body. Stored on both `AIContent` (generation cost) and `AIInteraction` (per-request cost, 0 for cache hits). Credit deducted in EUR using `USD_TO_EUR_RATE`
+
+#### Credit System
+- Users get `WELCOME_CREDIT_EUR` (default €0.50) on registration (both regular and Google OAuth)
+- `User.credit_balance` (EUR) deducted on each non-cached AI generation
+- Frontend shows "~N prompts left" based on selected model's `approx_cost_eur` (estimated from avg 500 input + 1500 output tokens)
+- Users can still click action buttons with 0 credit — cache hits are free. Only blocked (402) when a fresh generation is needed and credit is 0
+- Credit top-up/purchase flow is not yet implemented — admin can manually edit `credit_balance` in Django admin
+
+#### Key Design Decisions
+- **Static frontend data**: Learning content comes from `src/data/books.ts`, not from the API. Item identification uses SHA-256 fingerprints rather than database IDs
+- **Model selection**: Users choose LLM model per-request in the modal, with "save as default" option. Resolution order: request param → `user.preferred_model` → platform default (`LLMModel.is_default`) → `OPENROUTER_DEFAULT_MODEL` setting
+- **shadcn/ui wrappers**: Never modify `src/components/ui/` files. Create wrapper components in feature directories (e.g., `components/ai/model-select.tsx` wraps `DropdownMenu`)
+- **base-ui quirk**: `DropdownMenuLabel` (`MenuPrimitive.GroupLabel`) must be inside a `DropdownMenuGroup` — it crashes without `MenuGroupContext`
+
+#### AI API Endpoints
+```
+GET  /api/v1/ai/models/            # Active models (public, no auth)
+GET  /api/v1/ai/credit/            # User credit balance (auth required)
+POST /api/v1/ai/generate/          # Generate content (auth required, accepts model + save_as_default)
+POST /api/v1/ai/<uuid>/save/       # Save to user collection
+GET  /api/v1/ai/saved/             # List saved content
+DELETE /api/v1/ai/saved/<uuid>/    # Remove from saved
+POST /api/v1/ai/saved/<uuid>/share/ # Generate share key
+GET  /api/v1/ai/shared/<key>/      # View shared content (public)
+```
+
+#### Management Commands
+```bash
+python manage.py sync_models       # Fetch/update models from OpenRouter (new models default to is_active=False)
+```
+
 ### Environment Variables
 - Frontend `.env.local`: `NEXT_PUBLIC_API_URL`
 - Backend `.env`: `SECRET_KEY`, `DEBUG`, `ALLOWED_HOSTS`, `DATABASE_URL`

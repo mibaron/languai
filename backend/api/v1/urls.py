@@ -2,9 +2,11 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from .views import (
+    AIContentDeleteView,
     AIContentSaveView,
     AIContentShareView,
     AIGenerateView,
+    AIItemContentView,
     GoogleLoginView,
     LevelViewSet,
     LLMModelListView,
@@ -37,6 +39,8 @@ urlpatterns = [
     path("auth/me/", MeView.as_view(), name="auth-me"),
     path("ai/models/", LLMModelListView.as_view(), name="ai-models"),
     path("ai/credit/", UserCreditView.as_view(), name="ai-credit"),
+    path("ai/item-content/", AIItemContentView.as_view(), name="ai-item-content"),
+    path("ai/content/<uuid:pk>/", AIContentDeleteView.as_view(), name="ai-content-delete"),
     path("ai/generate/", AIGenerateView.as_view(), name="ai-generate"),
     path("ai/saved/", UserSavedAIContentView.as_view(), name="ai-saved-list"),
     path("ai/<uuid:pk>/save/", AIContentSaveView.as_view(), name="ai-save"),
