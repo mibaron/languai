@@ -1,12 +1,15 @@
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
 import type { AIExplanationViewProps } from "./types";
 
 export function AIExplanationView({ data }: AIExplanationViewProps) {
   return (
     <div className="space-y-4">
       <div className="prose prose-sm dark:prose-invert max-w-none">
-        <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>
           {data.explanation}
-        </p>
+        </ReactMarkdown>
       </div>
 
       {data.key_points.length > 0 && (
