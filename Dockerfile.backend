@@ -15,7 +15,7 @@ RUN uv sync --frozen --no-dev --extra prod
 
 COPY backend/ .
 
-RUN uv run python manage.py collectstatic --noinput
+RUN DJANGO_SETTINGS_MODULE=config.settings.base uv run python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
