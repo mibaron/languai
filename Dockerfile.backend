@@ -11,9 +11,10 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 WORKDIR /app
 
 COPY backend/pyproject.toml backend/uv.lock ./
-RUN uv sync --frozen --no-dev --extra prod
+RUN uv sync --no-dev --extra prod
 
 COPY backend/ .
+RUN uv run python -c "import psycopg" && echo "psycopg OK"
 
 RUN DJANGO_SETTINGS_MODULE=config.settings.base uv run python manage.py collectstatic --noinput
 
