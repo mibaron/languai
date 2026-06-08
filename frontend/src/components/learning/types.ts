@@ -23,6 +23,14 @@ export interface ContentPanelProps {
   onCategoryChange: (category: CategoryId) => void;
 }
 
+export interface ContentFilterDrawerProps {
+  currentLevel: LevelCode;
+  currentCategory: CategoryId;
+  onLevelChange: (level: LevelCode) => void;
+  onCategoryChange: (category: CategoryId) => void;
+  sectionCount: number;
+}
+
 export interface SectionContextProps {
   levelCode: string;
   category: string;

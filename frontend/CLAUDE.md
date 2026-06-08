@@ -34,7 +34,7 @@ frontend/
 
 ### Component Guidelines
 - **One component per .tsx file** — no exceptions. File name matches component name in kebab-case.
-- Use shadcn/ui components as the base — customize via Tailwind, don't override internals
+- **Never modify files in `src/components/ui/`** — these are pure shadcn/ui components and must stay untouched. Newly added shadcn components depend on the originals for styles. To customize behavior or styling, create a wrapper component in the relevant feature directory (e.g., `components/ai/model-select.tsx` wraps `DropdownMenu`, `components/ui/confirm-dialog.tsx` wraps `Dialog`). Custom types for wrapper components go in a co-located `types.ts`.
 - Server Components by default; add `"use client"` only when needed (interactivity, hooks, browser APIs)
 - Keep components small and focused — extract when a component exceeds ~100 lines
 - Use `cn()` utility (from shadcn) for conditional class merging — never string concatenation

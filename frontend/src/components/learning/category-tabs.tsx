@@ -13,7 +13,7 @@ export function CategoryTabs({ currentCategory, onCategoryChange }: CategoryTabs
       value={currentCategory}
       onValueChange={(value) => onCategoryChange(value as CategoryId)}
     >
-      <TabsList className="h-auto flex-wrap gap-1 bg-transparent p-0">
+      <TabsList className="!h-auto flex-wrap gap-1 bg-transparent p-0">
         {CATEGORY_TABS.map((tab) => (
           <TabsTrigger
             key={tab.id}

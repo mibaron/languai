@@ -88,14 +88,16 @@ The app provides AI help for every learning item (verbs, grammar, phrases). User
 
 #### AI API Endpoints
 ```
-GET  /api/v1/ai/models/            # Active models (public, no auth)
-GET  /api/v1/ai/credit/            # User credit balance (auth required)
-POST /api/v1/ai/generate/          # Generate content (auth required, accepts model + save_as_default)
-POST /api/v1/ai/<uuid>/save/       # Save to user collection
-GET  /api/v1/ai/saved/             # List saved content
-DELETE /api/v1/ai/saved/<uuid>/    # Remove from saved
-POST /api/v1/ai/saved/<uuid>/share/ # Generate share key
-GET  /api/v1/ai/shared/<key>/      # View shared content (public)
+GET    /api/v1/ai/models/              # Active models (public, no auth)
+GET    /api/v1/ai/credit/              # User credit balance (auth required)
+POST   /api/v1/ai/generate/            # Generate content (auth, accepts model + save_as_default + regenerate)
+POST   /api/v1/ai/item-content/        # List all AI content for a specific item (by fingerprint)
+DELETE /api/v1/ai/content/<uuid>/      # Delete AI content (admin)
+POST   /api/v1/ai/<uuid>/save/         # Save to user collection
+GET    /api/v1/ai/saved/               # List saved content
+DELETE /api/v1/ai/saved/<uuid>/        # Remove from saved
+POST   /api/v1/ai/saved/<uuid>/share/  # Generate share key
+GET    /api/v1/ai/shared/<key>/        # View shared content (public)
 ```
 
 #### Management Commands

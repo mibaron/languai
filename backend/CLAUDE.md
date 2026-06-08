@@ -23,8 +23,9 @@ backend/
 │   └── wsgi.py
 ├── apps/
 │   ├── content/          # Core learning content (books, sections, items)
-│   ├── users/            # Custom user model, auth
-│   └── progress/         # User learning progress tracking
+│   ├── users/            # Custom user model, auth, credit balance, preferred LLM
+│   ├── progress/         # User learning progress tracking
+│   └── ai_content/       # AI-generated content, LLM model catalog, interactions
 ├── api/
 │   └── v1/               # API version 1 (ViewSets, serializers, urls)
 ├── tests/                # Test directory mirroring apps structure
