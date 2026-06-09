@@ -3,6 +3,8 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     env_file: .env.production
+    networks:
+      - languai
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -17,6 +19,8 @@ services:
       dockerfile: Dockerfile.backend
     restart: unless-stopped
     env_file: .env.production
+    networks:
+      - languai
     depends_on:
       db:
         condition: service_healthy
@@ -31,6 +35,8 @@ services:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://langu-ai.de}
         NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${NEXT_PUBLIC_GOOGLE_CLIENT_ID:-}
     restart: unless-stopped
+    networks:
+      - languai
     expose:
       - "3000"
 
@@ -41,6 +47,8 @@ services:
       - "80:80"
       - "443:443"
       - "443:443/udp"
+    networks:
+      - languai
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
@@ -48,6 +56,10 @@ services:
     depends_on:
       - backend
       - frontend
+
+networks:
+  languai:
+    driver: bridge
 
 volumes:
   pgdata:
