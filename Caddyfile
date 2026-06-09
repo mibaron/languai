@@ -1,4 +1,4 @@
-langu-ai.de {
+langu-ai.de, www.langu-ai.de {
 	handle /api/* {
 		reverse_proxy backend:8000
 	}
