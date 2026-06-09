@@ -8,6 +8,8 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="").split(",")
 
 CORS_ALLOWED_ORIGINS = config("CORS_ALLOWED_ORIGINS", default="").split(",")
 
+CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="").split(",")
+
 # PostgreSQL
 DATABASES = {
     "default": {
