@@ -8,7 +8,8 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { getAuthErrorMessage, login } from "@/lib/api/auth";
+import { authLoginCreate } from "@/lib/api/orval/api/generated/auth/auth";
+import { getAuthErrorMessage } from "@/lib/utils/auth/error-utils";
 import { setUserToken } from "@/lib/utils/auth/cookie-utils";
 
 import { GoogleSignInButton } from "./google-sign-in-button";
@@ -37,7 +38,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
     setState((prev) => ({ ...prev, error: null, isLoading: true }));
 
     try {
-      const response = await login({
+      const response = await authLoginCreate({
         username: state.username,
         password: state.password,
       });

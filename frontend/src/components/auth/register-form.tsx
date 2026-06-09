@@ -8,7 +8,8 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { getAuthErrorMessage, register } from "@/lib/api/auth";
+import { authRegisterCreate } from "@/lib/api/orval/api/generated/auth/auth";
+import { getAuthErrorMessage } from "@/lib/utils/auth/error-utils";
 import { setUserToken } from "@/lib/utils/auth/cookie-utils";
 
 import { GoogleSignInButton } from "./google-sign-in-button";
@@ -45,7 +46,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
     setState((prev) => ({ ...prev, error: null, isLoading: true }));
 
     try {
-      const response = await register({
+      const response = await authRegisterCreate({
         username: state.username,
         email: state.email,
         password: state.password,

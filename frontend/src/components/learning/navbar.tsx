@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { logout } from "@/lib/api/auth";
+import { authLogoutCreate } from "@/lib/api/orval/api/generated/auth/auth";
 import { setUserToken } from "@/lib/utils/auth/cookie-utils";
 
 import type { NavbarProps } from "./types";
@@ -24,7 +24,7 @@ export function Navbar({ search, onSearchChange }: NavbarProps) {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      await authLogoutCreate();
     } finally {
       setUserToken(undefined);
       router.push("/login");

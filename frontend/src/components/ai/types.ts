@@ -1,11 +1,9 @@
+import type { AIContent, LLMModel } from "@/lib/api/orval/api/generated/model";
 import type {
-  AIActionType,
-  AIContentResponse,
   AIExamplesResponse,
   AIExplanationResponse,
   AIItemContext,
   AIQuizResponse,
-  LLMModelOption,
 } from "@/types/ai-content";
 
 export interface AIButtonProps {
@@ -31,21 +29,21 @@ export interface AIExplanationViewProps {
 }
 
 export interface AIResponseViewProps {
-  content: AIContentResponse;
+  content: AIContent;
   onSave: () => void;
   isSaved: boolean;
 }
 
 export interface AIContentCardProps {
-  content: AIContentResponse;
+  content: AIContent;
   onSave: (id: string) => Promise<void>;
   onDelete: (id: string) => void;
-  onRegenerate: (content: AIContentResponse) => void;
+  onRegenerate: (content: AIContent) => void;
   isDeleting: boolean;
 }
 
 export interface ModelSelectProps {
-  models: LLMModelOption[];
+  models: LLMModel[];
   value: string;
   onChange: (value: string) => void;
   promptsRemaining: number | null;

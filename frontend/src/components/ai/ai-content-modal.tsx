@@ -14,18 +14,14 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import {
-  deleteAIContent,
-  generateAIContent,
-  getCredit,
-  listItemContent,
-  listModels,
-  saveAIContent,
-} from "@/lib/api/ai";
-import type {
-  AIActionType,
-  AIContentResponse,
-  LLMModelOption,
-} from "@/types/ai-content";
+  aiContentDestroy,
+  aiCreditRetrieve,
+  aiGenerateCreate,
+  aiItemContentCreate,
+  aiModelsList,
+  aiSaveCreate,
+} from "@/lib/api/orval/api/generated/ai-content/ai-content";
+import type { ActionTypeEnum, AIContent, CategoryEnum, LLMModel } from "@/lib/api/orval/api/generated/model";
 
 import { AIContentCard } from "./ai-content-card";
 import { ModelSelect } from "./model-select";
@@ -38,14 +34,14 @@ const ACTION_BUTTONS = [
 ];
 
 export function AIContentModal({ open, onOpenChange, context }: AIContentModalProps) {
-  const [allContent, setAllContent] = useState<AIContentResponse[]>([]);
+  const [allContent, setAllContent] = useState<AIContent[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [activeAction, setActiveAction] = useState<AIActionType | null>(null);
+  const [activeAction, setActiveAction] = useState<ActionTypeEnum | null>(null);
 
-  const [models, setModels] = useState<LLMModelOption[]>([]);
+  const [models, setModels] = useState<LLMModel[]>([]);
   const [selectedModel, setSelectedModel] = useState<string>("");
   const [saveAsDefault, setSaveAsDefault] = useState(false);
   const [creditBalance, setCreditBalance] = useState<number | null>(null);
@@ -53,7 +49,7 @@ export function AIContentModal({ open, onOpenChange, context }: AIContentModalPr
   const loadExistingContent = useCallback(async () => {
     setIsInitialLoading(true);
     try {
-      const data = await listItemContent({
+      const data = await aiItemContentCreate({
         level_code: context.levelCode,
         category: context.category,
         section_title: context.sectionTitle,
@@ -73,14 +69,14 @@ export function AIContentModal({ open, onOpenChange, context }: AIContentModalPr
   useEffect(() => {
     if (!open) return;
     loadExistingContent();
-    listModels().then((data) => {
+    aiModelsList().then((data) => {
       setModels(data);
       const defaultModel = data.find((m) => m.is_default);
       if (defaultModel && !selectedModel) {
         setSelectedModel(defaultModel.model_id);
       }
     }).catch(() => {});
-    getCredit().then((data) => {
+    aiCreditRetrieve().then((data) => {
       setCreditBalance(parseFloat(data.credit_balance));
     }).catch(() => {});
   }, [open]);
@@ -93,7 +89,7 @@ export function AIContentModal({ open, onOpenChange, context }: AIContentModalPr
   }, [creditBalance, selectedModel, models]);
 
   const contentByAction = useMemo(() => {
-    const map: Record<string, AIContentResponse[]> = {};
+    const map: Record<string, AIContent[]> = {};
     for (const c of allContent) {
       if (!map[c.action_type]) map[c.action_type] = [];
       map[c.action_type].push(c);
@@ -107,15 +103,15 @@ export function AIContentModal({ open, onOpenChange, context }: AIContentModalPr
     ? activeContent.some((c) => c.model_used === selectedModel)
     : false;
 
-  const handleGenerate = useCallback(async (actionType: AIActionType, regenerate = false) => {
+  const handleGenerate = useCallback(async (actionType: ActionTypeEnum, regenerate = false) => {
     setIsLoading(true);
     setError(null);
     setActiveAction(actionType);
 
     try {
-      const response = await generateAIContent({
+      const response = await aiGenerateCreate({
         level_code: context.levelCode,
-        category: context.category,
+        category: context.category as CategoryEnum,
         section_title: context.sectionTitle,
         section_headers: context.sectionHeaders,
         item_cells: context.itemCells,
@@ -137,7 +133,7 @@ export function AIContentModal({ open, onOpenChange, context }: AIContentModalPr
         return [response, ...prev];
       });
 
-      getCredit().then((data) => setCreditBalance(parseFloat(data.credit_balance))).catch(() => {});
+      aiCreditRetrieve().then((data) => setCreditBalance(parseFloat(data.credit_balance))).catch(() => {});
     } catch (err: unknown) {
       const errorObj = err as { response?: { data?: { error?: { code?: string } } } };
       if (errorObj?.response?.data?.error?.code === "insufficient_credit") {
@@ -154,7 +150,7 @@ export function AIContentModal({ open, onOpenChange, context }: AIContentModalPr
   const handleDelete = useCallback(async (id: string) => {
     setIsDeleting(true);
     try {
-      await deleteAIContent(id);
+      await aiContentDestroy(id);
       setAllContent((prev) => prev.filter((c) => c.id !== id));
     } catch {
       setError("Failed to delete. Please try again.");
@@ -163,13 +159,13 @@ export function AIContentModal({ open, onOpenChange, context }: AIContentModalPr
     }
   }, []);
 
-  const handleRegenerate = useCallback(async (content: AIContentResponse) => {
+  const handleRegenerate = useCallback(async (content: AIContent) => {
     setSelectedModel(content.model_used);
     await handleGenerate(content.action_type, true);
   }, [handleGenerate]);
 
   const handleSave = useCallback(async (id: string) => {
-    await saveAIContent(id);
+    await aiSaveCreate(id);
   }, []);
 
   const handleOpenChange = useCallback((nextOpen: boolean) => {

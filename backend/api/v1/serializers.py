@@ -37,6 +37,24 @@ class GoogleLoginSerializer(serializers.Serializer):
     credential = serializers.CharField()
 
 
+class AuthResponseSerializer(serializers.Serializer):
+    user = serializers.SerializerMethodField()
+    token = serializers.CharField()
+
+    @extend_schema_field({"$ref": "#/components/schemas/User"})
+    def get_user(self, obj: dict) -> dict:
+        return obj["user"]
+
+
+class UserCreditResponseSerializer(serializers.Serializer):
+    credit_balance = serializers.CharField()
+    currency = serializers.CharField()
+
+
+class ShareKeyResponseSerializer(serializers.Serializer):
+    share_key = serializers.CharField()
+
+
 class UserSerializer(serializers.ModelSerializer):
     preferred_model_id = serializers.CharField(
         source="preferred_model.model_id", read_only=True, default=None
@@ -199,6 +217,9 @@ class AIGenerateRequestSerializer(serializers.Serializer):
 
 
 class AIContentSerializer(serializers.ModelSerializer):
+    item_cells = serializers.ListField(child=serializers.CharField(), read_only=True)
+    section_headers = serializers.ListField(child=serializers.CharField(), read_only=True)
+    response_json = serializers.JSONField(read_only=True)
     is_saved = serializers.SerializerMethodField()
 
     class Meta:
@@ -237,6 +258,10 @@ class UserAIContentSerializer(serializers.ModelSerializer):
 
 
 class SharedAIContentSerializer(serializers.ModelSerializer):
+    item_cells = serializers.ListField(child=serializers.CharField(), read_only=True)
+    section_headers = serializers.ListField(child=serializers.CharField(), read_only=True)
+    response_json = serializers.JSONField(read_only=True)
+
     class Meta:
         model = AIContent
         fields = [

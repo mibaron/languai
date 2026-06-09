@@ -7,7 +7,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import type {
-  AIContentResponse,
   AIExamplesResponse,
   AIExplanationResponse,
   AIQuizResponse,
@@ -67,13 +66,13 @@ export function AIContentCard({
           </div>
         </div>
 
-        {content.action_type === "examples" && content.response_json && (
+        {content.action_type === "examples" && content.response_json != null && (
           <AIExamplesView data={content.response_json as AIExamplesResponse} />
         )}
-        {content.action_type === "quiz" && content.response_json && (
+        {content.action_type === "quiz" && content.response_json != null && (
           <AIQuizView data={content.response_json as AIQuizResponse} />
         )}
-        {content.action_type === "explanation" && content.response_json && (
+        {content.action_type === "explanation" && content.response_json != null && (
           <AIExplanationView data={content.response_json as AIExplanationResponse} />
         )}
 

@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { getAuthErrorMessage, googleLogin } from "@/lib/api/auth";
+import { authGoogleCreate } from "@/lib/api/orval/api/generated/auth/auth";
+import { getAuthErrorMessage } from "@/lib/utils/auth/error-utils";
 import { setUserToken } from "@/lib/utils/auth/cookie-utils";
 
 import type { GoogleSignInButtonProps } from "./types";
@@ -54,7 +55,7 @@ export function GoogleSignInButton({ onSuccess, onError }: GoogleSignInButtonPro
     async (response: { credential: string }) => {
       setIsLoading(true);
       try {
-        const authResponse = await googleLogin({ credential: response.credential });
+        const authResponse = await authGoogleCreate({ credential: response.credential });
         setUserToken(authResponse.token);
         onSuccess(authResponse.token);
       } catch (error) {

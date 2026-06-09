@@ -25,6 +25,7 @@ from .serializers import (
     AIContentSerializer,
     AIGenerateRequestSerializer,
     AIItemContentRequestSerializer,
+    AuthResponseSerializer,
     GoogleLoginSerializer,
     LevelSerializer,
     LevelWriteSerializer,
@@ -37,8 +38,10 @@ from .serializers import (
     SectionListSerializer,
     SectionProgressSerializer,
     SectionWriteSerializer,
+    ShareKeyResponseSerializer,
     SharedAIContentSerializer,
     UserAIContentSerializer,
+    UserCreditResponseSerializer,
     UserSerializer,
 )
 
@@ -52,7 +55,7 @@ class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
     permission_classes = [permissions.AllowAny]
 
-    @extend_schema(summary="Register a new user", tags=["auth"])
+    @extend_schema(summary="Register a new user", tags=["auth"], responses={201: AuthResponseSerializer})
     def post(self, request: Request, *args: object, **kwargs: object) -> Response:
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -72,7 +75,7 @@ class LoginView(APIView):
         summary="Login and receive auth token",
         tags=["auth"],
         request=LoginSerializer,
-        responses={200: UserSerializer},
+        responses={200: AuthResponseSerializer},
     )
     def post(self, request: Request) -> Response:
         serializer = LoginSerializer(data=request.data)
@@ -107,7 +110,7 @@ class GoogleLoginView(APIView):
         summary="Login or register with Google",
         tags=["auth"],
         request=GoogleLoginSerializer,
-        responses={200: UserSerializer},
+        responses={200: AuthResponseSerializer},
     )
     def post(self, request: Request) -> Response:
         serializer = GoogleLoginSerializer(data=request.data)
@@ -360,7 +363,7 @@ class AIGenerateView(APIView):
 class AIContentSaveView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    @extend_schema(summary="Save AI content to user collection", tags=["ai-content"], responses={201: None})
+    @extend_schema(summary="Save AI content to user collection", tags=["ai-content"], request=None, responses={201: None})
     def post(self, request: Request, pk: str) -> Response:
         try:
             ai_content = AIContent.objects.get(pk=pk)
@@ -401,7 +404,7 @@ class UserSavedAIContentDeleteView(APIView):
 class AIContentShareView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    @extend_schema(summary="Generate share key for saved AI content", tags=["ai-content"])
+    @extend_schema(summary="Generate share key for saved AI content", tags=["ai-content"], request=None, responses={200: ShareKeyResponseSerializer})
     def post(self, request: Request, pk: str) -> Response:
         try:
             saved = UserAIContent.objects.get(pk=pk, user=request.user)
@@ -496,7 +499,7 @@ class LLMModelListView(generics.ListAPIView):
 class UserCreditView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    @extend_schema(summary="Get user credit balance", tags=["ai-content"])
+    @extend_schema(summary="Get user credit balance", tags=["ai-content"], responses={200: UserCreditResponseSerializer})
     def get(self, request: Request) -> Response:
         return Response({
             "credit_balance": str(request.user.credit_balance),
