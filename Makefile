@@ -4,6 +4,7 @@
 
 SSH := ssh languai-prod
 REMOTE_DIR := /home/aron/langu-ai-website/languai
+DC := docker compose --env-file .env.production
 
 .PHONY: help install frontend-install backend-install \
         dev frontend-dev backend-dev \
@@ -125,25 +126,25 @@ clean: ## Remove build artifacts and caches
 # ── Deployment ───────────────────────────────
 
 deploy: ## Pull latest code and rebuild all containers on production
-	$(SSH) "cd $(REMOTE_DIR) && git pull && docker compose up -d --build"
+	$(SSH) "cd $(REMOTE_DIR) && git pull && $(DC) up -d --build"
 
 deploy-backend: ## Rebuild and restart only the backend container
-	$(SSH) "cd $(REMOTE_DIR) && git pull && docker compose up -d --build backend"
+	$(SSH) "cd $(REMOTE_DIR) && git pull && $(DC) up -d --build backend"
 
 deploy-frontend: ## Rebuild and restart only the frontend container
-	$(SSH) "cd $(REMOTE_DIR) && git pull && docker compose up -d --build frontend"
+	$(SSH) "cd $(REMOTE_DIR) && git pull && $(DC) up -d --build frontend"
 
 deploy-caddy: ## Restart Caddy (picks up Caddyfile changes, no rebuild needed)
-	$(SSH) "cd $(REMOTE_DIR) && git pull && docker compose restart caddy"
+	$(SSH) "cd $(REMOTE_DIR) && git pull && $(DC) restart caddy"
 
 prod-migrate: ## Run Django migrations on production
-	$(SSH) "cd $(REMOTE_DIR) && docker compose exec backend uv run python manage.py migrate"
+	$(SSH) "cd $(REMOTE_DIR) && $(DC) exec backend uv run python manage.py migrate"
 
 prod-logs: ## Tail production logs (usage: make prod-logs or make prod-logs s=backend)
-	$(SSH) "cd $(REMOTE_DIR) && docker compose logs --tail 50 -f $(s)"
+	$(SSH) "cd $(REMOTE_DIR) && $(DC) logs --tail 50 -f $(s)"
 
 prod-status: ## Show production container status
-	$(SSH) "cd $(REMOTE_DIR) && docker compose ps"
+	$(SSH) "cd $(REMOTE_DIR) && $(DC) ps"
 
 prod-shell: ## Open a shell in the backend container
-	$(SSH) -t "cd $(REMOTE_DIR) && docker compose exec backend bash"
+	$(SSH) -t "cd $(REMOTE_DIR) && $(DC) exec backend bash"
