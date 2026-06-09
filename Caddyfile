@@ -17,5 +17,6 @@ langu-ai.de, www.langu-ai.de {
 }
 
 admin.langu-ai.de {
+	redir / /admin/ permanent
 	reverse_proxy backend:8000
 }

@@ -105,6 +105,18 @@ GET    /api/v1/ai/shared/<key>/        # View shared content (public)
 python manage.py sync_models       # Fetch/update models from OpenRouter (new models default to is_active=False)
 ```
 
+### Auth Guard
+- **Next.js middleware** (`frontend/src/middleware.ts`) blocks all unauthenticated access, redirecting to `/login?next=<path>`
+- Public (no-auth) paths: `/login`, `/register`. Update the middleware's `PUBLIC_PATHS` array when adding new public routes
+- 401 API responses clear the token and redirect to `/login?next=<current-path>` (see `frontend/src/lib/api/orval/client.ts`)
+- `useSearchParams()` requires a `<Suspense>` boundary in Next.js — any page using it must wrap the component
+
+### Deployment
+- Deploy from local machine via Makefile: `make deploy`, `make deploy-backend`, `make deploy-frontend`, `make deploy-caddy`
+- All deploy commands use `docker compose --env-file .env.production` — this is required because Docker Compose only reads `.env` by default, not `.env.production`
+- Django admin is on a separate subdomain: `admin.langu-ai.de` (not `/admin` on the main site)
+- See `DEPLOYMENT.md` for full setup guide, env vars, and troubleshooting
+
 ### Environment Variables
 - Frontend `.env.local`: `NEXT_PUBLIC_API_URL`
 - Backend `.env`: `SECRET_KEY`, `DEBUG`, `ALLOWED_HOSTS`, `DATABASE_URL`
