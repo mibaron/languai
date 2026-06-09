@@ -53,6 +53,9 @@ client.interceptors.response.use(
   async (error: AxiosError) => {
     if (error.response?.status === 401) {
       setUserToken(undefined);
+      if (typeof window !== "undefined") {
+        window.location.href = `/login?next=${encodeURIComponent(window.location.pathname)}`;
+      }
     }
     return Promise.reject(error);
   },
