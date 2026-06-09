@@ -8,22 +8,22 @@ import type {
 } from "@/types/auth";
 
 export async function login(credentials: LoginCredentials): Promise<AuthResponse> {
-  const response = await client.post<AuthResponse>("/auth/login/", credentials);
+  const response = await client.post<AuthResponse>("/api/v1/auth/login/", credentials);
   return response.data;
 }
 
 export async function register(credentials: RegisterCredentials): Promise<AuthResponse> {
-  const response = await client.post<AuthResponse>("/auth/register/", credentials);
+  const response = await client.post<AuthResponse>("/api/v1/auth/register/", credentials);
   return response.data;
 }
 
 export async function googleLogin(credential: GoogleCredential): Promise<AuthResponse> {
-  const response = await client.post<AuthResponse>("/auth/google/", credential);
+  const response = await client.post<AuthResponse>("/api/v1/auth/google/", credential);
   return response.data;
 }
 
 export async function logout(): Promise<void> {
-  await client.post("/auth/logout/");
+  await client.post("/api/v1/auth/logout/");
 }
 
 export function getAuthErrorMessage(error: unknown): string {
