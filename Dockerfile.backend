@@ -16,7 +16,7 @@ RUN uv sync --no-dev --extra prod
 COPY backend/ .
 RUN uv run python -c "import psycopg" && echo "psycopg OK"
 
-RUN DJANGO_SETTINGS_MODULE=config.settings.base uv run python manage.py collectstatic --noinput
+RUN uv run python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
