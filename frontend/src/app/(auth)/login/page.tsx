@@ -1,11 +1,12 @@
 "use client";
 
+import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { AuthLayout } from "@/components/auth/auth-layout";
 import { LoginForm } from "@/components/auth/login-form";
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -14,9 +15,15 @@ export default function LoginPage() {
     router.push(next);
   };
 
+  return <LoginForm onSuccess={handleLoginSuccess} />;
+}
+
+export default function LoginPage() {
   return (
     <AuthLayout>
-      <LoginForm onSuccess={handleLoginSuccess} />
+      <Suspense>
+        <LoginContent />
+      </Suspense>
     </AuthLayout>
   );
 }

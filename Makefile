@@ -2,6 +2,9 @@
 # LinguAI — Development Commands
 # ──────────────────────────────────────────────
 
+SSH := ssh languai-prod
+REMOTE_DIR := /home/aron/langu-ai-website/languai
+
 .PHONY: help install frontend-install backend-install \
         dev frontend-dev backend-dev \
         build frontend-build \
@@ -10,7 +13,9 @@
         test frontend-test backend-test \
         migrate makemigrations seed createsuperuser \
         generate-api schema \
-        clean
+        clean \
+        deploy deploy-backend deploy-frontend deploy-caddy \
+        prod-logs prod-status prod-migrate prod-shell
 
 # ── Help ──────────────────────────────────────
 
@@ -116,3 +121,29 @@ clean: ## Remove build artifacts and caches
 	find backend -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
 	find backend -type d -name .pytest_cache -exec rm -rf {} + 2>/dev/null || true
 	find backend -type d -name .mypy_cache -exec rm -rf {} + 2>/dev/null || true
+
+# ── Deployment ───────────────────────────────
+
+deploy: ## Pull latest code and rebuild all containers on production
+	$(SSH) "cd $(REMOTE_DIR) && git pull && docker compose up -d --build"
+
+deploy-backend: ## Rebuild and restart only the backend container
+	$(SSH) "cd $(REMOTE_DIR) && git pull && docker compose up -d --build backend"
+
+deploy-frontend: ## Rebuild and restart only the frontend container
+	$(SSH) "cd $(REMOTE_DIR) && git pull && docker compose up -d --build frontend"
+
+deploy-caddy: ## Restart Caddy (picks up Caddyfile changes, no rebuild needed)
+	$(SSH) "cd $(REMOTE_DIR) && git pull && docker compose restart caddy"
+
+prod-migrate: ## Run Django migrations on production
+	$(SSH) "cd $(REMOTE_DIR) && docker compose exec backend uv run python manage.py migrate"
+
+prod-logs: ## Tail production logs (usage: make prod-logs or make prod-logs s=backend)
+	$(SSH) "cd $(REMOTE_DIR) && docker compose logs --tail 50 -f $(s)"
+
+prod-status: ## Show production container status
+	$(SSH) "cd $(REMOTE_DIR) && docker compose ps"
+
+prod-shell: ## Open a shell in the backend container
+	$(SSH) -t "cd $(REMOTE_DIR) && docker compose exec backend bash"
