@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { authGoogleCreate } from "@/lib/api/orval/api/generated/auth/auth";
 import { getAuthErrorMessage } from "@/lib/utils/auth/error-utils";
 import { setUserToken } from "@/lib/utils/auth/cookie-utils";
@@ -49,7 +50,7 @@ function GoogleIcon() {
 export function GoogleSignInButton({ onSuccess, onError }: GoogleSignInButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isReady, setIsReady] = useState(false);
-  const hiddenButtonRef = useRef<HTMLDivElement>(null);
+  const googleButtonRef = useRef<HTMLDivElement>(null);
 
   const handleCredentialResponse = useCallback(
     async (response: { credential: string }) => {
@@ -71,16 +72,17 @@ export function GoogleSignInButton({ onSuccess, onError }: GoogleSignInButtonPro
     if (!clientId) return;
 
     const initializeGoogle = () => {
-      if (!window.google || !hiddenButtonRef.current) return;
+      if (!window.google || !googleButtonRef.current) return;
 
       window.google.accounts.id.initialize({
         client_id: clientId,
         callback: handleCredentialResponse,
       });
 
-      window.google.accounts.id.renderButton(hiddenButtonRef.current, {
+      window.google.accounts.id.renderButton(googleButtonRef.current, {
         type: "standard",
         size: "large",
+        width: googleButtonRef.current.offsetWidth,
       });
 
       setIsReady(true);
@@ -105,28 +107,30 @@ export function GoogleSignInButton({ onSuccess, onError }: GoogleSignInButtonPro
     };
   }, [handleCredentialResponse]);
 
-  const handleClick = () => {
-    const iframe = hiddenButtonRef.current?.querySelector("div[role='button']") as HTMLElement | null;
-    iframe?.click();
-  };
-
   if (!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
     return null;
   }
 
   return (
-    <>
-      <div ref={hiddenButtonRef} className="absolute h-0 w-0 overflow-hidden opacity-0" />
+    <div className="relative w-full">
       <Button
         type="button"
         variant="outline"
-        className="w-full"
+        className="pointer-events-none w-full"
         disabled={!isReady || isLoading}
-        onClick={handleClick}
+        aria-hidden="true"
+        tabIndex={-1}
       >
         <GoogleIcon />
         {isLoading ? "Signing in..." : "Continue with Google"}
       </Button>
-    </>
+      <div
+        ref={googleButtonRef}
+        className={cn(
+          "absolute inset-0 z-10 overflow-hidden opacity-[0.01]",
+          (!isReady || isLoading) && "pointer-events-none",
+        )}
+      />
+    </div>
   );
 }
