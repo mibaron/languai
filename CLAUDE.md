@@ -45,6 +45,123 @@ make help              # Show all available commands
 - No `any` types in TypeScript — use proper types or `unknown`
 - No `# type: ignore` in Python without explanation
 
+## Frontend Architecture
+
+### Component Layers (strict hierarchy)
+
+```
+src/components/
+├── ui/              # Layer 0: shadcn/ui primitives — NEVER modify
+├── kit/             # Layer 1: Project UI kit — wrappers, typography, layout
+└── composites/      # Layer 2: Multi-kit reusable blocks (PackCard, EmptyState, etc.)
+```
+
+**Layer 0 — Primitives** (`components/ui/`): shadcn/ui components installed via CLI. Pure, untouched, upgradeable. Never edit these files.
+
+**Layer 1 — Kit** (`components/kit/`): Project-level wrappers and design tokens. This is where we eliminate Tailwind repetition:
+- `typography.tsx` — `PageTitle`, `SectionTitle`, `SectionHeader`, `Label`, `Caption`, `Muted` etc.
+- `layout.tsx` — `Stack`, `Container`, `PageSection`, `Spacer`, etc.
+- Feature wrappers — e.g., `icon-button.tsx`, `status-badge.tsx` (wrap shadcn Button/Badge with project-specific variants)
+- All colors, spacing, and font tokens live in `tailwind.config.ts` as semantic variables — never hardcode hex values in components
+
+**Layer 2 — Composites** (`components/composites/`): Reusable blocks that compose multiple kit components. Used across pages. Examples:
+- `pack-card.tsx` — title + subtitle + description + badges + action button
+- `empty-state.tsx` — icon + title + description + optional badge/CTA (e.g., the Explain tab placeholder)
+- `bottom-tab-bar.tsx` — navigation bar with icon tabs
+- `progress-ring.tsx` — circular progress indicator
+
+**Page sections** — colocated with the page in `_components/`:
+- Each visual section of a page is its own component
+- Page-specific hooks live in `_hooks/`
+- Page `page.tsx` files are **pure composition** — no raw HTML, no Tailwind classes, no business logic
+
+### Component Rules
+1. **One component per .tsx file** — no exceptions
+2. **All types in dedicated .ts files** — `types.ts` for local, `src/types/` for shared. Never inline type definitions in .tsx
+3. **Page components must be Tailwind-free** — pages compose kit/composite/section components only. A `div` for layout is fine; Tailwind utility soup is not
+4. **DRY typography** — never write `className="text-lg font-bold tracking-tight"` in multiple places. Use kit typography components instead
+5. **DRY colors** — all colors defined as CSS variables or Tailwind config tokens. Never repeat hex values across files
+
+### Logic Extraction
+- **Custom hooks for all logic** — form state, validation, side effects, API calls, multi-state coordination → extract to dedicated hook files
+- **API calls** — Orval generates the client; wrap Orval hooks in page-specific hooks to add loading/error/transform logic
+- **Page hooks** live in `_hooks/` next to the page. Shared hooks live in `src/hooks/`
+- **Goal**: page components read like a wireframe — declarative JSX with no business logic, no `useEffect`, no `fetch`
+
+### File Structure (frontend)
+```
+src/
+├── app/
+│   ├── (public)/              # Landing page, public routes
+│   │   └── page.tsx
+│   ├── (auth)/                # Login, register, onboarding
+│   │   ├── login/page.tsx
+│   │   ├── register/page.tsx
+│   │   └── onboarding/page.tsx
+│   ├── (app)/                 # Authenticated app (bottom tabs)
+│   │   ├── layout.tsx         # Bottom tab bar layout
+│   │   ├── learn/
+│   │   │   ├── page.tsx       # Pure composition
+│   │   │   ├── _components/   # Page-specific section components
+│   │   │   └── _hooks/        # Page-specific hooks
+│   │   ├── explain/
+│   │   ├── practice/
+│   │   └── profile/
+│   ├── layout.tsx
+│   └── globals.css
+├── components/
+│   ├── ui/                    # shadcn/ui (DO NOT MODIFY)
+│   ├── kit/                   # Project UI kit
+│   └── composites/            # Reusable composite components
+├── hooks/                     # Shared hooks
+├── lib/                       # Utilities, helpers
+├── types/                     # Shared TypeScript types
+└── data/                      # Static data (books.ts, etc.)
+```
+
+**Colocation rule**: If a component/hook is used by only one page, it lives in that page's `_components/` or `_hooks/`. If used by 2+ pages, promote to `components/composites/` or `hooks/`.
+
+## Backend Architecture
+
+### Design Principles
+- **SOLID** — Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion
+- **Service Layer Pattern** — views are thin HTTP handlers; business logic lives in services
+- **DRY** — shared utilities, base classes, and mixins for common patterns
+- **Security-first** — permissions on every endpoint, input validation, no mass-assignment vulnerabilities
+- **Production-ready** — structured logging, proper exception handling, database indexing
+
+### Django App Structure
+Each Django app follows this layout:
+```
+apps/<app_name>/
+├── models.py           # Data models + constraints only, no business logic
+├── services.py         # Write operations (create, update, delete, side effects)
+├── selectors.py        # Read-only query functions (annotated querysets, filters)
+├── serializers.py      # DRF serializers for input validation and output formatting
+├── views.py            # Thin views: parse request → call service/selector → return response
+├── permissions.py      # Custom DRF permission classes (IsPackOwner, CanSubscribe, etc.)
+├── exceptions.py       # Domain-specific exceptions (PackNotFound, AlreadySubscribed, etc.)
+├── constants.py        # Choices, magic numbers, configuration values
+├── admin.py            # Django admin configuration
+├── urls.py             # URL routing
+├── signals.py          # Signal handlers (if needed)
+└── tests/
+    ├── test_services.py
+    ├── test_selectors.py
+    ├── test_views.py
+    └── factories.py    # Test factories (factory_boy)
+```
+
+### Backend Rules
+1. **Views are thin** — max ~15 lines. Parse request, call service/selector, return serialized response. No QuerySet chains, no business logic, no side effects in views
+2. **Services own business logic** — all writes, validation beyond serializer-level, cross-model operations, side effects (emails, notifications, credit deduction). Services call other services, never views
+3. **Selectors are pure reads** — return QuerySets or computed values. No side effects. Annotate and filter here, not in views or serializers
+4. **Models are data** — fields, constraints, indexes, `__str__`, `Meta`. No business methods. Use model properties only for trivial computed fields
+5. **Permissions are granular** — custom permission classes per action. Never rely on `is_staff` checks scattered in views. Role-based access via permission classes
+6. **Exceptions are domain-specific** — raise `PackNotFound`, `InsufficientCredits` etc. in services, catch and map to HTTP status in views or a shared exception handler
+7. **Logging** — structured logging with `structlog` or Python's `logging`. Log business events (user subscribed, credit deducted, AI generation triggered), not just errors
+8. **Database design** — proper indexes on filtered/sorted fields, unique constraints for business rules, `created_at`/`updated_at` on all models via a `TimeStampedModel` base class
+
 ### API Contract
 - OpenAPI schema generated by drf-spectacular (backend is the single source of truth)
 - Frontend API client auto-generated via Orval from the OpenAPI schema

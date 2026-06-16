@@ -11,7 +11,7 @@ function LoginContent() {
   const searchParams = useSearchParams();
 
   const handleLoginSuccess = () => {
-    const next = searchParams.get("next") || "/";
+    const next = searchParams.get("next") || "/learn";
     router.push(next);
   };
 
