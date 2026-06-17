@@ -4,11 +4,11 @@ services:
     restart: unless-stopped
     env_file: .env.production
     networks:
-      - languai
+      - Langu-AI
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-languai}"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-Langu-AI}"]
       interval: 5s
       timeout: 3s
       retries: 5
@@ -20,7 +20,7 @@ services:
     restart: unless-stopped
     env_file: .env.production
     networks:
-      - languai
+      - Langu-AI
     depends_on:
       db:
         condition: service_healthy
@@ -36,7 +36,7 @@ services:
         NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${NEXT_PUBLIC_GOOGLE_CLIENT_ID:-}
     restart: unless-stopped
     networks:
-      - languai
+      - Langu-AI
     expose:
       - "3000"
 
@@ -48,7 +48,7 @@ services:
       - "443:443"
       - "443:443/udp"
     networks:
-      - languai
+      - Langu-AI
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
@@ -58,7 +58,7 @@ services:
       - frontend
 
 networks:
-  languai:
+  Langu-AI:
     driver: bridge
 
 volumes:

@@ -1,8 +1,8 @@
-# Prototype Prompt: LinguAI V2 — Mobile Shell + Onboarding
+# Prototype Prompt: Langu-AI V2 — Mobile Shell + Onboarding
 
 ## What this app is
 
-LinguAI is a German language learning web app (PWA). Users subscribe to "content packs" (e.g., "German A1.1 in English", "German A1.1 in Persian") and learn through grammar tables, vocabulary flashcards, quizzes, fill-in-the-blank exercises, and more important: the user can expand these content with personalized AI generated content fit to the app and their learning path!.
+Langu-AI is a German language learning web app (PWA). Users subscribe to "content packs" (e.g., "German A1.1 in English", "German A1.1 in Persian") and learn through grammar tables, vocabulary flashcards, quizzes, fill-in-the-blank exercises, and more important: the user can expand these content with personalized AI generated content fit to the app and their learning path!.
 
 The current version is a desktop-first reference tool — a top navbar, level switcher, category tabs (grammar/vocab/verbs/phrases), and section cards. It works but it's not mobile-friendly and has no onboarding. We're redesigning it as a mobile-first PWA that users save to their phone's homescreen.
 
@@ -21,7 +21,7 @@ I'm attaching screenshots of the current app for reference. The new design shoul
 ### Screen 1: Welcome / Language Setup
 First screen a new user sees (can appear before or after signup — the design is the same either way).
 
-- Heading: "Welcome to LinguAI" with a short subtitle
+- Heading: "Welcome to Langu-AI" with a short subtitle
 - Step 1: "What language do you speak?" — selectable chips/buttons for: English, Persian, Turkish, Arabic (expandable later). Allow selecting 1-3 languages, with one marked as primary
 - A clear "Continue" button at the bottom
 
@@ -44,7 +44,7 @@ First screen a new user sees (can appear before or after signup — the design i
 ### Screen 4: App Shell — Learn Tab (main screen after onboarding)
 This is the core of the prototype. After onboarding, the user lands here.
 
-- **Top area**: Compact header with app logo ("LinguAI"), a small avatar/profile icon on the right. No hamburger menu — navigation is via bottom tabs.
+- **Top area**: Compact header with app logo ("Langu-AI"), a small avatar/profile icon on the right. No hamburger menu — navigation is via bottom tabs.
 - **Active pack selector**: If the user has multiple packs, show the current one with a dropdown/switcher to change. If only one pack, just show the pack name as a heading.
 - **Content sections**: The pack's content organized by category. Use horizontal scrollable tabs or toggle group at the top: Grammar, Vocabulary, Verbs, Phrases. Below that, a vertical list of section cards (similar to the current app's section cards but optimized for mobile — full width, clear tap targets).
 - Each section card shows: title, type badge (table/notes/grid), and a progress indicator if applicable.

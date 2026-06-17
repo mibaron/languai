@@ -19,7 +19,7 @@ export function LandingFooter() {
           <div className="flex size-[30px] items-center justify-center rounded-lg bg-brand">
             <BookOpen className="size-4 text-white" />
           </div>
-          LinguAI
+          Langu-AI
         </Link>
 
         <div className="flex gap-6">
@@ -35,7 +35,7 @@ export function LandingFooter() {
         </div>
 
         <p className="text-xs text-zinc-600">
-          © 2026 LinguAI. Free German learning for everyone.
+          © 2026 Langu-AI. Free German learning for everyone.
         </p>
       </div>
     </footer>

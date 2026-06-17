@@ -581,7 +581,7 @@ wheels = [
 ]
 
 [[package]]
-name = "languai-backend"
+name = "Langu-AI-backend"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

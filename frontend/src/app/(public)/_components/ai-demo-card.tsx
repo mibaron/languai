@@ -37,7 +37,7 @@ export function AiDemoCard() {
 
         <div className="rounded-[10px] bg-white/[0.04] p-3.5">
           <div className="mb-2 text-[10px] font-bold uppercase tracking-wide text-zinc-600">
-            LinguAI AI
+            Langu-AI AI
           </div>
           <div className="text-[13px] leading-relaxed text-zinc-400">
             Here are 3 examples with{" "}

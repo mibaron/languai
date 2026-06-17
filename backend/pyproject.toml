@@ -1,7 +1,7 @@
 [project]
-name = "languai-backend"
+name = "Langu-AI-backend"
 version = "0.1.0"
-description = "LinguAI - German language learning platform backend"
+description = "Langu-AI - German language learning platform backend"
 requires-python = ">=3.12"
 dependencies = [
     "django>=6.0,<6.1",

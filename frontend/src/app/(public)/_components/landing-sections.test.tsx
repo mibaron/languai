@@ -10,9 +10,9 @@ import { LandingNavbar } from "./landing-navbar";
 import { StatsBar } from "./stats-bar";
 
 describe("LandingNavbar", () => {
-  it("renders LinguAI logo", () => {
+  it("renders Langu-AI logo", () => {
     render(<LandingNavbar />);
-    expect(screen.getByText("LinguAI")).toBeInTheDocument();
+    expect(screen.getByText("Langu-AI")).toBeInTheDocument();
   });
 
   it("renders navigation links", () => {
@@ -152,13 +152,13 @@ describe("FinalCtaSection", () => {
 });
 
 describe("LandingFooter", () => {
-  it("renders LinguAI branding", () => {
+  it("renders Langu-AI branding", () => {
     render(<LandingFooter />);
-    expect(screen.getByText("LinguAI")).toBeInTheDocument();
+    expect(screen.getByText("Langu-AI")).toBeInTheDocument();
   });
 
   it("renders copyright", () => {
     render(<LandingFooter />);
-    expect(screen.getByText(/© 2026 LinguAI/)).toBeInTheDocument();
+    expect(screen.getByText(/© 2026 Langu-AI/)).toBeInTheDocument();
   });
 });

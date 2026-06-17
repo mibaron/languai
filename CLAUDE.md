@@ -1,4 +1,4 @@
-# LinguAI - German Language Learning Platform
+# Langu-AI - German Language Learning Platform
 
 ## Project Overview
 
@@ -10,7 +10,7 @@ A full-stack German language learning application built as a monorepo:
 ## Monorepo Structure
 
 ```
-languai/
+Langu-AI/
 ├── frontend/          # Next.js application
 ├── backend/           # Django application (uv-managed)
 ├── Makefile           # All dev commands (make help for list)

@@ -35,7 +35,7 @@ export function Navbar({ search, onSearchChange }: NavbarProps) {
       <div className="mx-auto flex h-14 max-w-7xl items-center gap-4 px-6">
         <Link href="/" className="flex items-center gap-2">
           <BookOpen className="h-5 w-5 text-primary" />
-          <span className="text-lg font-bold tracking-tight">LinguAI</span>
+          <span className="text-lg font-bold tracking-tight">Langu-AI</span>
         </Link>
 
         <div className="relative ml-auto max-w-sm flex-1">

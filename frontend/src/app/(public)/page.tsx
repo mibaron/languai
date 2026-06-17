@@ -12,7 +12,7 @@ import { PricingSection } from "./_components/pricing-section";
 import { StatsBar } from "./_components/stats-bar";
 
 export const metadata: Metadata = {
-  title: "LinguAI — AI-Powered German Learning",
+  title: "Langu-AI — AI-Powered German Learning",
   description:
     "Your personal German tutor powered by AI. Learn German from A1 to B2 with structured content, AI explanations, and exam preparation. Free forever.",
 };

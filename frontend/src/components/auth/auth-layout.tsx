@@ -62,7 +62,7 @@ function BrandPanel() {
         <div className="flex size-[34px] items-center justify-center rounded-[9px] bg-brand">
           <BookOpen className="size-[18px] text-white" />
         </div>
-        LinguAI
+        Langu-AI
       </Link>
 
       <div className="relative z-10 flex flex-1 flex-col justify-center">
@@ -88,7 +88,7 @@ function BrandPanel() {
         </div>
       </div>
 
-      <p className="relative z-10 text-xs text-zinc-700">© 2026 LinguAI</p>
+      <p className="relative z-10 text-xs text-zinc-700">© 2026 Langu-AI</p>
     </div>
   );
 }
@@ -102,7 +102,7 @@ function MobileLogo() {
       <div className="flex size-7 items-center justify-center rounded-[7px] bg-brand">
         <BookOpen className="size-3.5 text-white" />
       </div>
-      LinguAI
+      Langu-AI
     </Link>
   );
 }

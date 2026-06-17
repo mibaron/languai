@@ -106,8 +106,8 @@ REST_FRAMEWORK = {
 
 # drf-spectacular
 SPECTACULAR_SETTINGS = {
-    "TITLE": "LinguAI API",
-    "DESCRIPTION": "API for the LinguAI German language learning platform",
+    "TITLE": "Langu-AI API",
+    "DESCRIPTION": "API for the Langu-AI German language learning platform",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "COMPONENT_SPLIT_REQUEST": True,

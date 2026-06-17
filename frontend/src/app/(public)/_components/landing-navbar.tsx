@@ -23,7 +23,7 @@ export function LandingNavbar() {
           <div className="flex size-[30px] items-center justify-center rounded-lg bg-brand">
             <BookOpen className="size-4 text-white" />
           </div>
-          LinguAI
+          Langu-AI
         </Link>
 
         <div className="hidden flex-1 items-center gap-6 md:flex">

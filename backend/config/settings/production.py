@@ -14,8 +14,8 @@ CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="").split(",")
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("POSTGRES_DB", default="languai"),
-        "USER": config("POSTGRES_USER", default="languai"),
+        "NAME": config("POSTGRES_DB", default="Langu-AI"),
+        "USER": config("POSTGRES_USER", default="Langu-AI"),
         "PASSWORD": config("POSTGRES_PASSWORD", default=""),
         "HOST": config("POSTGRES_HOST", default="db"),
         "PORT": config("POSTGRES_PORT", default="5432"),

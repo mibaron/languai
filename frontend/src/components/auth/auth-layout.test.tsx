@@ -23,14 +23,14 @@ describe("AuthLayout", () => {
     expect(screen.getByText("Your way.")).toBeInTheDocument();
   });
 
-  it("renders LinguAI logo text", async () => {
+  it("renders Langu-AI logo text", async () => {
     const { AuthLayout } = await import("./auth-layout");
     render(
       <AuthLayout>
         <div>Form</div>
       </AuthLayout>,
     );
-    const logos = screen.getAllByText("LinguAI");
+    const logos = screen.getAllByText("Langu-AI");
     expect(logos.length).toBeGreaterThanOrEqual(1);
   });
 
@@ -54,6 +54,6 @@ describe("AuthLayout", () => {
         <div>Form</div>
       </AuthLayout>,
     );
-    expect(screen.getByText("© 2026 LinguAI")).toBeInTheDocument();
+    expect(screen.getByText("© 2026 Langu-AI")).toBeInTheDocument();
   });
 });

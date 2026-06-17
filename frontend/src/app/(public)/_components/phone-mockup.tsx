@@ -49,7 +49,7 @@ function PhoneHeader() {
           <BookOpen className="size-3 text-white" />
         </div>
         <span className="text-sm font-bold tracking-tight text-zinc-900">
-          LinguAI
+          Langu-AI
         </span>
       </div>
       <div className="flex size-7 items-center justify-center rounded-full bg-zinc-100 text-xs font-semibold text-zinc-500">

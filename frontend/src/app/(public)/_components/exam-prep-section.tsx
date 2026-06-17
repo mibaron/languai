@@ -102,7 +102,7 @@ export function ExamPrepSection() {
           </h2>
 
           <p className="mb-7 text-base leading-relaxed text-muted-foreground">
-            LinguAI&apos;s content packs are structured around CEFR levels and
+            Langu-AI&apos;s content packs are structured around CEFR levels and
             aligned with Goethe-Institut and TELC exam requirements. Practice
             until you&apos;re confident — with timed mock exams and AI feedback.
           </p>

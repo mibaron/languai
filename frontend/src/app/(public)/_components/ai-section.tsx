@@ -59,7 +59,7 @@ export function AiSection() {
           </h2>
 
           <p className="mb-8 text-base leading-relaxed text-muted-foreground">
-            LinguAI&apos;s AI doesn&apos;t replace learning — it accelerates it.
+            Langu-AI&apos;s AI doesn&apos;t replace learning — it accelerates it.
             Ask for a personalized explanation, generate practice sentences from
             any grammar rule, or create a custom quiz on the spot.
           </p>
