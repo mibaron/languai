@@ -240,6 +240,10 @@ python manage.py sync_models       # Fetch/update models from OpenRouter (new mo
 - Never hardcode URLs — always use environment variables for API base URL
 
 ### Testing
-- Frontend: Vitest + React Testing Library
-- Backend: pytest + pytest-django
-- Test files live next to the code they test (frontend) or in `tests/` dirs (backend)
+- **Every new feature or bug fix must include tests** — this is a hard requirement, not optional
+- Frontend: Vitest + React Testing Library (test files colocated next to source, `*.test.ts(x)`)
+- Backend: pytest + pytest-django (test files in `apps/<app>/tests/`, factories for test data)
+- Test behavior, not implementation — assert on what users see or what data changes, not internal state
+- Mock at boundaries only — external APIs, cookies, storage. Never mock internal functions or the ORM
+- No snapshot tests — they break on every UI change and provide no signal
+- See `frontend/CLAUDE.md` and `backend/CLAUDE.md` for stack-specific testing patterns and rules

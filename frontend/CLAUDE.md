@@ -91,6 +91,81 @@ frontend/
 - Dynamic imports (`next/dynamic`) for heavy components not needed on initial load
 - Minimize client-side JavaScript — prefer Server Components
 
+### Testing
+
+**Stack**: Vitest 4.x + React Testing Library + @testing-library/user-event + jsdom 25
+
+**Config**: `vitest.config.mts` (ESM — must use `.mts` extension). Setup file: `tests/setup.ts`.
+
+#### Test file placement
+- Test files live **next to the code they test**, named `<module>.test.ts` or `<component>.test.tsx`
+- For pure logic tests (no JSX), use `.test.ts`
+- For component render tests, use `.test.tsx`
+- If a component file has both a pure function export and a component export, write separate test files: `<name>.test.ts` for the function, `<name>.component.test.tsx` for the component
+
+#### What to test and when
+- **Every new feature or bug fix must include tests** — no exceptions
+- **Pure functions** (utils, helpers, selectors): unit test all branches and edge cases
+- **Components**: test rendering, user interactions, conditional rendering, and error states
+- **Middleware/routing logic**: test all path combinations (public, protected, auth-only) and redirect behavior
+- **Hooks**: test via components that use them, or with `renderHook` for standalone logic
+- **Do NOT test**: shadcn/ui primitives (`components/ui/`), Orval-generated code, CSS/styling details, implementation internals
+
+#### Testing patterns
+
+**Component tests** — test behavior, not implementation:
+```tsx
+// DO: test what the user sees and does
+expect(screen.getByText("Welcome back")).toBeInTheDocument();
+await user.click(screen.getByRole("button", { name: /submit/i }));
+await waitFor(() => expect(onSuccess).toHaveBeenCalled());
+
+// DON'T: test internal state, CSS classes, or implementation
+expect(component.state.isLoading).toBe(true);  // ❌
+expect(el).toHaveClass("bg-brand");             // ❌ (unless testing a kit component)
+```
+
+**Mocking external dependencies**:
+```tsx
+// Mock API calls (Orval-generated)
+vi.mock("@/lib/api/orval/api/generated/auth/auth", () => ({
+  authLoginCreate: vi.fn(),
+}));
+
+// Mock cookie/storage utils
+vi.mock("@/lib/utils/auth/cookie-utils", () => ({
+  setUserToken: vi.fn(),
+}));
+
+// Mock complex child components to isolate the component under test
+vi.mock("./google-sign-in-button", () => ({
+  GoogleSignInButton: (props) => <button data-testid="google-btn">Google</button>,
+}));
+```
+
+**Text split by `<br>` or nested elements** — use container queries:
+```tsx
+const { container } = render(<Component />);
+const h1 = container.querySelector("h1");
+expect(h1?.textContent).toContain("First line");
+```
+
+**Multiple elements with same text** — use exact matchers or `getAllBy`:
+```tsx
+screen.getByRole("button", { name: /^sign in$/i });  // exact match
+screen.getAllByText(/Free forever/);                   // when duplicates expected
+```
+
+#### Testing rules
+1. **No `any` in tests** — same TypeScript rules as production code
+2. **No snapshot tests** — they break on every UI change and provide no signal
+3. **Test user-visible behavior** — not implementation details, not internal state
+4. **Mock at module boundaries** — mock API calls, cookies, and router; don't mock internal functions
+5. **Each test must be independent** — no shared mutable state between tests; use `beforeEach` for setup
+6. **Use `userEvent` over `fireEvent`** — `userEvent` simulates real browser behavior (typing, clicking)
+7. **Use `waitFor` for async assertions** — never `setTimeout` or manual delays
+8. **Kit component tests may assert classes** — since kit components exist to enforce styling patterns, testing their CSS output is valid
+
 ### Commands (via Makefile from project root)
 ```bash
 make frontend-dev         # Start dev server (port 3000)
