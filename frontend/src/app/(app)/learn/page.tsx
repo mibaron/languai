@@ -1,47 +1,71 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Package } from "lucide-react";
 
-import { ContentPanel } from "@/components/learning/content-panel";
-import { Navbar } from "@/components/learning/navbar";
-import { SearchResultsPanel } from "@/components/learning/search-results-panel";
-import { searchAllContent } from "@/lib/search-content";
-import type { CategoryId, LevelCode } from "@/types/content";
+import { EmptyState } from "@/components/composites/empty-state";
 
-export default function CheatSheetPage() {
-  const [level, setLevel] = useState<LevelCode>("A1.1");
-  const [category, setCategory] = useState<CategoryId>("grammar");
-  const [search, setSearch] = useState("");
+import { CategoryTabs } from "./_components/category-tabs";
+import { PackHeader } from "./_components/pack-header";
+import { PackSelectorDrawer } from "./_components/pack-selector-drawer";
+import { SectionList } from "./_components/section-list";
+import { useLearnTab } from "./_hooks/use-learn-tab";
 
-  const searchResults = useMemo(
-    () => searchAllContent(search),
-    [search],
-  );
+export default function LearnPage() {
+  const {
+    category,
+    setCategory,
+    activePack,
+    activePackId,
+    subscriptions,
+    isLoading,
+    sections,
+    packDrawerOpen,
+    selectPack,
+    openPackDrawer,
+    closePackDrawer,
+    openStats,
+  } = useLearnTab();
 
-  const isSearching = search.trim().length > 0;
+  if (isLoading) {
+    return (
+      <div className="flex flex-1 items-center justify-center">
+        <div className="size-6 animate-spin rounded-full border-2 border-brand border-t-transparent" />
+      </div>
+    );
+  }
 
-  const handleLevelChange = (newLevel: LevelCode) => {
-    setLevel(newLevel);
-    setCategory("grammar");
-  };
-
-  const handleClearSearch = () => {
-    setSearch("");
-  };
+  if (!activePack) {
+    return (
+      <EmptyState
+        icon={<Package size={26} className="text-brand" />}
+        title="No packs subscribed"
+        description="Browse packs from the Profile tab to get started."
+      />
+    );
+  }
 
   return (
-    <>
-      <Navbar search={search} onSearchChange={setSearch} />
-      {isSearching ? (
-        <SearchResultsPanel results={searchResults} onClear={handleClearSearch} />
-      ) : (
-        <ContentPanel
-          currentLevel={level}
-          currentCategory={category}
-          onLevelChange={handleLevelChange}
-          onCategoryChange={(cat) => setCategory(cat)}
+    <div className="relative flex flex-1 flex-col overflow-hidden">
+      <PackHeader
+        activePack={activePack}
+        overallProgress={0}
+        onOpenPackDrawer={openPackDrawer}
+        onOpenStats={openStats}
+      />
+      <CategoryTabs
+        activeCategory={category}
+        onCategoryChange={setCategory}
+      />
+      <SectionList sections={sections} onOpenSection={() => {}} />
+
+      {packDrawerOpen && (
+        <PackSelectorDrawer
+          packs={subscriptions}
+          activePackId={activePackId}
+          onSelect={selectPack}
+          onClose={closePackDrawer}
         />
       )}
-    </>
+    </div>
   );
 }
