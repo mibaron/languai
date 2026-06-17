@@ -30,3 +30,9 @@ export interface GoogleSignInButtonProps {
 export interface AuthLayoutProps {
   children: React.ReactNode;
 }
+
+export interface PasswordStrength {
+  score: number;
+  label: string;
+  color: string;
+}
