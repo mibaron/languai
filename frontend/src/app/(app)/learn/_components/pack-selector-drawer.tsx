@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Check, Archive, ChevronRight, Compass } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -61,13 +62,17 @@ export function PackSelectorDrawer({
             </button>
           );
         })}
-        <button className="flex w-full items-center gap-3 border-t-[1.5px] border-border/70 px-5 py-[13px]">
+        <Link
+          href="/archived-packs"
+          onClick={onClose}
+          className="flex w-full items-center gap-3 border-t-[1.5px] border-border/70 px-5 py-[13px]"
+        >
           <Archive size={16} className="text-muted-foreground" />
           <span className="flex-1 text-left text-[13px] text-muted-foreground">
             Archived Packs
           </span>
           <ChevronRight size={14} className="text-muted-foreground/40" />
-        </button>
+        </Link>
         <div className="h-[34px]" />
       </div>
     </div>

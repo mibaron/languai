@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/composites/empty-state";
 import { CategoryTabs } from "./_components/category-tabs";
 import { PackHeader } from "./_components/pack-header";
 import { PackSelectorDrawer } from "./_components/pack-selector-drawer";
+import { PackStatsDrawer } from "./_components/pack-stats-drawer";
 import { SectionList } from "./_components/section-list";
 import { useLearnTab } from "./_hooks/use-learn-tab";
 
@@ -20,10 +21,12 @@ export default function LearnPage() {
     isLoading,
     sections,
     packDrawerOpen,
+    statsDrawerOpen,
     selectPack,
     openPackDrawer,
     closePackDrawer,
     openStats,
+    closeStats,
   } = useLearnTab();
 
   if (isLoading) {
@@ -64,6 +67,14 @@ export default function LearnPage() {
           activePackId={activePackId}
           onSelect={selectPack}
           onClose={closePackDrawer}
+        />
+      )}
+
+      {activePack && (
+        <PackStatsDrawer
+          pack={activePack}
+          open={statsDrawerOpen}
+          onClose={closeStats}
         />
       )}
     </div>

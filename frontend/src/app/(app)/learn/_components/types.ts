@@ -29,3 +29,9 @@ export interface PackSelectorDrawerProps {
   onSelect: (packId: string) => void;
   onClose: () => void;
 }
+
+export interface PackStatsDrawerProps {
+  pack: Pack;
+  open: boolean;
+  onClose: () => void;
+}

@@ -25,3 +25,10 @@ export interface ProgressRingProps {
   strokeWidth?: number;
   className?: string;
 }
+
+export interface BottomDrawerProps {
+  open: boolean;
+  onClose: () => void;
+  children: ReactNode;
+  className?: string;
+}
