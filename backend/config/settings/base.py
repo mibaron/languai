@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "apps.content",
     "apps.progress",
     "apps.ai_content",
+    "apps.packs",
 ]
 
 MIDDLEWARE = [
@@ -114,6 +115,7 @@ SPECTACULAR_SETTINGS = {
     "ENUM_NAME_OVERRIDES": {
         "CategoryEnum": "apps.content.models.Category",
         "ContentTypeEnum": "apps.content.models.ContentType",
+        "SubscriptionStatusEnum": "apps.packs.models.SubscriptionStatus",
     },
     "SCHEMA_PATH_PREFIX": r"/api/v1/",
 }

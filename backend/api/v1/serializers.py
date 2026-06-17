@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 from apps.ai_content.models import AIContent, ActionType, LLMModel, UserAIContent
 from apps.content.models import Category, Level, Section, SectionItem
+from apps.packs.models import Pack, SubscriptionStatus, UserPackSubscription
 from apps.progress.models import SectionProgress
 
 User = get_user_model()
@@ -192,6 +193,43 @@ class SectionProgressSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
         read_only_fields = ["id", "completed_at", "updated_at"]
+
+
+# ── Packs ────────────────────────────────────
+
+
+class PackSerializer(serializers.ModelSerializer):
+    level_code = serializers.CharField(source="level.code", read_only=True)
+    subscriber_count = serializers.IntegerField(read_only=True, default=0)
+
+    class Meta:
+        model = Pack
+        fields = [
+            "id",
+            "title",
+            "slug",
+            "level_code",
+            "base_language",
+            "description",
+            "grammar_count",
+            "vocab_count",
+            "exercise_count",
+            "subscriber_count",
+        ]
+        read_only_fields = fields
+
+
+class UserPackSubscriptionSerializer(serializers.ModelSerializer):
+    pack = PackSerializer(read_only=True)
+
+    class Meta:
+        model = UserPackSubscription
+        fields = ["id", "pack", "status", "created_at"]
+        read_only_fields = fields
+
+
+class SubscribeRequestSerializer(serializers.Serializer):
+    pack_id = serializers.UUIDField()
 
 
 # ── AI Content ───────────────────────────────
