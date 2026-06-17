@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getUserTokenFromRequest } from "@/lib/utils/auth/middleware-cookie";
 
-const PUBLIC_PATHS = ["/", "/login", "/register", "/onboarding"];
+const PUBLIC_PATHS = ["/", "/login", "/register", "/onboarding", "/forgot-password", "/reset-password"];
 const AUTH_ONLY_PATHS = ["/login", "/register"];
 
 export function middleware(req: NextRequest) {

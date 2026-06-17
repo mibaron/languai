@@ -8,6 +8,7 @@ from django.db import models
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     native_language = models.CharField(max_length=10, default="en")
+    learning_language = models.CharField(max_length=10, default="de")
     current_level = models.CharField(max_length=10, default="A1.1")
     preferred_model = models.ForeignKey(
         "ai_content.LLMModel",

@@ -9,6 +9,23 @@ import zod from 'zod';
 
 
 /**
+ * @summary Change password
+ */
+export const authChangePasswordCreateBodyNewPasswordMin = 8;
+
+export const authChangePasswordCreateBody = zod.object({
+  "old_password": zod.string().min(1),
+  "new_password": zod.string().min(authChangePasswordCreateBodyNewPasswordMin)
+})
+
+/**
+ * @summary Request password reset email
+ */
+export const authForgotPasswordCreateBody = zod.object({
+  "email": zod.string().email().min(1)
+})
+
+/**
  * @summary Login or register with Google
  */
 export const authGoogleCreateBody = zod.object({
@@ -17,7 +34,7 @@ export const authGoogleCreateBody = zod.object({
 
 export const authGoogleCreateResponseUserUsernameMax = 150;
 export const authGoogleCreateResponseUserUsernameRegExp = new RegExp('^[\\w.@+-]+$');
-export const authGoogleCreateResponseUserEmailMax = 254;export const authGoogleCreateResponseUserNativeLanguageMax = 10;export const authGoogleCreateResponseUserCurrentLevelMax = 10;export const authGoogleCreateResponseUserCreditBalanceRegExp = new RegExp('^-?\\d{0,4}(?:\\.\\d{0,6})?$');
+export const authGoogleCreateResponseUserEmailMax = 254;export const authGoogleCreateResponseUserFirstNameMax = 150;export const authGoogleCreateResponseUserLastNameMax = 150;export const authGoogleCreateResponseUserNativeLanguageMax = 10;export const authGoogleCreateResponseUserLearningLanguageMax = 10;export const authGoogleCreateResponseUserCurrentLevelMax = 10;export const authGoogleCreateResponseUserCreditBalanceRegExp = new RegExp('^-?\\d{0,4}(?:\\.\\d{0,6})?$');
 
 
 export const authGoogleCreateResponse = zod.object({
@@ -25,7 +42,10 @@ export const authGoogleCreateResponse = zod.object({
   "id": zod.string().uuid(),
   "username": zod.string().max(authGoogleCreateResponseUserUsernameMax).regex(authGoogleCreateResponseUserUsernameRegExp).describe('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
   "email": zod.string().email().max(authGoogleCreateResponseUserEmailMax).optional(),
+  "first_name": zod.string().max(authGoogleCreateResponseUserFirstNameMax).optional(),
+  "last_name": zod.string().max(authGoogleCreateResponseUserLastNameMax).optional(),
   "native_language": zod.string().max(authGoogleCreateResponseUserNativeLanguageMax).optional(),
+  "learning_language": zod.string().max(authGoogleCreateResponseUserLearningLanguageMax).optional(),
   "current_level": zod.string().max(authGoogleCreateResponseUserCurrentLevelMax).optional(),
   "credit_balance": zod.string().regex(authGoogleCreateResponseUserCreditBalanceRegExp),
   "preferred_model_id": zod.string(),
@@ -44,7 +64,7 @@ export const authLoginCreateBody = zod.object({
 
 export const authLoginCreateResponseUserUsernameMax = 150;
 export const authLoginCreateResponseUserUsernameRegExp = new RegExp('^[\\w.@+-]+$');
-export const authLoginCreateResponseUserEmailMax = 254;export const authLoginCreateResponseUserNativeLanguageMax = 10;export const authLoginCreateResponseUserCurrentLevelMax = 10;export const authLoginCreateResponseUserCreditBalanceRegExp = new RegExp('^-?\\d{0,4}(?:\\.\\d{0,6})?$');
+export const authLoginCreateResponseUserEmailMax = 254;export const authLoginCreateResponseUserFirstNameMax = 150;export const authLoginCreateResponseUserLastNameMax = 150;export const authLoginCreateResponseUserNativeLanguageMax = 10;export const authLoginCreateResponseUserLearningLanguageMax = 10;export const authLoginCreateResponseUserCurrentLevelMax = 10;export const authLoginCreateResponseUserCreditBalanceRegExp = new RegExp('^-?\\d{0,4}(?:\\.\\d{0,6})?$');
 
 
 export const authLoginCreateResponse = zod.object({
@@ -52,7 +72,10 @@ export const authLoginCreateResponse = zod.object({
   "id": zod.string().uuid(),
   "username": zod.string().max(authLoginCreateResponseUserUsernameMax).regex(authLoginCreateResponseUserUsernameRegExp).describe('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
   "email": zod.string().email().max(authLoginCreateResponseUserEmailMax).optional(),
+  "first_name": zod.string().max(authLoginCreateResponseUserFirstNameMax).optional(),
+  "last_name": zod.string().max(authLoginCreateResponseUserLastNameMax).optional(),
   "native_language": zod.string().max(authLoginCreateResponseUserNativeLanguageMax).optional(),
+  "learning_language": zod.string().max(authLoginCreateResponseUserLearningLanguageMax).optional(),
   "current_level": zod.string().max(authLoginCreateResponseUserCurrentLevelMax).optional(),
   "credit_balance": zod.string().regex(authLoginCreateResponseUserCreditBalanceRegExp),
   "preferred_model_id": zod.string(),
@@ -66,14 +89,17 @@ export const authLoginCreateResponse = zod.object({
  */
 export const authMeRetrieveResponseUsernameMax = 150;
 export const authMeRetrieveResponseUsernameRegExp = new RegExp('^[\\w.@+-]+$');
-export const authMeRetrieveResponseEmailMax = 254;export const authMeRetrieveResponseNativeLanguageMax = 10;export const authMeRetrieveResponseCurrentLevelMax = 10;export const authMeRetrieveResponseCreditBalanceRegExp = new RegExp('^-?\\d{0,4}(?:\\.\\d{0,6})?$');
+export const authMeRetrieveResponseEmailMax = 254;export const authMeRetrieveResponseFirstNameMax = 150;export const authMeRetrieveResponseLastNameMax = 150;export const authMeRetrieveResponseNativeLanguageMax = 10;export const authMeRetrieveResponseLearningLanguageMax = 10;export const authMeRetrieveResponseCurrentLevelMax = 10;export const authMeRetrieveResponseCreditBalanceRegExp = new RegExp('^-?\\d{0,4}(?:\\.\\d{0,6})?$');
 
 
 export const authMeRetrieveResponse = zod.object({
   "id": zod.string().uuid(),
   "username": zod.string().max(authMeRetrieveResponseUsernameMax).regex(authMeRetrieveResponseUsernameRegExp).describe('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
   "email": zod.string().email().max(authMeRetrieveResponseEmailMax).optional(),
+  "first_name": zod.string().max(authMeRetrieveResponseFirstNameMax).optional(),
+  "last_name": zod.string().max(authMeRetrieveResponseLastNameMax).optional(),
   "native_language": zod.string().max(authMeRetrieveResponseNativeLanguageMax).optional(),
+  "learning_language": zod.string().max(authMeRetrieveResponseLearningLanguageMax).optional(),
   "current_level": zod.string().max(authMeRetrieveResponseCurrentLevelMax).optional(),
   "credit_balance": zod.string().regex(authMeRetrieveResponseCreditBalanceRegExp),
   "preferred_model_id": zod.string(),
@@ -85,25 +111,31 @@ export const authMeRetrieveResponse = zod.object({
  */
 export const authMeUpdateBodyUsernameMax = 150;
 export const authMeUpdateBodyUsernameRegExp = new RegExp('^[\\w.@+-]+$');
-export const authMeUpdateBodyEmailMax = 254;export const authMeUpdateBodyNativeLanguageMax = 10;export const authMeUpdateBodyCurrentLevelMax = 10;
+export const authMeUpdateBodyEmailMax = 254;export const authMeUpdateBodyFirstNameMax = 150;export const authMeUpdateBodyLastNameMax = 150;export const authMeUpdateBodyNativeLanguageMax = 10;export const authMeUpdateBodyLearningLanguageMax = 10;export const authMeUpdateBodyCurrentLevelMax = 10;
 
 export const authMeUpdateBody = zod.object({
   "username": zod.string().min(1).max(authMeUpdateBodyUsernameMax).regex(authMeUpdateBodyUsernameRegExp).describe('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
   "email": zod.string().email().max(authMeUpdateBodyEmailMax).optional(),
+  "first_name": zod.string().max(authMeUpdateBodyFirstNameMax).optional(),
+  "last_name": zod.string().max(authMeUpdateBodyLastNameMax).optional(),
   "native_language": zod.string().min(1).max(authMeUpdateBodyNativeLanguageMax).optional(),
+  "learning_language": zod.string().min(1).max(authMeUpdateBodyLearningLanguageMax).optional(),
   "current_level": zod.string().min(1).max(authMeUpdateBodyCurrentLevelMax).optional()
 })
 
 export const authMeUpdateResponseUsernameMax = 150;
 export const authMeUpdateResponseUsernameRegExp = new RegExp('^[\\w.@+-]+$');
-export const authMeUpdateResponseEmailMax = 254;export const authMeUpdateResponseNativeLanguageMax = 10;export const authMeUpdateResponseCurrentLevelMax = 10;export const authMeUpdateResponseCreditBalanceRegExp = new RegExp('^-?\\d{0,4}(?:\\.\\d{0,6})?$');
+export const authMeUpdateResponseEmailMax = 254;export const authMeUpdateResponseFirstNameMax = 150;export const authMeUpdateResponseLastNameMax = 150;export const authMeUpdateResponseNativeLanguageMax = 10;export const authMeUpdateResponseLearningLanguageMax = 10;export const authMeUpdateResponseCurrentLevelMax = 10;export const authMeUpdateResponseCreditBalanceRegExp = new RegExp('^-?\\d{0,4}(?:\\.\\d{0,6})?$');
 
 
 export const authMeUpdateResponse = zod.object({
   "id": zod.string().uuid(),
   "username": zod.string().max(authMeUpdateResponseUsernameMax).regex(authMeUpdateResponseUsernameRegExp).describe('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
   "email": zod.string().email().max(authMeUpdateResponseEmailMax).optional(),
+  "first_name": zod.string().max(authMeUpdateResponseFirstNameMax).optional(),
+  "last_name": zod.string().max(authMeUpdateResponseLastNameMax).optional(),
   "native_language": zod.string().max(authMeUpdateResponseNativeLanguageMax).optional(),
+  "learning_language": zod.string().max(authMeUpdateResponseLearningLanguageMax).optional(),
   "current_level": zod.string().max(authMeUpdateResponseCurrentLevelMax).optional(),
   "credit_balance": zod.string().regex(authMeUpdateResponseCreditBalanceRegExp),
   "preferred_model_id": zod.string(),
@@ -115,25 +147,31 @@ export const authMeUpdateResponse = zod.object({
  */
 export const authMePartialUpdateBodyUsernameMax = 150;
 export const authMePartialUpdateBodyUsernameRegExp = new RegExp('^[\\w.@+-]+$');
-export const authMePartialUpdateBodyEmailMax = 254;export const authMePartialUpdateBodyNativeLanguageMax = 10;export const authMePartialUpdateBodyCurrentLevelMax = 10;
+export const authMePartialUpdateBodyEmailMax = 254;export const authMePartialUpdateBodyFirstNameMax = 150;export const authMePartialUpdateBodyLastNameMax = 150;export const authMePartialUpdateBodyNativeLanguageMax = 10;export const authMePartialUpdateBodyLearningLanguageMax = 10;export const authMePartialUpdateBodyCurrentLevelMax = 10;
 
 export const authMePartialUpdateBody = zod.object({
   "username": zod.string().min(1).max(authMePartialUpdateBodyUsernameMax).regex(authMePartialUpdateBodyUsernameRegExp).optional().describe('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
   "email": zod.string().email().max(authMePartialUpdateBodyEmailMax).optional(),
+  "first_name": zod.string().max(authMePartialUpdateBodyFirstNameMax).optional(),
+  "last_name": zod.string().max(authMePartialUpdateBodyLastNameMax).optional(),
   "native_language": zod.string().min(1).max(authMePartialUpdateBodyNativeLanguageMax).optional(),
+  "learning_language": zod.string().min(1).max(authMePartialUpdateBodyLearningLanguageMax).optional(),
   "current_level": zod.string().min(1).max(authMePartialUpdateBodyCurrentLevelMax).optional()
 })
 
 export const authMePartialUpdateResponseUsernameMax = 150;
 export const authMePartialUpdateResponseUsernameRegExp = new RegExp('^[\\w.@+-]+$');
-export const authMePartialUpdateResponseEmailMax = 254;export const authMePartialUpdateResponseNativeLanguageMax = 10;export const authMePartialUpdateResponseCurrentLevelMax = 10;export const authMePartialUpdateResponseCreditBalanceRegExp = new RegExp('^-?\\d{0,4}(?:\\.\\d{0,6})?$');
+export const authMePartialUpdateResponseEmailMax = 254;export const authMePartialUpdateResponseFirstNameMax = 150;export const authMePartialUpdateResponseLastNameMax = 150;export const authMePartialUpdateResponseNativeLanguageMax = 10;export const authMePartialUpdateResponseLearningLanguageMax = 10;export const authMePartialUpdateResponseCurrentLevelMax = 10;export const authMePartialUpdateResponseCreditBalanceRegExp = new RegExp('^-?\\d{0,4}(?:\\.\\d{0,6})?$');
 
 
 export const authMePartialUpdateResponse = zod.object({
   "id": zod.string().uuid(),
   "username": zod.string().max(authMePartialUpdateResponseUsernameMax).regex(authMePartialUpdateResponseUsernameRegExp).describe('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
   "email": zod.string().email().max(authMePartialUpdateResponseEmailMax).optional(),
+  "first_name": zod.string().max(authMePartialUpdateResponseFirstNameMax).optional(),
+  "last_name": zod.string().max(authMePartialUpdateResponseLastNameMax).optional(),
   "native_language": zod.string().max(authMePartialUpdateResponseNativeLanguageMax).optional(),
+  "learning_language": zod.string().max(authMePartialUpdateResponseLearningLanguageMax).optional(),
   "current_level": zod.string().max(authMePartialUpdateResponseCurrentLevelMax).optional(),
   "credit_balance": zod.string().regex(authMePartialUpdateResponseCreditBalanceRegExp),
   "preferred_model_id": zod.string(),
@@ -145,12 +183,24 @@ export const authMePartialUpdateResponse = zod.object({
  */
 export const authRegisterCreateBodyUsernameMax = 150;
 export const authRegisterCreateBodyUsernameRegExp = new RegExp('^[\\w.@+-]+$');
-export const authRegisterCreateBodyEmailMax = 254;export const authRegisterCreateBodyPasswordMin = 8;export const authRegisterCreateBodyNativeLanguageMax = 10;
+export const authRegisterCreateBodyEmailMax = 254;export const authRegisterCreateBodyPasswordMin = 8;export const authRegisterCreateBodyNativeLanguageMax = 10;export const authRegisterCreateBodyLearningLanguageMax = 10;
 
 export const authRegisterCreateBody = zod.object({
   "username": zod.string().min(1).max(authRegisterCreateBodyUsernameMax).regex(authRegisterCreateBodyUsernameRegExp).describe('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
   "email": zod.string().email().max(authRegisterCreateBodyEmailMax).optional(),
   "password": zod.string().min(authRegisterCreateBodyPasswordMin),
-  "native_language": zod.string().min(1).max(authRegisterCreateBodyNativeLanguageMax).optional()
+  "native_language": zod.string().min(1).max(authRegisterCreateBodyNativeLanguageMax).optional(),
+  "learning_language": zod.string().min(1).max(authRegisterCreateBodyLearningLanguageMax).optional()
+})
+
+/**
+ * @summary Reset password with token
+ */
+export const authResetPasswordCreateBodyNewPasswordMin = 8;
+
+export const authResetPasswordCreateBody = zod.object({
+  "uid": zod.string().min(1),
+  "token": zod.string().min(1),
+  "new_password": zod.string().min(authResetPasswordCreateBodyNewPasswordMin)
 })
 

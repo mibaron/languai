@@ -16,11 +16,20 @@ export interface PatchedUserRequest {
   username?: string;
   /** @maxLength 254 */
   email?: string;
+  /** @maxLength 150 */
+  first_name?: string;
+  /** @maxLength 150 */
+  last_name?: string;
   /**
    * @minLength 1
    * @maxLength 10
    */
   native_language?: string;
+  /**
+   * @minLength 1
+   * @maxLength 10
+   */
+  learning_language?: string;
   /**
    * @minLength 1
    * @maxLength 10

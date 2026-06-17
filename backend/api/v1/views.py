@@ -30,6 +30,8 @@ from .serializers import (
     AIGenerateRequestSerializer,
     AIItemContentRequestSerializer,
     AuthResponseSerializer,
+    ChangePasswordSerializer,
+    ForgotPasswordSerializer,
     GoogleLoginSerializer,
     LevelSerializer,
     LevelWriteSerializer,
@@ -39,6 +41,7 @@ from .serializers import (
     OnboardingStatusSerializer,
     PackSerializer,
     RegisterSerializer,
+    ResetPasswordSerializer,
     SectionDetailSerializer,
     SectionItemSerializer,
     SectionItemWriteSerializer,
@@ -184,6 +187,103 @@ class MeView(generics.RetrieveUpdateAPIView):
 
     def get_object(self) -> User:
         return self.request.user
+
+    @extend_schema(summary="Delete current user account", tags=["auth"], responses={204: None})
+    def delete(self, request: Request, *args: object, **kwargs: object) -> Response:
+        user = request.user
+        try:
+            request.user.auth_token.delete()
+        except Token.DoesNotExist:
+            pass
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ChangePasswordView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ChangePasswordSerializer
+
+    @extend_schema(summary="Change password", tags=["auth"], request=ChangePasswordSerializer, responses={204: None})
+    def post(self, request: Request) -> Response:
+        serializer = ChangePasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        if not request.user.check_password(serializer.validated_data["old_password"]):
+            return Response(
+                {"error": {"code": "wrong_password", "message": "Current password is incorrect"}},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        request.user.set_password(serializer.validated_data["new_password"])
+        request.user.save(update_fields=["password"])
+        request.user.auth_token.delete()
+        token, _ = Token.objects.get_or_create(user=request.user)
+        return Response({"token": token.key}, status=status.HTTP_200_OK)
+
+
+class ForgotPasswordView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = ForgotPasswordSerializer
+
+    @extend_schema(summary="Request password reset email", tags=["auth"], request=ForgotPasswordSerializer, responses={200: None})
+    def post(self, request: Request) -> Response:
+        serializer = ForgotPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        from django.contrib.auth.tokens import default_token_generator
+        from django.utils.encoding import force_bytes
+        from django.utils.http import urlsafe_base64_encode
+
+        email = serializer.validated_data["email"]
+        user = User.objects.filter(email=email).first()
+
+        if user and user.has_usable_password():
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            reset_url = f"{request.headers.get('Origin', '')}/reset-password?uid={uid}&token={token}"
+            try:
+                user.email_user(
+                    subject="Reset your Langu-AI password",
+                    message=f"Click the link to reset your password: {reset_url}",
+                    from_email=None,
+                )
+            except Exception:
+                logger.exception("Failed to send password reset email")
+
+        return Response({"detail": "If an account with that email exists, a reset link has been sent."})
+
+
+class ResetPasswordView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = ResetPasswordSerializer
+
+    @extend_schema(summary="Reset password with token", tags=["auth"], request=ResetPasswordSerializer, responses={204: None})
+    def post(self, request: Request) -> Response:
+        serializer = ResetPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        from django.contrib.auth.tokens import default_token_generator
+        from django.utils.http import urlsafe_base64_decode
+
+        try:
+            uid = urlsafe_base64_decode(serializer.validated_data["uid"]).decode()
+            user = User.objects.get(pk=uid)
+        except (ValueError, TypeError, User.DoesNotExist):
+            return Response(
+                {"error": {"code": "invalid_token", "message": "Invalid or expired reset link"}},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not default_token_generator.check_token(user, serializer.validated_data["token"]):
+            return Response(
+                {"error": {"code": "invalid_token", "message": "Invalid or expired reset link"}},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        user.set_password(serializer.validated_data["new_password"])
+        user.save(update_fields=["password"])
+        Token.objects.filter(user=user).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # ── Levels ────────────────────────────────────

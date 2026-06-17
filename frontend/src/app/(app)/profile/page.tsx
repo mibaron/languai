@@ -6,14 +6,22 @@ import {
   Package,
   Sparkles,
   Bookmark,
-  Settings,
+  Lock,
   LogOut,
+  Trash2,
   ChevronRight,
   Compass,
   MoreVertical,
+  Pencil,
 } from "lucide-react";
 
+import { getLanguageLabel } from "@/lib/languages";
+
+import { ChangePasswordDrawer } from "./_components/change-password-drawer";
+import { DeleteAccountDialog } from "./_components/delete-account-dialog";
+import { EditNameDrawer } from "./_components/edit-name-drawer";
 import { ExplorePacksView } from "./_components/explore-packs-view";
+import { LanguageDrawer } from "./_components/language-drawer";
 import { PackActionSheet } from "./_components/pack-action-sheet";
 import { ProfileRow } from "./_components/profile-row";
 import { ProfileSection } from "./_components/profile-section";
@@ -28,13 +36,24 @@ export default function ProfilePage() {
     setExploreOpen,
     actionSheetPack,
     setActionSheetPack,
+    drawer,
+    setDrawer,
+    closeDrawer,
     handleSubscribe,
     handleArchive,
     handleUnsubscribe,
     handleSignOut,
+    handleSaveName,
+    handleSaveLanguage,
+    handleDeleteAccount,
+    isUpdatingProfile,
+    isDeletingAccount,
   } = useProfile();
 
-  const displayName = user?.username ?? "User";
+  const firstName = user?.first_name ?? "";
+  const lastName = user?.last_name ?? "";
+  const displayName =
+    [firstName, lastName].filter(Boolean).join(" ") || user?.username || "User";
   const displayEmail = user?.email ?? "";
   const initial = displayName.charAt(0).toUpperCase();
 
@@ -46,7 +65,7 @@ export default function ProfilePage() {
             <div className="flex size-14 items-center justify-center rounded-full border-2 border-brand/30 bg-brand-muted">
               <span className="text-2xl font-bold text-brand">{initial}</span>
             </div>
-            <div>
+            <div className="min-w-0 flex-1">
               <div className="text-[17px] font-bold tracking-[-0.01em] text-foreground">
                 {displayName}
               </div>
@@ -56,6 +75,12 @@ export default function ProfilePage() {
                 </div>
               )}
             </div>
+            <button
+              onClick={() => setDrawer({ type: "editName" })}
+              className="flex size-9 items-center justify-center rounded-lg border border-border/50 text-muted-foreground"
+            >
+              <Pencil size={15} />
+            </button>
           </div>
         </div>
 
@@ -79,8 +104,23 @@ export default function ProfilePage() {
           </button>
 
           <ProfileSection title="Languages">
-            <ProfileRow icon={Globe} label="Speaks" value="English" />
-            <ProfileRow icon={BookOpen} label="Learning" value="German" last />
+            <ProfileRow
+              icon={Globe}
+              label="Speaks"
+              value={getLanguageLabel(user?.native_language ?? "en")}
+              onClick={() =>
+                setDrawer({ type: "language", mode: "speaks" })
+              }
+            />
+            <ProfileRow
+              icon={BookOpen}
+              label="Learning"
+              value={getLanguageLabel(user?.learning_language ?? "de")}
+              onClick={() =>
+                setDrawer({ type: "language", mode: "learning" })
+              }
+              last
+            />
           </ProfileSection>
 
           <ProfileSection title="My Packs">
@@ -126,7 +166,12 @@ export default function ProfilePage() {
               }
             />
             <ProfileRow icon={Bookmark} label="Saved Items" />
-            <ProfileRow icon={Settings} label="Settings" last />
+            <ProfileRow
+              icon={Lock}
+              label="Change Password"
+              onClick={() => setDrawer({ type: "changePassword" })}
+              last
+            />
           </ProfileSection>
 
           <button
@@ -135,6 +180,14 @@ export default function ProfilePage() {
           >
             <LogOut size={18} />
             Sign Out
+          </button>
+
+          <button
+            onClick={() => setDrawer({ type: "deleteAccount" })}
+            className="flex w-full items-center gap-2.5 rounded-xl border border-border/50 px-4 py-3.5 text-sm font-medium text-muted-foreground"
+          >
+            <Trash2 size={18} />
+            Delete Account
           </button>
         </div>
       </div>
@@ -151,6 +204,42 @@ export default function ProfilePage() {
         onClose={() => setActionSheetPack(null)}
         onArchive={handleArchive}
         onUnsubscribe={handleUnsubscribe}
+      />
+
+      <EditNameDrawer
+        open={drawer.type === "editName"}
+        firstName={firstName}
+        lastName={lastName}
+        onSave={handleSaveName}
+        onClose={closeDrawer}
+        isSaving={isUpdatingProfile}
+      />
+
+      <LanguageDrawer
+        open={drawer.type === "language"}
+        mode={drawer.type === "language" ? drawer.mode : "speaks"}
+        currentValue={
+          drawer.type === "language" && drawer.mode === "learning"
+            ? (user?.learning_language ?? "de")
+            : (user?.native_language ?? "en")
+        }
+        onSave={handleSaveLanguage}
+        onClose={closeDrawer}
+        isSaving={isUpdatingProfile}
+      />
+
+      <ChangePasswordDrawer
+        open={drawer.type === "changePassword"}
+        onClose={closeDrawer}
+      />
+
+      <DeleteAccountDialog
+        open={drawer.type === "deleteAccount"}
+        onOpenChange={(open) => {
+          if (!open) closeDrawer();
+        }}
+        onConfirm={handleDeleteAccount}
+        isLoading={isDeletingAccount}
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import type { Pack, UserPackSubscription } from "@/lib/api/orval/api/generated/model";
+import type { UserPackSubscription } from "@/lib/api/orval/api/generated/model";
 
 export interface ExplorePacksViewProps {
   open: boolean;
@@ -26,4 +26,34 @@ export interface ProfileRowProps {
   last?: boolean;
   onClick?: () => void;
   action?: React.ReactNode;
+}
+
+export interface EditNameDrawerProps {
+  open: boolean;
+  firstName: string;
+  lastName: string;
+  onSave: (firstName: string, lastName: string) => void;
+  onClose: () => void;
+  isSaving: boolean;
+}
+
+export interface LanguageDrawerProps {
+  open: boolean;
+  mode: "speaks" | "learning";
+  currentValue: string;
+  onSave: (value: string) => void;
+  onClose: () => void;
+  isSaving: boolean;
+}
+
+export interface ChangePasswordDrawerProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+export interface DeleteAccountDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onConfirm: () => void;
+  isLoading: boolean;
 }

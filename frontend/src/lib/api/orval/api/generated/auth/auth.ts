@@ -21,10 +21,13 @@ import type {
 
 import type {
   AuthResponse,
+  ChangePasswordRequest,
+  ForgotPasswordRequest,
   GoogleLoginRequest,
   LoginRequest,
   PatchedUserRequest,
   RegisterRequest,
+  ResetPasswordRequest,
   User,
   UserRequest
 } from '.././model';
@@ -39,6 +42,134 @@ type AwaitedInput<T> = PromiseLike<T> | T;
 
 
 /**
+ * @summary Change password
+ */
+export const authChangePasswordCreate = (
+    changePasswordRequest: ChangePasswordRequest,
+ signal?: AbortSignal
+) => {
+      
+      
+      return axiosInstance<void>(
+      {url: `/api/v1/auth/change-password/`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: changePasswordRequest, signal
+    },
+      );
+    }
+  
+
+
+export const getAuthChangePasswordCreateMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authChangePasswordCreate>>, TError,{data: ChangePasswordRequest}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof authChangePasswordCreate>>, TError,{data: ChangePasswordRequest}, TContext> => {
+
+const mutationKey = ['authChangePasswordCreate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authChangePasswordCreate>>, {data: ChangePasswordRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  authChangePasswordCreate(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AuthChangePasswordCreateMutationResult = NonNullable<Awaited<ReturnType<typeof authChangePasswordCreate>>>
+    export type AuthChangePasswordCreateMutationBody = ChangePasswordRequest
+    export type AuthChangePasswordCreateMutationError = unknown
+
+    /**
+ * @summary Change password
+ */
+export const useAuthChangePasswordCreate = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authChangePasswordCreate>>, TError,{data: ChangePasswordRequest}, TContext>, }
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof authChangePasswordCreate>>,
+        TError,
+        {data: ChangePasswordRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getAuthChangePasswordCreateMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    /**
+ * @summary Request password reset email
+ */
+export const authForgotPasswordCreate = (
+    forgotPasswordRequest: ForgotPasswordRequest,
+ signal?: AbortSignal
+) => {
+      
+      
+      return axiosInstance<void>(
+      {url: `/api/v1/auth/forgot-password/`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: forgotPasswordRequest, signal
+    },
+      );
+    }
+  
+
+
+export const getAuthForgotPasswordCreateMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authForgotPasswordCreate>>, TError,{data: ForgotPasswordRequest}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof authForgotPasswordCreate>>, TError,{data: ForgotPasswordRequest}, TContext> => {
+
+const mutationKey = ['authForgotPasswordCreate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authForgotPasswordCreate>>, {data: ForgotPasswordRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  authForgotPasswordCreate(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AuthForgotPasswordCreateMutationResult = NonNullable<Awaited<ReturnType<typeof authForgotPasswordCreate>>>
+    export type AuthForgotPasswordCreateMutationBody = ForgotPasswordRequest
+    export type AuthForgotPasswordCreateMutationError = unknown
+
+    /**
+ * @summary Request password reset email
+ */
+export const useAuthForgotPasswordCreate = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authForgotPasswordCreate>>, TError,{data: ForgotPasswordRequest}, TContext>, }
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof authForgotPasswordCreate>>,
+        TError,
+        {data: ForgotPasswordRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getAuthForgotPasswordCreateMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    /**
  * @summary Login or register with Google
  */
 export const authGoogleCreate = (
@@ -422,6 +553,67 @@ export const useAuthMePartialUpdate = <TError = unknown,
       return useMutation(mutationOptions);
     }
     /**
+ * @summary Delete current user account
+ */
+export const authMeDestroy = (
+    
+ ) => {
+      
+      
+      return axiosInstance<void>(
+      {url: `/api/v1/auth/me/`, method: 'DELETE'
+    },
+      );
+    }
+  
+
+
+export const getAuthMeDestroyMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authMeDestroy>>, TError,void, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof authMeDestroy>>, TError,void, TContext> => {
+
+const mutationKey = ['authMeDestroy'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authMeDestroy>>, void> = () => {
+          
+
+          return  authMeDestroy()
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AuthMeDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof authMeDestroy>>>
+    
+    export type AuthMeDestroyMutationError = unknown
+
+    /**
+ * @summary Delete current user account
+ */
+export const useAuthMeDestroy = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authMeDestroy>>, TError,void, TContext>, }
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof authMeDestroy>>,
+        TError,
+        void,
+        TContext
+      > => {
+
+      const mutationOptions = getAuthMeDestroyMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    /**
  * @summary Register a new user
  */
 export const authRegisterCreate = (
@@ -482,6 +674,70 @@ export const useAuthRegisterCreate = <TError = unknown,
       > => {
 
       const mutationOptions = getAuthRegisterCreateMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    /**
+ * @summary Reset password with token
+ */
+export const authResetPasswordCreate = (
+    resetPasswordRequest: ResetPasswordRequest,
+ signal?: AbortSignal
+) => {
+      
+      
+      return axiosInstance<void>(
+      {url: `/api/v1/auth/reset-password/`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: resetPasswordRequest, signal
+    },
+      );
+    }
+  
+
+
+export const getAuthResetPasswordCreateMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authResetPasswordCreate>>, TError,{data: ResetPasswordRequest}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof authResetPasswordCreate>>, TError,{data: ResetPasswordRequest}, TContext> => {
+
+const mutationKey = ['authResetPasswordCreate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authResetPasswordCreate>>, {data: ResetPasswordRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  authResetPasswordCreate(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AuthResetPasswordCreateMutationResult = NonNullable<Awaited<ReturnType<typeof authResetPasswordCreate>>>
+    export type AuthResetPasswordCreateMutationBody = ResetPasswordRequest
+    export type AuthResetPasswordCreateMutationError = unknown
+
+    /**
+ * @summary Reset password with token
+ */
+export const useAuthResetPasswordCreate = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authResetPasswordCreate>>, TError,{data: ResetPasswordRequest}, TContext>, }
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof authResetPasswordCreate>>,
+        TError,
+        {data: ResetPasswordRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getAuthResetPasswordCreateMutationOptions(options);
 
       return useMutation(mutationOptions);
     }

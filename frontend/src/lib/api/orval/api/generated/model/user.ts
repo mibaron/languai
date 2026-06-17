@@ -16,8 +16,14 @@ export interface User {
   username: string;
   /** @maxLength 254 */
   email?: string;
+  /** @maxLength 150 */
+  first_name?: string;
+  /** @maxLength 150 */
+  last_name?: string;
   /** @maxLength 10 */
   native_language?: string;
+  /** @maxLength 10 */
+  learning_language?: string;
   /** @maxLength 10 */
   current_level?: string;
   /** @pattern ^-?\d{0,4}(?:\.\d{0,6})?$ */

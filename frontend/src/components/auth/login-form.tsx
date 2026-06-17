@@ -108,6 +108,15 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
           />
         </div>
 
+        <div className="flex justify-end">
+          <Link
+            href="/forgot-password"
+            className="text-xs text-muted-foreground hover:text-brand"
+          >
+            Forgot password?
+          </Link>
+        </div>
+
         <Button
           type="submit"
           className="mt-2 w-full rounded-xl bg-brand py-3 text-[15px] font-semibold hover:bg-brand-hover"

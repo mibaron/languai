@@ -23,4 +23,9 @@ export interface RegisterRequest {
    * @maxLength 10
    */
   native_language?: string;
+  /**
+   * @minLength 1
+   * @maxLength 10
+   */
+  learning_language?: string;
 }

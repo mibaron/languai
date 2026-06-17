@@ -18,7 +18,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["username", "email", "password", "native_language"]
+        fields = ["username", "email", "password", "native_language", "learning_language"]
 
     def create(self, validated_data: dict) -> User:
         from django.conf import settings
@@ -52,6 +52,21 @@ class UserCreditResponseSerializer(serializers.Serializer):
     currency = serializers.CharField()
 
 
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True, min_length=8)
+
+
+class ForgotPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
+class ResetPasswordSerializer(serializers.Serializer):
+    uid = serializers.CharField()
+    token = serializers.CharField()
+    new_password = serializers.CharField(write_only=True, min_length=8)
+
+
 class ShareKeyResponseSerializer(serializers.Serializer):
     share_key = serializers.CharField()
 
@@ -64,7 +79,8 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            "id", "username", "email", "native_language", "current_level",
+            "id", "username", "email", "first_name", "last_name",
+            "native_language", "learning_language", "current_level",
             "credit_balance", "preferred_model_id", "date_joined",
         ]
         read_only_fields = ["id", "date_joined", "credit_balance", "preferred_model_id"]
