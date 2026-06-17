@@ -1,15 +1,14 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-
 import { AuthLayout } from "@/components/auth/auth-layout";
 import { RegisterForm } from "@/components/auth/register-form";
+import { useOnboardingSync } from "@/hooks/use-onboarding-sync";
 
 export default function RegisterPage() {
-  const router = useRouter();
+  const { syncAndRedirect } = useOnboardingSync();
 
   const handleRegisterSuccess = () => {
-    router.push("/learn");
+    syncAndRedirect("/learn");
   };
 
   return (

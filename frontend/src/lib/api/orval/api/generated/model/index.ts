@@ -22,6 +22,8 @@ export * from './levelWrite';
 export * from './levelWriteRequest';
 export * from './levelsListParams';
 export * from './loginRequest';
+export * from './onboardingCompleteRequest';
+export * from './onboardingStatus';
 export * from './pack';
 export * from './packsListParams';
 export * from './packsSubscriptionsListParams';

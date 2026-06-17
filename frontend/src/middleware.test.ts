@@ -37,6 +37,11 @@ describe("middleware", () => {
       expect(response.headers.get("location")).toBeNull();
     });
 
+    it("allows access to /onboarding", () => {
+      const response = middleware(createRequest("/onboarding"));
+      expect(response.headers.get("location")).toBeNull();
+    });
+
     it("redirects /learn to /login with next param", () => {
       const response = middleware(createRequest("/learn"));
       const location = response.headers.get("location");
@@ -79,6 +84,11 @@ describe("middleware", () => {
       const response = middleware(createRequest("/register"));
       const location = response.headers.get("location");
       expect(location).toContain("/learn");
+    });
+
+    it("allows access to /onboarding (does not redirect)", () => {
+      const response = middleware(createRequest("/onboarding"));
+      expect(response.headers.get("location")).toBeNull();
     });
 
     it("allows access to /learn (no redirect loop)", () => {

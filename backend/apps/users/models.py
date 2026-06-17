@@ -19,6 +19,7 @@ class User(AbstractUser):
     credit_balance = models.DecimalField(
         max_digits=10, decimal_places=6, default=Decimal("0")
     )
+    is_onboarded = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["-date_joined"]

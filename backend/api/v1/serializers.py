@@ -195,6 +195,21 @@ class SectionProgressSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "completed_at", "updated_at"]
 
 
+# ── Onboarding ───────────────────────────────
+
+
+class OnboardingStatusSerializer(serializers.Serializer):
+    is_onboarded = serializers.BooleanField()
+    native_language = serializers.CharField()
+    current_level = serializers.CharField()
+    pack_ids = serializers.ListField(child=serializers.UUIDField(), default=list)
+
+
+class OnboardingCompleteSerializer(serializers.Serializer):
+    native_language = serializers.CharField(max_length=10)
+    pack_ids = serializers.ListField(child=serializers.UUIDField(), min_length=1)
+
+
 # ── Packs ────────────────────────────────────
 
 

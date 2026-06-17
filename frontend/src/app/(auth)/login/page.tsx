@@ -1,18 +1,19 @@
 "use client";
 
 import { Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 import { AuthLayout } from "@/components/auth/auth-layout";
 import { LoginForm } from "@/components/auth/login-form";
+import { useOnboardingSync } from "@/hooks/use-onboarding-sync";
 
 function LoginContent() {
-  const router = useRouter();
   const searchParams = useSearchParams();
+  const { syncAndRedirect } = useOnboardingSync();
 
   const handleLoginSuccess = () => {
     const next = searchParams.get("next") || "/learn";
-    router.push(next);
+    syncAndRedirect(next);
   };
 
   return <LoginForm onSuccess={handleLoginSuccess} />;

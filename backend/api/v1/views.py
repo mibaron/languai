@@ -35,6 +35,8 @@ from .serializers import (
     LevelWriteSerializer,
     LLMModelSerializer,
     LoginSerializer,
+    OnboardingCompleteSerializer,
+    OnboardingStatusSerializer,
     PackSerializer,
     RegisterSerializer,
     SectionDetailSerializer,
@@ -511,6 +513,74 @@ class UserCreditView(APIView):
         return Response({
             "credit_balance": str(request.user.credit_balance),
             "currency": "EUR",
+        })
+
+
+# ── Onboarding ───────────────────────────────
+
+
+class OnboardingView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @extend_schema(
+        summary="Get onboarding status",
+        tags=["onboarding"],
+        responses={200: OnboardingStatusSerializer},
+    )
+    def get(self, request: Request) -> Response:
+        user = request.user
+        pack_ids = list(
+            user.pack_subscriptions.filter(status="active").values_list("pack_id", flat=True)
+        )
+        return Response({
+            "is_onboarded": user.is_onboarded,
+            "native_language": user.native_language,
+            "current_level": user.current_level,
+            "pack_ids": pack_ids,
+        })
+
+    @extend_schema(
+        summary="Complete onboarding",
+        tags=["onboarding"],
+        request=OnboardingCompleteSerializer,
+        responses={200: OnboardingStatusSerializer},
+    )
+    def post(self, request: Request) -> Response:
+        serializer = OnboardingCompleteSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = request.user
+        data = serializer.validated_data
+
+        user.native_language = data["native_language"]
+        user.is_onboarded = True
+
+        from apps.packs.models import Pack, SubscriptionStatus, UserPackSubscription
+
+        subscribed_pack_ids = []
+        for pack_id in data["pack_ids"]:
+            try:
+                pack = Pack.objects.get(id=pack_id, is_active=True)
+            except Pack.DoesNotExist:
+                continue
+            UserPackSubscription.objects.get_or_create(
+                user=user,
+                pack=pack,
+                defaults={"status": SubscriptionStatus.ACTIVE},
+            )
+            subscribed_pack_ids.append(pack_id)
+
+        if subscribed_pack_ids:
+            first_pack = Pack.objects.get(id=subscribed_pack_ids[0])
+            user.current_level = first_pack.level.code
+
+        user.save(update_fields=["native_language", "current_level", "is_onboarded"])
+
+        return Response({
+            "is_onboarded": True,
+            "native_language": user.native_language,
+            "current_level": user.current_level,
+            "pack_ids": subscribed_pack_ids,
         })
 
 
