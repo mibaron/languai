@@ -2,7 +2,7 @@ import pytest
 
 from apps.packs.models import SubscriptionStatus, UserPackSubscription
 
-from .factories import PackFactory, UserFactory, UserPackSubscriptionFactory
+from .factories import PackFactory, UserPackSubscriptionFactory
 
 
 @pytest.mark.django_db

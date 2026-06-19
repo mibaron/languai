@@ -1,10 +1,24 @@
 from django.contrib import admin
 
-from .models import Pack, UserPackSubscription
+from .models import Pack, PackItem, PackReferenceSheet, UserPackSubscription
+
+
+class PackItemInline(admin.TabularInline):
+    model = PackItem
+    extra = 1
+    raw_id_fields = ["item"]
+
+
+class PackReferenceSheetInline(admin.TabularInline):
+    model = PackReferenceSheet
+    extra = 1
+    raw_id_fields = ["sheet"]
 
 
 @admin.register(Pack)
 class PackAdmin(admin.ModelAdmin):
+    inlines = [PackItemInline, PackReferenceSheetInline]
+    filter_horizontal = ["goals"]
     list_display = [
         "title",
         "level",

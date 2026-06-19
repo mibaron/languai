@@ -9,6 +9,7 @@ import { getUserToken } from "@/lib/utils/auth/cookie-utils";
 import { ChevronRight } from "lucide-react";
 
 import { ProgressHeader } from "./_components/progress-header";
+import { StepGoals } from "./_components/step-goals";
 import { StepLanguage } from "./_components/step-language";
 import { StepPacks } from "./_components/step-packs";
 import { StepTarget } from "./_components/step-target";
@@ -23,11 +24,15 @@ export default function OnboardingPage() {
     selectedLanguages,
     primaryLanguage,
     selectedPackIds,
+    selectedGoalId,
+    goals,
+    goalsLoading,
     packs,
     packsLoading,
     canContinue,
     toggleLanguage,
     togglePack,
+    selectGoal,
     goNext,
     goBack,
     persistToStorage,
@@ -47,6 +52,7 @@ export default function OnboardingPage() {
         await onboardingCreate({
           native_language: primaryLanguage,
           pack_ids: selectedPackIds,
+          learning_goal: selectedGoalId,
         });
         clearOnboardingStorage();
         router.push("/learn");
@@ -63,6 +69,7 @@ export default function OnboardingPage() {
     persistToStorage,
     primaryLanguage,
     selectedPackIds,
+    selectedGoalId,
     router,
   ]);
 
@@ -99,6 +106,17 @@ export default function OnboardingPage() {
               style={{ width: `${100 / totalSteps}%` }}
             >
               <StepTarget />
+            </div>
+            <div
+              className="shrink-0 overflow-y-auto"
+              style={{ width: `${100 / totalSteps}%` }}
+            >
+              <StepGoals
+                goals={goals}
+                selectedGoalId={selectedGoalId}
+                onSelect={selectGoal}
+                isLoading={goalsLoading}
+              />
             </div>
             <div
               className="shrink-0 overflow-y-auto"

@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('users', '0003_add_is_onboarded'),
+        ("users", "0003_add_is_onboarded"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='learning_language',
-            field=models.CharField(default='de', max_length=10),
+            model_name="user",
+            name="learning_language",
+            field=models.CharField(default="de", max_length=10),
         ),
     ]

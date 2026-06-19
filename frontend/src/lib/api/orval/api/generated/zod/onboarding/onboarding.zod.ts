@@ -15,7 +15,8 @@ export const onboardingRetrieveResponse = zod.object({
   "is_onboarded": zod.boolean(),
   "native_language": zod.string(),
   "current_level": zod.string(),
-  "pack_ids": zod.array(zod.string().uuid()).optional()
+  "pack_ids": zod.array(zod.string().uuid()).optional(),
+  "learning_goal": zod.string().uuid().nullable()
 })
 
 /**
@@ -25,13 +26,15 @@ export const onboardingCreateBodyNativeLanguageMax = 10;
 
 export const onboardingCreateBody = zod.object({
   "native_language": zod.string().min(1).max(onboardingCreateBodyNativeLanguageMax),
-  "pack_ids": zod.array(zod.string().uuid()).min(1)
+  "pack_ids": zod.array(zod.string().uuid()).min(1),
+  "learning_goal": zod.string().uuid().nullish()
 })
 
 export const onboardingCreateResponse = zod.object({
   "is_onboarded": zod.boolean(),
   "native_language": zod.string(),
   "current_level": zod.string(),
-  "pack_ids": zod.array(zod.string().uuid()).optional()
+  "pack_ids": zod.array(zod.string().uuid()).optional(),
+  "learning_goal": zod.string().uuid().nullable()
 })
 

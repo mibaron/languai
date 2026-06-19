@@ -6,7 +6,14 @@ from .models import User
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    list_display = ["username", "email", "current_level", "credit_balance", "preferred_model", "is_active"]
+    list_display = [
+        "username",
+        "email",
+        "current_level",
+        "credit_balance",
+        "preferred_model",
+        "is_active",
+    ]
     list_filter = ["current_level", "is_active"]
     fieldsets = BaseUserAdmin.fieldsets + (
         ("Learning", {"fields": ("native_language", "current_level")}),

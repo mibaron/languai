@@ -7,52 +7,98 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('content', '0003_section_created_by_sectionitem_created_by'),
+        ("content", "0003_section_created_by_sectionitem_created_by"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Pack',
+            name="Pack",
             fields=[
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('title', models.CharField(max_length=255)),
-                ('slug', models.SlugField(max_length=100, unique=True)),
-                ('base_language', models.CharField(db_index=True, max_length=10)),
-                ('description', models.TextField(blank=True, default='')),
-                ('grammar_count', models.PositiveIntegerField(default=0)),
-                ('vocab_count', models.PositiveIntegerField(default=0)),
-                ('exercise_count', models.PositiveIntegerField(default=0)),
-                ('is_active', models.BooleanField(db_index=True, default=True)),
-                ('level', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='packs', to='content.level')),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False
+                    ),
+                ),
+                ("title", models.CharField(max_length=255)),
+                ("slug", models.SlugField(max_length=100, unique=True)),
+                ("base_language", models.CharField(db_index=True, max_length=10)),
+                ("description", models.TextField(blank=True, default="")),
+                ("grammar_count", models.PositiveIntegerField(default=0)),
+                ("vocab_count", models.PositiveIntegerField(default=0)),
+                ("exercise_count", models.PositiveIntegerField(default=0)),
+                ("is_active", models.BooleanField(db_index=True, default=True)),
+                (
+                    "level",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="packs",
+                        to="content.level",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'pack',
-                'verbose_name_plural': 'packs',
-                'ordering': ['level', 'base_language'],
+                "verbose_name": "pack",
+                "verbose_name_plural": "packs",
+                "ordering": ["level", "base_language"],
             },
         ),
         migrations.CreateModel(
-            name='UserPackSubscription',
+            name="UserPackSubscription",
             fields=[
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('status', models.CharField(choices=[('active', 'Active'), ('archived', 'Archived'), ('completed', 'Completed')], db_index=True, default='active', max_length=20)),
-                ('pack', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='subscriptions', to='packs.pack')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='pack_subscriptions', to=settings.AUTH_USER_MODEL)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False
+                    ),
+                ),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("active", "Active"),
+                            ("archived", "Archived"),
+                            ("completed", "Completed"),
+                        ],
+                        db_index=True,
+                        default="active",
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "pack",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="subscriptions",
+                        to="packs.pack",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="pack_subscriptions",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'pack subscription',
-                'verbose_name_plural': 'pack subscriptions',
-                'ordering': ['-created_at'],
-                'constraints': [models.UniqueConstraint(fields=('user', 'pack'), name='unique_user_pack_subscription')],
+                "verbose_name": "pack subscription",
+                "verbose_name_plural": "pack subscriptions",
+                "ordering": ["-created_at"],
+                "constraints": [
+                    models.UniqueConstraint(
+                        fields=("user", "pack"), name="unique_user_pack_subscription"
+                    )
+                ],
             },
         ),
     ]

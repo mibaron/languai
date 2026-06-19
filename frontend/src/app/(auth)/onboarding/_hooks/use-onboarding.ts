@@ -2,12 +2,13 @@
 
 import { useCallback, useState } from "react";
 
+import { useGoalsList } from "@/lib/api/orval/api/generated/goals/goals";
 import { usePacksList } from "@/lib/api/orval/api/generated/packs/packs";
 
 import type { OnboardingData } from "../_components/types";
 
 const STORAGE_KEY = "langu-ai-onboarding";
-const TOTAL_STEPS = 3;
+const TOTAL_STEPS = 4;
 
 function loadFromStorage(): OnboardingData | null {
   if (typeof window === "undefined") return null;
@@ -47,9 +48,15 @@ export function useOnboarding() {
   const [selectedPackIds, setSelectedPackIds] = useState<string[]>(
     stored?.selectedPackIds ?? [],
   );
+  const [selectedGoalId, setSelectedGoalId] = useState<string | null>(
+    stored?.selectedGoalId ?? null,
+  );
 
   const { data: packsResponse, isLoading: packsLoading } = usePacksList();
   const packs = packsResponse?.results ?? [];
+
+  const { data: goalsData, isLoading: goalsLoading } = useGoalsList();
+  const goals = goalsData ?? [];
 
   const toggleLanguage = useCallback(
     (langCode: string) => {
@@ -74,14 +81,19 @@ export function useOnboarding() {
     );
   }, []);
 
-  const canContinue = step === 3 ? selectedPackIds.length > 0 : true;
+  const selectGoal = useCallback((goalId: string) => {
+    setSelectedGoalId(goalId);
+  }, []);
+
+  const canContinue = step === 4 ? selectedPackIds.length > 0 : true;
 
   const persistToStorage = useCallback(() => {
     saveToStorage({
       nativeLanguage: primaryLanguage,
       selectedPackIds,
+      selectedGoalId,
     });
-  }, [primaryLanguage, selectedPackIds]);
+  }, [primaryLanguage, selectedPackIds, selectedGoalId]);
 
   const goNext = useCallback(() => {
     if (step < TOTAL_STEPS) {
@@ -101,11 +113,15 @@ export function useOnboarding() {
     selectedLanguages,
     primaryLanguage,
     selectedPackIds,
+    selectedGoalId,
+    goals,
+    goalsLoading,
     packs,
     packsLoading,
     canContinue,
     toggleLanguage,
     togglePack,
+    selectGoal,
     goNext,
     goBack,
     persistToStorage,

@@ -13,9 +13,16 @@ A full-stack German language learning application built as a monorepo:
 Langu-AI/
 ├── frontend/          # Next.js application
 ├── backend/           # Django application (uv-managed)
+├── docs/              # Architecture decisions, design docs, brainstorming records
 ├── Makefile           # All dev commands (make help for list)
 ├── german-cheatsheet.jsx  # Original reference (do not modify)
 ```
+
+### Documentation (`docs/`)
+- Architecture decisions, design documents, and brainstorming records go in `docs/`
+- These are committed to the repo so future conversations can catch up on context
+- Name files descriptively in kebab-case: `learning-engine-architecture.md`, `onboarding-flow.md`
+- When the user says "write it down" or "save this for later", this is the place
 
 ## Quick Start
 ```bash

@@ -6,51 +6,88 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Level',
+            name="Level",
             fields=[
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('code', models.CharField(db_index=True, max_length=10, unique=True)),
-                ('name', models.CharField(max_length=100)),
-                ('order', models.PositiveIntegerField(default=0)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False
+                    ),
+                ),
+                ("code", models.CharField(db_index=True, max_length=10, unique=True)),
+                ("name", models.CharField(max_length=100)),
+                ("order", models.PositiveIntegerField(default=0)),
             ],
             options={
-                'verbose_name': 'level',
-                'verbose_name_plural': 'levels',
-                'ordering': ['order'],
+                "verbose_name": "level",
+                "verbose_name_plural": "levels",
+                "ordering": ["order"],
             },
         ),
         migrations.CreateModel(
-            name='Section',
+            name="Section",
             fields=[
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('category', models.CharField(choices=[('grammar', 'Grammatik'), ('vocab', 'Wortschatz'), ('verbs', 'Verben'), ('phrases', 'Phrasen')], db_index=True, max_length=20)),
-                ('title', models.CharField(max_length=255)),
-                ('order', models.PositiveIntegerField(default=0)),
-                ('content_type', models.CharField(choices=[('table', 'Table'), ('notes', 'Notes'), ('grid', 'Grid')], max_length=20)),
-                ('note', models.TextField(blank=True, default='')),
-                ('note2', models.TextField(blank=True, default='')),
-                ('headers', models.JSONField(blank=True, default=list)),
-                ('rows', models.JSONField(blank=True, default=list)),
-                ('notes', models.JSONField(blank=True, default=list)),
-                ('level', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sections', to='content.level')),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False
+                    ),
+                ),
+                (
+                    "category",
+                    models.CharField(
+                        choices=[
+                            ("grammar", "Grammatik"),
+                            ("vocab", "Wortschatz"),
+                            ("verbs", "Verben"),
+                            ("phrases", "Phrasen"),
+                        ],
+                        db_index=True,
+                        max_length=20,
+                    ),
+                ),
+                ("title", models.CharField(max_length=255)),
+                ("order", models.PositiveIntegerField(default=0)),
+                (
+                    "content_type",
+                    models.CharField(
+                        choices=[("table", "Table"), ("notes", "Notes"), ("grid", "Grid")],
+                        max_length=20,
+                    ),
+                ),
+                ("note", models.TextField(blank=True, default="")),
+                ("note2", models.TextField(blank=True, default="")),
+                ("headers", models.JSONField(blank=True, default=list)),
+                ("rows", models.JSONField(blank=True, default=list)),
+                ("notes", models.JSONField(blank=True, default=list)),
+                (
+                    "level",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="sections",
+                        to="content.level",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'section',
-                'verbose_name_plural': 'sections',
-                'ordering': ['level', 'category', 'order'],
-                'indexes': [models.Index(fields=['level', 'category'], name='content_sec_level_i_b91658_idx')],
+                "verbose_name": "section",
+                "verbose_name_plural": "sections",
+                "ordering": ["level", "category", "order"],
+                "indexes": [
+                    models.Index(
+                        fields=["level", "category"], name="content_sec_level_i_b91658_idx"
+                    )
+                ],
             },
         ),
     ]

@@ -14,27 +14,24 @@ SYSTEM_PROMPTS = {
     "examples": (
         "You are a German language tutor. Given a learning item from a {level_code} German course, "
         "provide 5-8 additional example sentences that demonstrate the same concept. "
-        "Return ONLY a JSON object with an \"examples\" array, each element having \"german\" and \"english\" keys."
+        'Return ONLY a JSON object with an "examples" array, each element having "german" and "english" keys.'
     ),
     "quiz": (
         "You are a German language tutor creating a quick quiz. Given a learning item from a {level_code} German course, "
         "create 3-5 quiz questions testing the student's understanding. "
-        "Return ONLY a JSON object with a \"questions\" array, each having \"question\" (string), "
-        "\"options\" (array of 4 strings), \"correct_index\" (0-3), and \"explanation\" (string) keys."
+        'Return ONLY a JSON object with a "questions" array, each having "question" (string), '
+        '"options" (array of 4 strings), "correct_index" (0-3), and "explanation" (string) keys.'
     ),
     "explanation": (
         "You are a German language tutor. Given a learning item from a {level_code} German course, "
         "provide a clear, detailed explanation. Include when/why to use it, common mistakes, and tips. "
-        "Return ONLY a JSON object with \"title\" (string), \"explanation\" (markdown string), "
-        "\"key_points\" (array of strings), and \"common_mistakes\" (array of strings) keys."
+        'Return ONLY a JSON object with "title" (string), "explanation" (markdown string), '
+        '"key_points" (array of strings), and "common_mistakes" (array of strings) keys.'
     ),
 }
 
 USER_TEMPLATE = (
-    "Section: {section_title}\n"
-    "Level: {level_code} ({category})\n"
-    "{headers_line}"
-    "Item: {item_cells}\n"
+    "Section: {section_title}\nLevel: {level_code} ({category})\n{headers_line}Item: {item_cells}\n"
 )
 
 

@@ -6,62 +6,78 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('ai_content', '0001_initial'),
+        ("ai_content", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='LLMModel',
+            name="LLMModel",
             fields=[
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('model_id', models.CharField(db_index=True, max_length=100, unique=True)),
-                ('name', models.CharField(max_length=200)),
-                ('provider', models.CharField(max_length=100)),
-                ('prompt_price', models.DecimalField(decimal_places=12, default=Decimal('0'), max_digits=20)),
-                ('completion_price', models.DecimalField(decimal_places=12, default=Decimal('0'), max_digits=20)),
-                ('context_length', models.PositiveIntegerField(default=0)),
-                ('is_active', models.BooleanField(default=False)),
-                ('is_default', models.BooleanField(default=False)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False
+                    ),
+                ),
+                ("model_id", models.CharField(db_index=True, max_length=100, unique=True)),
+                ("name", models.CharField(max_length=200)),
+                ("provider", models.CharField(max_length=100)),
+                (
+                    "prompt_price",
+                    models.DecimalField(decimal_places=12, default=Decimal("0"), max_digits=20),
+                ),
+                (
+                    "completion_price",
+                    models.DecimalField(decimal_places=12, default=Decimal("0"), max_digits=20),
+                ),
+                ("context_length", models.PositiveIntegerField(default=0)),
+                ("is_active", models.BooleanField(default=False)),
+                ("is_default", models.BooleanField(default=False)),
             ],
             options={
-                'verbose_name': 'LLM model',
-                'verbose_name_plural': 'LLM models',
-                'ordering': ['provider', 'name'],
+                "verbose_name": "LLM model",
+                "verbose_name_plural": "LLM models",
+                "ordering": ["provider", "name"],
             },
         ),
         migrations.RemoveConstraint(
-            model_name='aicontent',
-            name='unique_fingerprint_action',
+            model_name="aicontent",
+            name="unique_fingerprint_action",
         ),
         migrations.RemoveIndex(
-            model_name='aicontent',
-            name='ai_content__item_fi_39b45a_idx',
+            model_name="aicontent",
+            name="ai_content__item_fi_39b45a_idx",
         ),
         migrations.AddField(
-            model_name='aicontent',
-            name='cost_usd',
-            field=models.DecimalField(decimal_places=8, default=Decimal('0'), max_digits=10),
+            model_name="aicontent",
+            name="cost_usd",
+            field=models.DecimalField(decimal_places=8, default=Decimal("0"), max_digits=10),
         ),
         migrations.AddField(
-            model_name='aiinteraction',
-            name='cost_usd',
-            field=models.DecimalField(decimal_places=8, default=Decimal('0'), max_digits=10),
+            model_name="aiinteraction",
+            name="cost_usd",
+            field=models.DecimalField(decimal_places=8, default=Decimal("0"), max_digits=10),
         ),
         migrations.AlterField(
-            model_name='aicontent',
-            name='model_used',
-            field=models.CharField(default='', max_length=100),
+            model_name="aicontent",
+            name="model_used",
+            field=models.CharField(default="", max_length=100),
         ),
         migrations.AddIndex(
-            model_name='aicontent',
-            index=models.Index(fields=['item_fingerprint', 'action_type', 'model_used'], name='ai_content__item_fi_5c6e27_idx'),
+            model_name="aicontent",
+            index=models.Index(
+                fields=["item_fingerprint", "action_type", "model_used"],
+                name="ai_content__item_fi_5c6e27_idx",
+            ),
         ),
         migrations.AddConstraint(
-            model_name='aicontent',
-            constraint=models.UniqueConstraint(fields=('item_fingerprint', 'action_type', 'model_used'), name='unique_fingerprint_action_model'),
+            model_name="aicontent",
+            constraint=models.UniqueConstraint(
+                fields=("item_fingerprint", "action_type", "model_used"),
+                name="unique_fingerprint_action_model",
+            ),
         ),
     ]

@@ -2,7 +2,12 @@ import pytest
 
 from apps.packs.exceptions import AlreadySubscribedError, NotSubscribedError, PackNotFoundError
 from apps.packs.models import SubscriptionStatus, UserPackSubscription
-from apps.packs.services import archive_pack, subscribe_to_pack, unarchive_pack, unsubscribe_from_pack
+from apps.packs.services import (
+    archive_pack,
+    subscribe_to_pack,
+    unarchive_pack,
+    unsubscribe_from_pack,
+)
 
 from .factories import PackFactory, UserFactory, UserPackSubscriptionFactory
 

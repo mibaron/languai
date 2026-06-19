@@ -3,7 +3,7 @@ from django.db import IntegrityError
 
 from apps.packs.models import UserPackSubscription
 
-from .factories import PackFactory, UserFactory, UserPackSubscriptionFactory
+from .factories import PackFactory, UserPackSubscriptionFactory
 
 
 @pytest.mark.django_db

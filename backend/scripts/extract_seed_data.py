@@ -27,7 +27,7 @@ def extract_books_json(jsx_content: str) -> str:
     # Convert JS object syntax to JSON:
     # - Add quotes around unquoted keys
     # - Remove trailing commas
-    result = re.sub(r'(?<=[{,\n])\s*(\w+)\s*:', r' "\1":', raw)
+    result = re.sub(r"(?<=[{,\n])\s*(\w+)\s*:", r' "\1":', raw)
     result = re.sub(r",\s*([}\]])", r"\1", result)
 
     return result
@@ -50,9 +50,7 @@ def main() -> None:
     print(f"Seed data written to {OUTPUT_PATH}")
 
     total_sections = sum(
-        len(sections)
-        for categories in books.values()
-        for sections in categories.values()
+        len(sections) for categories in books.values() for sections in categories.values()
     )
     print(f"  Levels: {len(books)}")
     print(f"  Total sections: {total_sections}")

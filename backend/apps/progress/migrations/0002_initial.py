@@ -6,22 +6,27 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('progress', '0001_initial'),
+        ("progress", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='sectionprogress',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='section_progress', to=settings.AUTH_USER_MODEL),
+            model_name="sectionprogress",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="section_progress",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddConstraint(
-            model_name='sectionprogress',
-            constraint=models.UniqueConstraint(fields=('user', 'section'), name='unique_user_section_progress'),
+            model_name="sectionprogress",
+            constraint=models.UniqueConstraint(
+                fields=("user", "section"), name="unique_user_section_progress"
+            ),
         ),
     ]

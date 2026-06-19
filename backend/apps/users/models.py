@@ -17,10 +17,15 @@ class User(AbstractUser):
         blank=True,
         related_name="preferred_by_users",
     )
-    credit_balance = models.DecimalField(
-        max_digits=10, decimal_places=6, default=Decimal("0")
-    )
+    credit_balance = models.DecimalField(max_digits=10, decimal_places=6, default=Decimal("0"))
     is_onboarded = models.BooleanField(default=False)
+    learning_goal = models.ForeignKey(
+        "knowledge.LearningGoal",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="users",
+    )
 
     class Meta:
         ordering = ["-date_joined"]

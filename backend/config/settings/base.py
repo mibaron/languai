@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     "apps.progress",
     "apps.ai_content",
     "apps.packs",
+    "apps.knowledge",
+    "apps.memory_engine",
 ]
 
 MIDDLEWARE = [

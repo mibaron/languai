@@ -70,7 +70,6 @@ def remove_packs(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("packs", "0001_initial"),
         ("content", "0001_initial"),

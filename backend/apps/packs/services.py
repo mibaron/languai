@@ -7,8 +7,8 @@ from .models import Pack, SubscriptionStatus, UserPackSubscription
 def subscribe_to_pack(*, user: User, pack_id: str) -> UserPackSubscription:
     try:
         pack = Pack.objects.get(id=pack_id, is_active=True)
-    except Pack.DoesNotExist:
-        raise PackNotFoundError(f"Pack {pack_id} not found or inactive")
+    except Pack.DoesNotExist as err:
+        raise PackNotFoundError(f"Pack {pack_id} not found or inactive") from err
 
     subscription, created = UserPackSubscription.objects.get_or_create(
         user=user,
@@ -28,8 +28,8 @@ def subscribe_to_pack(*, user: User, pack_id: str) -> UserPackSubscription:
 def unsubscribe_from_pack(*, user: User, pack_id: str) -> None:
     try:
         subscription = UserPackSubscription.objects.get(user=user, pack_id=pack_id)
-    except UserPackSubscription.DoesNotExist:
-        raise NotSubscribedError("Not subscribed to this pack")
+    except UserPackSubscription.DoesNotExist as err:
+        raise NotSubscribedError("Not subscribed to this pack") from err
 
     subscription.delete()
 
@@ -41,8 +41,8 @@ def archive_pack(*, user: User, pack_id: str) -> UserPackSubscription:
             pack_id=pack_id,
             status=SubscriptionStatus.ACTIVE,
         )
-    except UserPackSubscription.DoesNotExist:
-        raise NotSubscribedError("No active subscription for this pack")
+    except UserPackSubscription.DoesNotExist as err:
+        raise NotSubscribedError("No active subscription for this pack") from err
 
     subscription.status = SubscriptionStatus.ARCHIVED
     subscription.save(update_fields=["status", "updated_at"])
@@ -56,8 +56,8 @@ def unarchive_pack(*, user: User, pack_id: str) -> UserPackSubscription:
             pack_id=pack_id,
             status=SubscriptionStatus.ARCHIVED,
         )
-    except UserPackSubscription.DoesNotExist:
-        raise NotSubscribedError("No archived subscription for this pack")
+    except UserPackSubscription.DoesNotExist as err:
+        raise NotSubscribedError("No archived subscription for this pack") from err
 
     subscription.status = SubscriptionStatus.ACTIVE
     subscription.save(update_fields=["status", "updated_at"])

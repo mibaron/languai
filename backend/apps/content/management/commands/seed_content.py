@@ -41,7 +41,9 @@ class Command(BaseCommand):
 
         data_file = options.get("data_file")
         if not data_file:
-            data_file = Path(__file__).resolve().parent.parent.parent.parent.parent / "seed_data.json"
+            data_file = (
+                Path(__file__).resolve().parent.parent.parent.parent.parent / "seed_data.json"
+            )
 
         if not Path(data_file).exists():
             self.stderr.write(

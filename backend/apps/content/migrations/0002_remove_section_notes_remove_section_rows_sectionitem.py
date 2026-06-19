@@ -6,35 +6,48 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('content', '0001_initial'),
+        ("content", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='section',
-            name='notes',
+            model_name="section",
+            name="notes",
         ),
         migrations.RemoveField(
-            model_name='section',
-            name='rows',
+            model_name="section",
+            name="rows",
         ),
         migrations.CreateModel(
-            name='SectionItem',
+            name="SectionItem",
             fields=[
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('order', models.PositiveIntegerField(default=0)),
-                ('cells', models.JSONField(default=list)),
-                ('section', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='items', to='content.section')),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False
+                    ),
+                ),
+                ("order", models.PositiveIntegerField(default=0)),
+                ("cells", models.JSONField(default=list)),
+                (
+                    "section",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="items",
+                        to="content.section",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'section item',
-                'verbose_name_plural': 'section items',
-                'ordering': ['section', 'order'],
-                'indexes': [models.Index(fields=['section', 'order'], name='content_sec_section_2baefa_idx')],
+                "verbose_name": "section item",
+                "verbose_name_plural": "section items",
+                "ordering": ["section", "order"],
+                "indexes": [
+                    models.Index(fields=["section", "order"], name="content_sec_section_2baefa_idx")
+                ],
             },
         ),
     ]

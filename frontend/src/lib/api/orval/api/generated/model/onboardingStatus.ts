@@ -11,4 +11,6 @@ export interface OnboardingStatus {
   native_language: string;
   current_level: string;
   pack_ids?: string[];
+  /** @nullable */
+  learning_goal: string | null;
 }

@@ -14,4 +14,6 @@ export interface OnboardingCompleteRequest {
   native_language: string;
   /** @minItems 1 */
   pack_ids: string[];
+  /** @nullable */
+  learning_goal?: string | null;
 }

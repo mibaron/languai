@@ -6,21 +6,26 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('ai_content', '0002_llmmodel_remove_aicontent_unique_fingerprint_action_and_more'),
-        ('users', '0001_initial'),
+        ("ai_content", "0002_llmmodel_remove_aicontent_unique_fingerprint_action_and_more"),
+        ("users", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='credit_balance',
-            field=models.DecimalField(decimal_places=6, default=Decimal('0'), max_digits=10),
+            model_name="user",
+            name="credit_balance",
+            field=models.DecimalField(decimal_places=6, default=Decimal("0"), max_digits=10),
         ),
         migrations.AddField(
-            model_name='user',
-            name='preferred_model',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='preferred_by_users', to='ai_content.llmmodel'),
+            model_name="user",
+            name="preferred_model",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="preferred_by_users",
+                to="ai_content.llmmodel",
+            ),
         ),
     ]

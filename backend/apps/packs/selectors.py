@@ -14,9 +14,7 @@ def get_user_subscriptions(
     user: User,
     status: str | None = None,
 ) -> QuerySet[UserPackSubscription]:
-    qs = UserPackSubscription.objects.filter(user=user).select_related(
-        "pack", "pack__level"
-    )
+    qs = UserPackSubscription.objects.filter(user=user).select_related("pack", "pack__level")
     if status:
         qs = qs.filter(status=status)
     return qs

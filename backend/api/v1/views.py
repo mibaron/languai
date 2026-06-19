@@ -9,19 +9,38 @@ from google.auth.transport import requests as google_requests
 from google.oauth2 import id_token as google_id_token
 from rest_framework import generics, permissions, status, viewsets
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-logger = logging.getLogger(__name__)
-
 from apps.ai_content.models import AIContent, LLMModel, UserAIContent
-from apps.ai_content.services import InsufficientCreditError, compute_fingerprint, generate_ai_content
+from apps.ai_content.services import (
+    InsufficientCreditError,
+    compute_fingerprint,
+    generate_ai_content,
+)
 from apps.content.models import Level, Section, SectionItem
+from apps.knowledge.models import LearningGoal
+from apps.knowledge.serializers import LearningGoalSerializer
+from apps.memory_engine.serializers import (
+    ReviewRequestSerializer,
+    ReviewResponseSerializer,
+    SessionItemSerializer,
+)
+from apps.memory_engine.services import record_review
+from apps.memory_engine.session import SessionConfig, build_session
 from apps.packs.exceptions import AlreadySubscribedError, NotSubscribedError, PackNotFoundError
-from apps.packs.selectors import get_available_packs, get_user_archived_packs, get_user_subscriptions
-from apps.packs.services import archive_pack, subscribe_to_pack, unarchive_pack, unsubscribe_from_pack
+from apps.packs.models import SubscriptionStatus
+from apps.packs.selectors import (
+    get_available_packs,
+    get_user_subscriptions,
+)
+from apps.packs.services import (
+    archive_pack,
+    subscribe_to_pack,
+    unarchive_pack,
+    unsubscribe_from_pack,
+)
 from apps.progress.models import SectionProgress
 
 from .permissions import IsAdminOrReadOnly, IsOwnerOrAdminOrReadOnly
@@ -48,8 +67,8 @@ from .serializers import (
     SectionListSerializer,
     SectionProgressSerializer,
     SectionWriteSerializer,
-    ShareKeyResponseSerializer,
     SharedAIContentSerializer,
+    ShareKeyResponseSerializer,
     SubscribeRequestSerializer,
     UserAIContentSerializer,
     UserCreditResponseSerializer,
@@ -58,6 +77,7 @@ from .serializers import (
 )
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 
 # ── Auth ──────────────────────────────────────
@@ -67,7 +87,9 @@ class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
     permission_classes = [permissions.AllowAny]
 
-    @extend_schema(summary="Register a new user", tags=["auth"], responses={201: AuthResponseSerializer})
+    @extend_schema(
+        summary="Register a new user", tags=["auth"], responses={201: AuthResponseSerializer}
+    )
     def post(self, request: Request, *args: object, **kwargs: object) -> Response:
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -98,7 +120,12 @@ class LoginView(APIView):
         )
         if user is None:
             return Response(
-                {"error": {"code": "invalid_credentials", "message": "Invalid username or password"}},
+                {
+                    "error": {
+                        "code": "invalid_credentials",
+                        "message": "Invalid username or password",
+                    }
+                },
                 status=status.HTTP_401_UNAUTHORIZED,
             )
         token, _ = Token.objects.get_or_create(user=user)
@@ -108,7 +135,9 @@ class LoginView(APIView):
 class LogoutView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    @extend_schema(summary="Logout and invalidate token", tags=["auth"], request=None, responses={204: None})
+    @extend_schema(
+        summary="Logout and invalidate token", tags=["auth"], request=None, responses={204: None}
+    )
     def post(self, request: Request) -> Response:
         request.user.auth_token.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -130,7 +159,12 @@ class GoogleLoginView(APIView):
 
         if not settings.GOOGLE_CLIENT_ID:
             return Response(
-                {"error": {"code": "google_not_configured", "message": "Google login is not configured"}},
+                {
+                    "error": {
+                        "code": "google_not_configured",
+                        "message": "Google login is not configured",
+                    }
+                },
                 status=status.HTTP_503_SERVICE_UNAVAILABLE,
             )
 
@@ -203,7 +237,12 @@ class ChangePasswordView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = ChangePasswordSerializer
 
-    @extend_schema(summary="Change password", tags=["auth"], request=ChangePasswordSerializer, responses={204: None})
+    @extend_schema(
+        summary="Change password",
+        tags=["auth"],
+        request=ChangePasswordSerializer,
+        responses={204: None},
+    )
     def post(self, request: Request) -> Response:
         serializer = ChangePasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -225,7 +264,12 @@ class ForgotPasswordView(APIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = ForgotPasswordSerializer
 
-    @extend_schema(summary="Request password reset email", tags=["auth"], request=ForgotPasswordSerializer, responses={200: None})
+    @extend_schema(
+        summary="Request password reset email",
+        tags=["auth"],
+        request=ForgotPasswordSerializer,
+        responses={200: None},
+    )
     def post(self, request: Request) -> Response:
         serializer = ForgotPasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -240,7 +284,9 @@ class ForgotPasswordView(APIView):
         if user and user.has_usable_password():
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = default_token_generator.make_token(user)
-            reset_url = f"{request.headers.get('Origin', '')}/reset-password?uid={uid}&token={token}"
+            reset_url = (
+                f"{request.headers.get('Origin', '')}/reset-password?uid={uid}&token={token}"
+            )
             try:
                 user.email_user(
                     subject="Reset your Langu-AI password",
@@ -250,14 +296,21 @@ class ForgotPasswordView(APIView):
             except Exception:
                 logger.exception("Failed to send password reset email")
 
-        return Response({"detail": "If an account with that email exists, a reset link has been sent."})
+        return Response(
+            {"detail": "If an account with that email exists, a reset link has been sent."}
+        )
 
 
 class ResetPasswordView(APIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = ResetPasswordSerializer
 
-    @extend_schema(summary="Reset password with token", tags=["auth"], request=ResetPasswordSerializer, responses={204: None})
+    @extend_schema(
+        summary="Reset password with token",
+        tags=["auth"],
+        request=ResetPasswordSerializer,
+        responses={204: None},
+    )
     def post(self, request: Request) -> Response:
         serializer = ResetPasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -368,9 +421,9 @@ class SectionItemViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         if getattr(self, "swagger_fake_view", False):
             return SectionItem.objects.none()
-        return SectionItem.objects.filter(
-            section_id=self.kwargs["section_pk"]
-        ).select_related("section", "created_by")
+        return SectionItem.objects.filter(section_id=self.kwargs["section_pk"]).select_related(
+            "section", "created_by"
+        )
 
     def get_serializer_class(self):
         if self.action in ("create", "update", "partial_update"):
@@ -400,9 +453,7 @@ class SectionProgressViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         if getattr(self, "swagger_fake_view", False):
             return SectionProgress.objects.none()
-        return SectionProgress.objects.filter(
-            user=self.request.user
-        ).select_related("section")
+        return SectionProgress.objects.filter(user=self.request.user).select_related("section")
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -450,7 +501,12 @@ class AIGenerateView(APIView):
             )
         except InsufficientCreditError:
             return Response(
-                {"error": {"code": "insufficient_credit", "message": "You have no credit remaining"}},
+                {
+                    "error": {
+                        "code": "insufficient_credit",
+                        "message": "You have no credit remaining",
+                    }
+                },
                 status=status.HTTP_402_PAYMENT_REQUIRED,
             )
         except Exception:
@@ -472,7 +528,12 @@ class AIGenerateView(APIView):
 class AIContentSaveView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    @extend_schema(summary="Save AI content to user collection", tags=["ai-content"], request=None, responses={201: None})
+    @extend_schema(
+        summary="Save AI content to user collection",
+        tags=["ai-content"],
+        request=None,
+        responses={201: None},
+    )
     def post(self, request: Request, pk: str) -> Response:
         try:
             ai_content = AIContent.objects.get(pk=pk)
@@ -502,7 +563,9 @@ class UserSavedAIContentView(generics.ListAPIView):
 class UserSavedAIContentDeleteView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    @extend_schema(summary="Remove AI content from user collection", tags=["ai-content"], responses={204: None})
+    @extend_schema(
+        summary="Remove AI content from user collection", tags=["ai-content"], responses={204: None}
+    )
     def delete(self, request: Request, pk: str) -> Response:
         deleted, _ = UserAIContent.objects.filter(pk=pk, user=request.user).delete()
         if not deleted:
@@ -513,7 +576,12 @@ class UserSavedAIContentDeleteView(APIView):
 class AIContentShareView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    @extend_schema(summary="Generate share key for saved AI content", tags=["ai-content"], request=None, responses={200: ShareKeyResponseSerializer})
+    @extend_schema(
+        summary="Generate share key for saved AI content",
+        tags=["ai-content"],
+        request=None,
+        responses={200: ShareKeyResponseSerializer},
+    )
     def post(self, request: Request, pk: str) -> Response:
         try:
             saved = UserAIContent.objects.get(pk=pk, user=request.user)
@@ -522,6 +590,7 @@ class AIContentShareView(APIView):
 
         if not saved.share_key:
             import secrets
+
             saved.share_key = secrets.token_urlsafe(8)
             saved.save(update_fields=["share_key"])
 
@@ -567,9 +636,7 @@ class AIItemContentView(APIView):
         )
 
         contents = AIContent.objects.filter(item_fingerprint=fingerprint)
-        return Response(
-            AIContentSerializer(contents, many=True, context={"request": request}).data
-        )
+        return Response(AIContentSerializer(contents, many=True, context={"request": request}).data)
 
 
 class AIContentDeleteView(APIView):
@@ -608,12 +675,18 @@ class LLMModelListView(generics.ListAPIView):
 class UserCreditView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    @extend_schema(summary="Get user credit balance", tags=["ai-content"], responses={200: UserCreditResponseSerializer})
+    @extend_schema(
+        summary="Get user credit balance",
+        tags=["ai-content"],
+        responses={200: UserCreditResponseSerializer},
+    )
     def get(self, request: Request) -> Response:
-        return Response({
-            "credit_balance": str(request.user.credit_balance),
-            "currency": "EUR",
-        })
+        return Response(
+            {
+                "credit_balance": str(request.user.credit_balance),
+                "currency": "EUR",
+            }
+        )
 
 
 # ── Onboarding ───────────────────────────────
@@ -632,12 +705,15 @@ class OnboardingView(APIView):
         pack_ids = list(
             user.pack_subscriptions.filter(status="active").values_list("pack_id", flat=True)
         )
-        return Response({
-            "is_onboarded": user.is_onboarded,
-            "native_language": user.native_language,
-            "current_level": user.current_level,
-            "pack_ids": pack_ids,
-        })
+        return Response(
+            {
+                "is_onboarded": user.is_onboarded,
+                "native_language": user.native_language,
+                "current_level": user.current_level,
+                "pack_ids": pack_ids,
+                "learning_goal": user.learning_goal_id,
+            }
+        )
 
     @extend_schema(
         summary="Complete onboarding",
@@ -655,7 +731,14 @@ class OnboardingView(APIView):
         user.native_language = data["native_language"]
         user.is_onboarded = True
 
-        from apps.packs.models import Pack, SubscriptionStatus, UserPackSubscription
+        if "learning_goal" in data and data["learning_goal"]:
+            try:
+                goal = LearningGoal.objects.get(pk=data["learning_goal"])
+                user.learning_goal = goal
+            except LearningGoal.DoesNotExist:
+                pass
+
+        from apps.packs.models import Pack, UserPackSubscription
 
         subscribed_pack_ids = []
         for pack_id in data["pack_ids"]:
@@ -674,14 +757,20 @@ class OnboardingView(APIView):
             first_pack = Pack.objects.get(id=subscribed_pack_ids[0])
             user.current_level = first_pack.level.code
 
-        user.save(update_fields=["native_language", "current_level", "is_onboarded"])
+        update_fields = ["native_language", "current_level", "is_onboarded"]
+        if user.learning_goal_id:
+            update_fields.append("learning_goal")
+        user.save(update_fields=update_fields)
 
-        return Response({
-            "is_onboarded": True,
-            "native_language": user.native_language,
-            "current_level": user.current_level,
-            "pack_ids": subscribed_pack_ids,
-        })
+        return Response(
+            {
+                "is_onboarded": True,
+                "native_language": user.native_language,
+                "current_level": user.current_level,
+                "pack_ids": subscribed_pack_ids,
+                "learning_goal": user.learning_goal_id,
+            }
+        )
 
 
 # ── Packs ────────────────────────────────────
@@ -765,7 +854,9 @@ class PackSubscribeView(APIView):
 class PackUnsubscribeView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    @extend_schema(summary="Unsubscribe from a pack", tags=["packs"], request=None, responses={204: None})
+    @extend_schema(
+        summary="Unsubscribe from a pack", tags=["packs"], request=None, responses={204: None}
+    )
     def delete(self, request: Request, pack_id: str) -> Response:
         try:
             unsubscribe_from_pack(user=request.user, pack_id=pack_id)
@@ -815,3 +906,111 @@ class PackUnarchiveView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
         return Response(UserPackSubscriptionSerializer(subscription).data)
+
+
+# ── Learning Goals ───────────────────────────
+
+
+class LearningGoalListView(generics.ListAPIView):
+    serializer_class = LearningGoalSerializer
+    permission_classes = [permissions.AllowAny]
+    pagination_class = None
+
+    @extend_schema(
+        summary="List all learning goals",
+        tags=["goals"],
+    )
+    def get(self, request: Request, *args: object, **kwargs: object) -> Response:
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):  # type: ignore[override]
+        return LearningGoal.objects.all()
+
+
+# ── Memory Engine ────────────────────────────
+
+
+class SessionView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @extend_schema(
+        summary="Get a practice session",
+        tags=["memory"],
+        parameters=[
+            OpenApiParameter(
+                name="max_items",
+                type=int,
+                required=False,
+                description="Maximum items in session (default 20)",
+            ),
+            OpenApiParameter(
+                name="skill_type",
+                type=str,
+                required=False,
+                description="Skill type filter (recognition, production, listening, spelling)",
+            ),
+        ],
+        responses={200: SessionItemSerializer(many=True)},
+    )
+    def get(self, request: Request) -> Response:
+        user = request.user
+        active_subs = user.pack_subscriptions.filter(
+            status=SubscriptionStatus.ACTIVE,
+        )
+        pack_ids = list(active_subs.values_list("pack_id", flat=True))
+
+        if not pack_ids:
+            return Response([])
+
+        max_items = int(request.query_params.get("max_items", 20))
+        skill_type = request.query_params.get("skill_type")
+
+        config = SessionConfig(max_items=max_items)
+        if skill_type:
+            config.skill_types = [skill_type]
+
+        session = build_session(user=user, pack_ids=pack_ids, config=config)
+        serializer = SessionItemSerializer(session, many=True)
+        return Response(serializer.data)
+
+
+class ReviewView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @extend_schema(
+        summary="Submit a review result",
+        tags=["memory"],
+        request=ReviewRequestSerializer,
+        responses={200: ReviewResponseSerializer},
+    )
+    def post(self, request: Request) -> Response:
+        serializer = ReviewRequestSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        try:
+            memory_state = record_review(
+                user=request.user,
+                item_id=str(data["item_id"]),
+                skill_type=data["skill_type"],
+                rating=data["rating"],
+                response_time_ms=data.get("response_time_ms"),
+            )
+        except Exception:
+            return Response(
+                {"detail": "Item not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        return Response(
+            ReviewResponseSerializer(
+                {
+                    "next_due": memory_state.next_due,
+                    "difficulty": memory_state.difficulty,
+                    "stability": memory_state.stability,
+                    "reps": memory_state.reps,
+                    "lapses": memory_state.lapses,
+                    "state": memory_state.state,
+                }
+            ).data
+        )

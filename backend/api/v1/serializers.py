@@ -2,9 +2,9 @@ from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
-from apps.ai_content.models import AIContent, ActionType, LLMModel, UserAIContent
+from apps.ai_content.models import ActionType, AIContent, LLMModel, UserAIContent
 from apps.content.models import Category, Level, Section, SectionItem
-from apps.packs.models import Pack, SubscriptionStatus, UserPackSubscription
+from apps.packs.models import Pack, UserPackSubscription
 from apps.progress.models import SectionProgress
 
 User = get_user_model()
@@ -79,9 +79,17 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            "id", "username", "email", "first_name", "last_name",
-            "native_language", "learning_language", "current_level",
-            "credit_balance", "preferred_model_id", "date_joined",
+            "id",
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "native_language",
+            "learning_language",
+            "current_level",
+            "credit_balance",
+            "preferred_model_id",
+            "date_joined",
         ]
         read_only_fields = ["id", "date_joined", "credit_balance", "preferred_model_id"]
 
@@ -219,11 +227,13 @@ class OnboardingStatusSerializer(serializers.Serializer):
     native_language = serializers.CharField()
     current_level = serializers.CharField()
     pack_ids = serializers.ListField(child=serializers.UUIDField(), default=list)
+    learning_goal = serializers.UUIDField(allow_null=True)
 
 
 class OnboardingCompleteSerializer(serializers.Serializer):
     native_language = serializers.CharField(max_length=10)
     pack_ids = serializers.ListField(child=serializers.UUIDField(), min_length=1)
+    learning_goal = serializers.UUIDField(required=False, allow_null=True)
 
 
 # ── Packs ────────────────────────────────────
@@ -277,7 +287,9 @@ class AIGenerateRequestSerializer(serializers.Serializer):
     level_code = serializers.CharField(max_length=10)
     category = serializers.ChoiceField(choices=Category.choices)
     section_title = serializers.CharField(max_length=255)
-    section_headers = serializers.ListField(child=serializers.CharField(), required=False, default=list)
+    section_headers = serializers.ListField(
+        child=serializers.CharField(), required=False, default=list
+    )
     item_cells = serializers.ListField(child=serializers.CharField(), min_length=1)
     action_type = serializers.ChoiceField(choices=ActionType.choices)
     model = serializers.CharField(max_length=100, required=False, default=None)
@@ -366,5 +378,8 @@ class LLMModelSerializer(serializers.ModelSerializer):
 
         avg_input_tokens = 500
         avg_output_tokens = 1500
-        cost_usd = float(obj.prompt_price) * avg_input_tokens + float(obj.completion_price) * avg_output_tokens
+        cost_usd = (
+            float(obj.prompt_price) * avg_input_tokens
+            + float(obj.completion_price) * avg_output_tokens
+        )
         return round(cost_usd * settings.USD_TO_EUR_RATE, 8)

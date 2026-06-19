@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -16,61 +15,131 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='AIContent',
+            name="AIContent",
             fields=[
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('item_fingerprint', models.CharField(db_index=True, max_length=64)),
-                ('action_type', models.CharField(choices=[('examples', 'More Examples'), ('quiz', 'Quiz / Question'), ('explanation', 'Explanation')], max_length=20)),
-                ('level_code', models.CharField(max_length=10)),
-                ('category', models.CharField(max_length=20)),
-                ('section_title', models.CharField(max_length=255)),
-                ('item_cells', models.JSONField(default=list)),
-                ('section_headers', models.JSONField(blank=True, default=list)),
-                ('response_text', models.TextField()),
-                ('response_json', models.JSONField(blank=True, null=True)),
-                ('model_used', models.CharField(default='', max_length=50)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False
+                    ),
+                ),
+                ("item_fingerprint", models.CharField(db_index=True, max_length=64)),
+                (
+                    "action_type",
+                    models.CharField(
+                        choices=[
+                            ("examples", "More Examples"),
+                            ("quiz", "Quiz / Question"),
+                            ("explanation", "Explanation"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                ("level_code", models.CharField(max_length=10)),
+                ("category", models.CharField(max_length=20)),
+                ("section_title", models.CharField(max_length=255)),
+                ("item_cells", models.JSONField(default=list)),
+                ("section_headers", models.JSONField(blank=True, default=list)),
+                ("response_text", models.TextField()),
+                ("response_json", models.JSONField(blank=True, null=True)),
+                ("model_used", models.CharField(default="", max_length=50)),
             ],
             options={
-                'verbose_name': 'AI content',
-                'verbose_name_plural': 'AI content',
-                'ordering': ['-created_at'],
-                'indexes': [models.Index(fields=['item_fingerprint', 'action_type'], name='ai_content__item_fi_39b45a_idx')],
-                'constraints': [models.UniqueConstraint(fields=('item_fingerprint', 'action_type'), name='unique_fingerprint_action')],
+                "verbose_name": "AI content",
+                "verbose_name_plural": "AI content",
+                "ordering": ["-created_at"],
+                "indexes": [
+                    models.Index(
+                        fields=["item_fingerprint", "action_type"],
+                        name="ai_content__item_fi_39b45a_idx",
+                    )
+                ],
+                "constraints": [
+                    models.UniqueConstraint(
+                        fields=("item_fingerprint", "action_type"), name="unique_fingerprint_action"
+                    )
+                ],
             },
         ),
         migrations.CreateModel(
-            name='AIInteraction',
+            name="AIInteraction",
             fields=[
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('ai_content', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='interactions', to='ai_content.aicontent')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ai_interactions', to=settings.AUTH_USER_MODEL)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False
+                    ),
+                ),
+                (
+                    "ai_content",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="interactions",
+                        to="ai_content.aicontent",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="ai_interactions",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'AI interaction',
-                'verbose_name_plural': 'AI interactions',
-                'ordering': ['-created_at'],
-                'indexes': [models.Index(fields=['user', 'created_at'], name='ai_content__user_id_51f881_idx')],
+                "verbose_name": "AI interaction",
+                "verbose_name_plural": "AI interactions",
+                "ordering": ["-created_at"],
+                "indexes": [
+                    models.Index(
+                        fields=["user", "created_at"], name="ai_content__user_id_51f881_idx"
+                    )
+                ],
             },
         ),
         migrations.CreateModel(
-            name='UserAIContent',
+            name="UserAIContent",
             fields=[
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('share_key', models.CharField(blank=True, max_length=12, null=True, unique=True)),
-                ('ai_content', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='saved_by', to='ai_content.aicontent')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='saved_ai_content', to=settings.AUTH_USER_MODEL)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False
+                    ),
+                ),
+                ("share_key", models.CharField(blank=True, max_length=12, null=True, unique=True)),
+                (
+                    "ai_content",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="saved_by",
+                        to="ai_content.aicontent",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="saved_ai_content",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'user AI content',
-                'verbose_name_plural': 'user AI content',
-                'ordering': ['-created_at'],
-                'constraints': [models.UniqueConstraint(fields=('user', 'ai_content'), name='unique_user_ai_content')],
+                "verbose_name": "user AI content",
+                "verbose_name_plural": "user AI content",
+                "ordering": ["-created_at"],
+                "constraints": [
+                    models.UniqueConstraint(
+                        fields=("user", "ai_content"), name="unique_user_ai_content"
+                    )
+                ],
             },
         ),
     ]
