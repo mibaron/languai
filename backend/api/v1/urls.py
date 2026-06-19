@@ -1,39 +1,40 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from .views import (
+from apps.ai_content.views import (
     AIContentDeleteView,
     AIContentSaveView,
     AIContentShareView,
     AIGenerateView,
     AIItemContentView,
-    ChangePasswordView,
-    ForgotPasswordView,
-    GoogleLoginView,
-    LearningGoalListView,
-    LevelViewSet,
     LLMModelListView,
-    LoginView,
-    LogoutView,
-    MeView,
-    OnboardingView,
+    SharedAIContentView,
+    UserCreditView,
+    UserSavedAIContentDeleteView,
+    UserSavedAIContentView,
+)
+from apps.content.views import LevelViewSet, SectionItemViewSet, SectionViewSet
+from apps.knowledge.views import LearningGoalListView
+from apps.memory_engine.views import ReviewView, SessionView
+from apps.packs.views import (
     PackArchiveView,
     PackListView,
     PackSubscribeView,
     PackUnarchiveView,
     PackUnsubscribeView,
+    UserPackSubscriptionListView,
+)
+from apps.progress.views import SectionProgressViewSet
+from apps.users.views import (
+    ChangePasswordView,
+    ForgotPasswordView,
+    GoogleLoginView,
+    LoginView,
+    LogoutView,
+    MeView,
+    OnboardingView,
     RegisterView,
     ResetPasswordView,
-    ReviewView,
-    SectionItemViewSet,
-    SectionProgressViewSet,
-    SectionViewSet,
-    SessionView,
-    SharedAIContentView,
-    UserCreditView,
-    UserPackSubscriptionListView,
-    UserSavedAIContentDeleteView,
-    UserSavedAIContentView,
 )
 
 router = DefaultRouter()
@@ -45,6 +46,7 @@ items_router = DefaultRouter()
 items_router.register("", SectionItemViewSet, basename="section-item")
 
 urlpatterns = [
+    # Auth
     path("auth/register/", RegisterView.as_view(), name="auth-register"),
     path("auth/login/", LoginView.as_view(), name="auth-login"),
     path("auth/google/", GoogleLoginView.as_view(), name="auth-google"),
@@ -53,7 +55,9 @@ urlpatterns = [
     path("auth/change-password/", ChangePasswordView.as_view(), name="auth-change-password"),
     path("auth/forgot-password/", ForgotPasswordView.as_view(), name="auth-forgot-password"),
     path("auth/reset-password/", ResetPasswordView.as_view(), name="auth-reset-password"),
+    # Onboarding
     path("onboarding/", OnboardingView.as_view(), name="onboarding"),
+    # AI Content
     path("ai/models/", LLMModelListView.as_view(), name="ai-models"),
     path("ai/credit/", UserCreditView.as_view(), name="ai-credit"),
     path("ai/item-content/", AIItemContentView.as_view(), name="ai-item-content"),
@@ -64,6 +68,7 @@ urlpatterns = [
     path("ai/saved/<uuid:pk>/", UserSavedAIContentDeleteView.as_view(), name="ai-saved-delete"),
     path("ai/saved/<uuid:pk>/share/", AIContentShareView.as_view(), name="ai-share"),
     path("ai/shared/<str:share_key>/", SharedAIContentView.as_view(), name="ai-shared"),
+    # Packs
     path("packs/", PackListView.as_view(), name="pack-list"),
     path("packs/subscribe/", PackSubscribeView.as_view(), name="pack-subscribe"),
     path("packs/subscriptions/", UserPackSubscriptionListView.as_view(), name="pack-subscriptions"),
@@ -72,9 +77,12 @@ urlpatterns = [
     ),
     path("packs/<uuid:pack_id>/archive/", PackArchiveView.as_view(), name="pack-archive"),
     path("packs/<uuid:pack_id>/unarchive/", PackUnarchiveView.as_view(), name="pack-unarchive"),
+    # Goals
     path("goals/", LearningGoalListView.as_view(), name="goal-list"),
+    # Memory Engine
     path("memory/session/", SessionView.as_view(), name="memory-session"),
     path("memory/review/", ReviewView.as_view(), name="memory-review"),
+    # Nested routes
     path("sections/<uuid:section_pk>/items/", include(items_router.urls)),
     path("", include(router.urls)),
 ]
