@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "apps.packs",
     "apps.knowledge",
     "apps.memory_engine",
+    "apps.exercise_engine",
 ]
 
 MIDDLEWARE = [
