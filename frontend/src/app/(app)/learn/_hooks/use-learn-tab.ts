@@ -11,6 +11,9 @@ export function useLearnTab() {
   const [activePackId, setActivePackId] = useState<string | null>(null);
   const [packDrawerOpen, setPackDrawerOpen] = useState(false);
   const [statsDrawerOpen, setStatsDrawerOpen] = useState(false);
+  const [selectedSectionIndex, setSelectedSectionIndex] = useState<
+    number | null
+  >(null);
 
   const { data: subscriptions, isLoading } = usePacksSubscriptionsList({
     status: "active",
@@ -32,11 +35,42 @@ export function useLearnTab() {
     return BOOKS[levelCode][category] ?? [];
   }, [levelCode, category]);
 
+  const selectedSection = useMemo(
+    () =>
+      selectedSectionIndex !== null ? (sections[selectedSectionIndex] ?? null) : null,
+    [sections, selectedSectionIndex],
+  );
+
   const selectPack = useCallback((packId: string) => {
     setActivePackId(packId);
     setPackDrawerOpen(false);
     setCategory("grammar");
+    setSelectedSectionIndex(null);
   }, []);
+
+  const changeCategory = useCallback((cat: CategoryId) => {
+    setCategory(cat);
+    setSelectedSectionIndex(null);
+  }, []);
+
+  const openSection = useCallback(
+    (section: Section) => {
+      const idx = sections.indexOf(section);
+      if (idx !== -1) setSelectedSectionIndex(idx);
+    },
+    [sections],
+  );
+
+  const closeSection = useCallback(() => setSelectedSectionIndex(null), []);
+
+  const navigateSection = useCallback(
+    (index: number) => {
+      if (index >= 0 && index < sections.length) {
+        setSelectedSectionIndex(index);
+      }
+    },
+    [sections.length],
+  );
 
   const openPackDrawer = useCallback(() => setPackDrawerOpen(true), []);
   const closePackDrawer = useCallback(() => setPackDrawerOpen(false), []);
@@ -45,12 +79,17 @@ export function useLearnTab() {
 
   return {
     category,
-    setCategory,
+    setCategory: changeCategory,
     activePack,
     activePackId: activePack?.id ?? null,
     subscriptions: subscriptions ?? [],
     isLoading,
     sections,
+    selectedSection,
+    selectedSectionIndex,
+    openSection,
+    closeSection,
+    navigateSection,
     packDrawerOpen,
     statsDrawerOpen,
     selectPack,

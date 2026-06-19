@@ -8,6 +8,7 @@ import { CategoryTabs } from "./_components/category-tabs";
 import { PackHeader } from "./_components/pack-header";
 import { PackSelectorDrawer } from "./_components/pack-selector-drawer";
 import { PackStatsDrawer } from "./_components/pack-stats-drawer";
+import { SectionDetailView } from "./_components/section-detail-view";
 import { SectionList } from "./_components/section-list";
 import { useLearnTab } from "./_hooks/use-learn-tab";
 
@@ -20,6 +21,11 @@ export default function LearnPage() {
     subscriptions,
     isLoading,
     sections,
+    selectedSection,
+    selectedSectionIndex,
+    openSection,
+    closeSection,
+    navigateSection,
     packDrawerOpen,
     statsDrawerOpen,
     selectPack,
@@ -55,11 +61,26 @@ export default function LearnPage() {
         onOpenPackDrawer={openPackDrawer}
         onOpenStats={openStats}
       />
-      <CategoryTabs
-        activeCategory={category}
-        onCategoryChange={setCategory}
-      />
-      <SectionList sections={sections} onOpenSection={() => {}} />
+
+      {selectedSection && selectedSectionIndex !== null ? (
+        <SectionDetailView
+          section={selectedSection}
+          sectionIndex={selectedSectionIndex}
+          totalSections={sections.length}
+          levelCode={activePack.level_code}
+          category={category}
+          onBack={closeSection}
+          onNavigate={navigateSection}
+        />
+      ) : (
+        <>
+          <CategoryTabs
+            activeCategory={category}
+            onCategoryChange={setCategory}
+          />
+          <SectionList sections={sections} onOpenSection={openSection} />
+        </>
+      )}
 
       {packDrawerOpen && (
         <PackSelectorDrawer

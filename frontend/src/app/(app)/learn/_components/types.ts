@@ -35,3 +35,24 @@ export interface PackStatsDrawerProps {
   open: boolean;
   onClose: () => void;
 }
+
+export interface SectionDetailHeaderProps {
+  title: string;
+  sectionIndex: number;
+  totalSections: number;
+  onBack: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+  hasPrev: boolean;
+  hasNext: boolean;
+}
+
+export interface SectionDetailViewProps {
+  section: Section;
+  sectionIndex: number;
+  totalSections: number;
+  levelCode: string;
+  category: string;
+  onBack: () => void;
+  onNavigate: (index: number) => void;
+}
