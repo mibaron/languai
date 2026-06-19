@@ -1,0 +1,2866 @@
+openapi: 3.0.3
+info:
+  title: Langu-AI API
+  version: 1.0.0
+  description: API for the Langu-AI German language learning platform
+paths:
+  /api/v1/ai/{id}/save/:
+    post:
+      operationId: ai_save_create
+      summary: Save AI content to user collection
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - ai-content
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          description: No response body
+  /api/v1/ai/content/{id}/:
+    delete:
+      operationId: ai_content_destroy
+      summary: Delete a generated AI content entry
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - ai-content
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/ai/credit/:
+    get:
+      operationId: ai_credit_retrieve
+      summary: Get user credit balance
+      tags:
+      - ai-content
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreditResponse'
+          description: ''
+  /api/v1/ai/generate/:
+    post:
+      operationId: ai_generate_create
+      summary: Generate AI content for a learning item (cache-first)
+      tags:
+      - ai-content
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AIGenerateRequestRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AIGenerateRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AIGenerateRequestRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AIContent'
+          description: ''
+  /api/v1/ai/item-content/:
+    post:
+      operationId: ai_item_content_create
+      summary: List all generated content for a learning item
+      tags:
+      - ai-content
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AIItemContentRequestRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AIItemContentRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AIItemContentRequestRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AIContent'
+          description: ''
+  /api/v1/ai/models/:
+    get:
+      operationId: ai_models_list
+      summary: List active LLM models
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - ai-content
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LLMModel'
+          description: ''
+  /api/v1/ai/saved/:
+    get:
+      operationId: ai_saved_list
+      summary: List user's saved AI content
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - ai-content
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserAIContentList'
+          description: ''
+  /api/v1/ai/saved/{id}/:
+    delete:
+      operationId: ai_saved_destroy
+      summary: Remove AI content from user collection
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - ai-content
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/ai/saved/{id}/share/:
+    post:
+      operationId: ai_saved_share_create
+      summary: Generate share key for saved AI content
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - ai-content
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShareKeyResponse'
+          description: ''
+  /api/v1/ai/shared/{share_key}/:
+    get:
+      operationId: ai_shared_retrieve
+      summary: View shared AI content by share key
+      parameters:
+      - in: path
+        name: share_key
+        schema:
+          type: string
+        required: true
+      tags:
+      - ai-content
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SharedAIContent'
+          description: ''
+  /api/v1/auth/change-password/:
+    post:
+      operationId: auth_change_password_create
+      summary: Change password
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/auth/forgot-password/:
+    post:
+      operationId: auth_forgot_password_create
+      summary: Request password reset email
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/google/:
+    post:
+      operationId: auth_google_create
+      summary: Login or register with Google
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoogleLoginRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GoogleLoginRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GoogleLoginRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+          description: ''
+  /api/v1/auth/login/:
+    post:
+      operationId: auth_login_create
+      summary: Login and receive auth token
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+          description: ''
+  /api/v1/auth/logout/:
+    post:
+      operationId: auth_logout_create
+      summary: Logout and invalidate token
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/auth/me/:
+    get:
+      operationId: auth_me_retrieve
+      summary: Get current user profile
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: auth_me_update
+      summary: Update current user profile
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: auth_me_partial_update
+      summary: Partially update current user profile
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: auth_me_destroy
+      summary: Delete current user account
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/auth/register/:
+    post:
+      operationId: auth_register_create
+      summary: Register a new user
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+          description: ''
+  /api/v1/auth/reset-password/:
+    post:
+      operationId: auth_reset_password_create
+      summary: Reset password with token
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/v1/exercises/session/:
+    get:
+      operationId: exercises_session_list
+      summary: Get an exercise session
+      parameters:
+      - in: query
+        name: exercise_type
+        schema:
+          type: string
+          enum:
+          - flashcard
+          - mcq_recognition
+        description: Type of exercises to generate
+        required: true
+      - in: query
+        name: max_items
+        schema:
+          type: integer
+        description: Maximum exercises in session (default 20)
+      tags:
+      - exercises
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FlashcardExercise'
+          description: ''
+  /api/v1/goals/:
+    get:
+      operationId: goals_list
+      summary: List all learning goals
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - goals
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LearningGoal'
+          description: ''
+  /api/v1/levels/:
+    get:
+      operationId: levels_list
+      summary: List all levels
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - levels
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLevelList'
+          description: ''
+    post:
+      operationId: levels_create
+      summary: Create a level (admin)
+      tags:
+      - levels
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LevelWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LevelWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LevelWriteRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LevelWrite'
+          description: ''
+  /api/v1/levels/{code}/:
+    get:
+      operationId: levels_retrieve
+      summary: Get a level by code
+      parameters:
+      - in: path
+        name: code
+        schema:
+          type: string
+          pattern: ^[A-Za-z0-9.]+$
+        required: true
+      tags:
+      - levels
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Level'
+          description: ''
+    put:
+      operationId: levels_update
+      summary: Update a level (admin)
+      parameters:
+      - in: path
+        name: code
+        schema:
+          type: string
+          pattern: ^[A-Za-z0-9.]+$
+        required: true
+      tags:
+      - levels
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LevelWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LevelWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LevelWriteRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LevelWrite'
+          description: ''
+    patch:
+      operationId: levels_partial_update
+      summary: Partially update a level (admin)
+      parameters:
+      - in: path
+        name: code
+        schema:
+          type: string
+          pattern: ^[A-Za-z0-9.]+$
+        required: true
+      tags:
+      - levels
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLevelWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLevelWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLevelWriteRequest'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LevelWrite'
+          description: ''
+    delete:
+      operationId: levels_destroy
+      summary: Delete a level (admin)
+      parameters:
+      - in: path
+        name: code
+        schema:
+          type: string
+          pattern: ^[A-Za-z0-9.]+$
+        required: true
+      tags:
+      - levels
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/memory/review/:
+    post:
+      operationId: memory_review_create
+      summary: Submit a review result
+      tags:
+      - memory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewRequestRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReviewRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReviewRequestRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewResponse'
+          description: ''
+  /api/v1/memory/session/:
+    get:
+      operationId: memory_session_list
+      summary: Get a practice session
+      parameters:
+      - in: query
+        name: max_items
+        schema:
+          type: integer
+        description: Maximum items in session (default 20)
+      - in: query
+        name: skill_type
+        schema:
+          type: string
+        description: Skill type filter (recognition, production, listening, spelling)
+      tags:
+      - memory
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SessionItem'
+          description: ''
+  /api/v1/onboarding/:
+    get:
+      operationId: onboarding_retrieve
+      summary: Get onboarding status
+      tags:
+      - onboarding
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnboardingStatus'
+          description: ''
+    post:
+      operationId: onboarding_create
+      summary: Complete onboarding
+      tags:
+      - onboarding
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OnboardingCompleteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OnboardingCompleteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OnboardingCompleteRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnboardingStatus'
+          description: ''
+  /api/v1/packs/:
+    get:
+      operationId: packs_list
+      summary: List available packs
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - packs
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPackList'
+          description: ''
+  /api/v1/packs/{pack_id}/archive/:
+    post:
+      operationId: packs_archive_create
+      summary: Archive a pack subscription
+      parameters:
+      - in: path
+        name: pack_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - packs
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPackSubscription'
+          description: ''
+  /api/v1/packs/{pack_id}/unarchive/:
+    post:
+      operationId: packs_unarchive_create
+      summary: Unarchive a pack subscription
+      parameters:
+      - in: path
+        name: pack_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - packs
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPackSubscription'
+          description: ''
+  /api/v1/packs/{pack_id}/unsubscribe/:
+    delete:
+      operationId: packs_unsubscribe_destroy
+      summary: Unsubscribe from a pack
+      parameters:
+      - in: path
+        name: pack_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - packs
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/packs/subscribe/:
+    post:
+      operationId: packs_subscribe_create
+      summary: Subscribe to a pack
+      tags:
+      - packs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscribeRequestRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubscribeRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubscribeRequestRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPackSubscription'
+          description: ''
+  /api/v1/packs/subscriptions/:
+    get:
+      operationId: packs_subscriptions_list
+      summary: List user's pack subscriptions
+      parameters:
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - active
+          - archived
+          - completed
+      tags:
+      - packs
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserPackSubscription'
+          description: ''
+  /api/v1/progress/:
+    get:
+      operationId: progress_list
+      summary: List user progress
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - progress
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSectionProgressList'
+          description: ''
+    post:
+      operationId: progress_create
+      summary: Create/update section progress
+      tags:
+      - progress
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SectionProgressRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SectionProgressRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SectionProgressRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SectionProgress'
+          description: ''
+  /api/v1/progress/{id}/:
+    get:
+      operationId: progress_retrieve
+      summary: Get progress for a section
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this section progress.
+        required: true
+      tags:
+      - progress
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SectionProgress'
+          description: ''
+    put:
+      operationId: progress_update
+      summary: Update section progress
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this section progress.
+        required: true
+      tags:
+      - progress
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SectionProgressRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SectionProgressRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SectionProgressRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SectionProgress'
+          description: ''
+    patch:
+      operationId: progress_partial_update
+      summary: Partially update section progress
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this section progress.
+        required: true
+      tags:
+      - progress
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSectionProgressRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSectionProgressRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSectionProgressRequest'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SectionProgress'
+          description: ''
+    delete:
+      operationId: progress_destroy
+      summary: Delete section progress
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this section progress.
+        required: true
+      tags:
+      - progress
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/sections/:
+    get:
+      operationId: sections_list
+      description: Filter by level, category, or content type. Supports search by
+        title.
+      summary: List sections
+      parameters:
+      - in: query
+        name: category
+        schema:
+          type: string
+          enum:
+          - grammar
+          - phrases
+          - verbs
+          - vocab
+        description: |-
+          * `grammar` - Grammatik
+          * `vocab` - Wortschatz
+          * `verbs` - Verben
+          * `phrases` - Phrasen
+      - in: query
+        name: content_type
+        schema:
+          type: string
+          enum:
+          - grid
+          - notes
+          - table
+        description: |-
+          * `table` - Table
+          * `notes` - Notes
+          * `grid` - Grid
+      - in: query
+        name: level__code
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - sections
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSectionListList'
+          description: ''
+    post:
+      operationId: sections_create
+      summary: Create a section
+      tags:
+      - sections
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SectionWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SectionWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SectionWriteRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SectionWrite'
+          description: ''
+  /api/v1/sections/{id}/:
+    get:
+      operationId: sections_retrieve
+      summary: Get section detail with items
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this section.
+        required: true
+      tags:
+      - sections
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SectionDetail'
+          description: ''
+    put:
+      operationId: sections_update
+      summary: Update a section
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this section.
+        required: true
+      tags:
+      - sections
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SectionWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SectionWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SectionWriteRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SectionWrite'
+          description: ''
+    patch:
+      operationId: sections_partial_update
+      summary: Partially update a section
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this section.
+        required: true
+      tags:
+      - sections
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSectionWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSectionWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSectionWriteRequest'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SectionWrite'
+          description: ''
+    delete:
+      operationId: sections_destroy
+      summary: Delete a section
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this section.
+        required: true
+      tags:
+      - sections
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/sections/{section_pk}/items/:
+    get:
+      operationId: sections_items_list
+      summary: List items in a section
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: path
+        name: section_pk
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - items
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSectionItemList'
+          description: ''
+    post:
+      operationId: sections_items_create
+      summary: Add an item to a section
+      parameters:
+      - in: path
+        name: section_pk
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - items
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SectionItemWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SectionItemWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SectionItemWriteRequest'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SectionItemWrite'
+          description: ''
+  /api/v1/sections/{section_pk}/items/{id}/:
+    get:
+      operationId: sections_items_retrieve
+      summary: Get a section item
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this section item.
+        required: true
+      - in: path
+        name: section_pk
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - items
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SectionItem'
+          description: ''
+    put:
+      operationId: sections_items_update
+      summary: Update a section item
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this section item.
+        required: true
+      - in: path
+        name: section_pk
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - items
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SectionItemWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SectionItemWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SectionItemWriteRequest'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SectionItemWrite'
+          description: ''
+    patch:
+      operationId: sections_items_partial_update
+      summary: Partially update a section item
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this section item.
+        required: true
+      - in: path
+        name: section_pk
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - items
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSectionItemWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSectionItemWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSectionItemWriteRequest'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SectionItemWrite'
+          description: ''
+    delete:
+      operationId: sections_items_destroy
+      summary: Delete a section item
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this section item.
+        required: true
+      - in: path
+        name: section_pk
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - items
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    AIContent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        action_type:
+          allOf:
+          - $ref: '#/components/schemas/ActionTypeEnum'
+          readOnly: true
+        level_code:
+          type: string
+          readOnly: true
+        category:
+          type: string
+          readOnly: true
+        section_title:
+          type: string
+          readOnly: true
+        item_cells:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        section_headers:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        response_text:
+          type: string
+          readOnly: true
+        response_json:
+          readOnly: true
+        model_used:
+          type: string
+          readOnly: true
+        is_saved:
+          type: boolean
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - action_type
+      - category
+      - created_at
+      - id
+      - is_saved
+      - item_cells
+      - level_code
+      - model_used
+      - response_json
+      - response_text
+      - section_headers
+      - section_title
+    AIGenerateRequestRequest:
+      type: object
+      properties:
+        level_code:
+          type: string
+          minLength: 1
+          maxLength: 10
+        category:
+          $ref: '#/components/schemas/CategoryEnum'
+        section_title:
+          type: string
+          minLength: 1
+          maxLength: 255
+        section_headers:
+          type: array
+          items:
+            type: string
+            minLength: 1
+        item_cells:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          minItems: 1
+        action_type:
+          $ref: '#/components/schemas/ActionTypeEnum'
+        model:
+          type: string
+          minLength: 1
+          maxLength: 100
+        save_as_default:
+          type: boolean
+          default: false
+        regenerate:
+          type: boolean
+          default: false
+      required:
+      - action_type
+      - category
+      - item_cells
+      - level_code
+      - section_title
+    AIItemContentRequestRequest:
+      type: object
+      properties:
+        level_code:
+          type: string
+          minLength: 1
+          maxLength: 10
+        category:
+          type: string
+          minLength: 1
+          maxLength: 20
+        section_title:
+          type: string
+          minLength: 1
+          maxLength: 255
+        item_cells:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          minItems: 1
+      required:
+      - category
+      - item_cells
+      - level_code
+      - section_title
+    ActionTypeEnum:
+      enum:
+      - examples
+      - quiz
+      - explanation
+      type: string
+      description: |-
+        * `examples` - More Examples
+        * `quiz` - Quiz / Question
+        * `explanation` - Explanation
+    AuthResponse:
+      type: object
+      properties:
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        token:
+          type: string
+      required:
+      - token
+      - user
+    CategoryEnum:
+      enum:
+      - grammar
+      - vocab
+      - verbs
+      - phrases
+      type: string
+      description: |-
+        * `grammar` - Grammatik
+        * `vocab` - Wortschatz
+        * `verbs` - Verben
+        * `phrases` - Phrasen
+    ChangePasswordRequest:
+      type: object
+      properties:
+        old_password:
+          type: string
+          writeOnly: true
+          minLength: 1
+        new_password:
+          type: string
+          writeOnly: true
+          minLength: 8
+      required:
+      - new_password
+      - old_password
+    ContentTypeEnum:
+      enum:
+      - table
+      - notes
+      - grid
+      type: string
+      description: |-
+        * `table` - Table
+        * `notes` - Notes
+        * `grid` - Grid
+    FlashcardExercise:
+      type: object
+      properties:
+        exercise_type:
+          type: string
+        item_id:
+          type: string
+        skill_type:
+          type: string
+        is_new:
+          type: boolean
+        front_text:
+          type: string
+        front_hint:
+          type: string
+        back_text:
+          type: string
+        back_extra:
+          type: string
+      required:
+      - back_extra
+      - back_text
+      - exercise_type
+      - front_hint
+      - front_text
+      - is_new
+      - item_id
+      - skill_type
+    ForgotPasswordRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+      required:
+      - email
+    GoogleLoginRequest:
+      type: object
+      properties:
+        credential:
+          type: string
+          minLength: 1
+      required:
+      - credential
+    LLMModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        model_id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        provider:
+          type: string
+          readOnly: true
+        is_default:
+          type: boolean
+          readOnly: true
+        approx_cost_eur:
+          type: number
+          format: double
+          readOnly: true
+      required:
+      - approx_cost_eur
+      - id
+      - is_default
+      - model_id
+      - name
+      - provider
+    LearningGoal:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+          readOnly: true
+        icon:
+          type: string
+          readOnly: true
+        order:
+          type: integer
+          readOnly: true
+      required:
+      - description
+      - icon
+      - id
+      - name
+      - order
+      - slug
+    Level:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        code:
+          type: string
+          maxLength: 10
+        name:
+          type: string
+          maxLength: 100
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        section_count:
+          type: integer
+          readOnly: true
+      required:
+      - code
+      - id
+      - name
+      - section_count
+    LevelWrite:
+      type: object
+      properties:
+        code:
+          type: string
+          maxLength: 10
+        name:
+          type: string
+          maxLength: 100
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+      required:
+      - code
+      - name
+    LevelWriteRequest:
+      type: object
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 10
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+      required:
+      - code
+      - name
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - password
+      - username
+    OnboardingCompleteRequest:
+      type: object
+      properties:
+        native_language:
+          type: string
+          minLength: 1
+          maxLength: 10
+        pack_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          minItems: 1
+        learning_goal:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - native_language
+      - pack_ids
+    OnboardingStatus:
+      type: object
+      properties:
+        is_onboarded:
+          type: boolean
+        native_language:
+          type: string
+        current_level:
+          type: string
+        pack_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+        learning_goal:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - current_level
+      - is_onboarded
+      - learning_goal
+      - native_language
+    Pack:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          readOnly: true
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        level_code:
+          type: string
+          readOnly: true
+        base_language:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        grammar_count:
+          type: integer
+          readOnly: true
+        vocab_count:
+          type: integer
+          readOnly: true
+        exercise_count:
+          type: integer
+          readOnly: true
+        subscriber_count:
+          type: integer
+          readOnly: true
+          default: 0
+      required:
+      - base_language
+      - description
+      - exercise_count
+      - grammar_count
+      - id
+      - level_code
+      - slug
+      - subscriber_count
+      - title
+      - vocab_count
+    PaginatedLevelList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Level'
+    PaginatedPackList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pack'
+    PaginatedSectionItemList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SectionItem'
+    PaginatedSectionListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SectionList'
+    PaginatedSectionProgressList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SectionProgress'
+    PaginatedUserAIContentList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserAIContent'
+    PatchedLevelWriteRequest:
+      type: object
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 10
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+    PatchedSectionItemWriteRequest:
+      type: object
+      properties:
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        cells: {}
+    PatchedSectionProgressRequest:
+      type: object
+      properties:
+        section:
+          type: string
+          format: uuid
+        is_completed:
+          type: boolean
+    PatchedSectionWriteRequest:
+      type: object
+      properties:
+        level:
+          type: string
+          format: uuid
+        category:
+          $ref: '#/components/schemas/CategoryEnum'
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        content_type:
+          $ref: '#/components/schemas/ContentTypeEnum'
+        note:
+          type: string
+        note2:
+          type: string
+        headers: {}
+    PatchedUserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        native_language:
+          type: string
+          minLength: 1
+          maxLength: 10
+        learning_language:
+          type: string
+          minLength: 1
+          maxLength: 10
+        current_level:
+          type: string
+          minLength: 1
+          maxLength: 10
+        preferred_model_id:
+          type: string
+          nullable: true
+          minLength: 1
+    RegisterRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+          minLength: 8
+        native_language:
+          type: string
+          minLength: 1
+          maxLength: 10
+        learning_language:
+          type: string
+          minLength: 1
+          maxLength: 10
+      required:
+      - password
+      - username
+    ResetPasswordRequest:
+      type: object
+      properties:
+        uid:
+          type: string
+          minLength: 1
+        token:
+          type: string
+          minLength: 1
+        new_password:
+          type: string
+          writeOnly: true
+          minLength: 8
+      required:
+      - new_password
+      - token
+      - uid
+    ReviewRequestRequest:
+      type: object
+      properties:
+        item_id:
+          type: string
+          format: uuid
+        skill_type:
+          type: string
+          minLength: 1
+        rating:
+          type: integer
+          maximum: 4
+          minimum: 1
+        response_time_ms:
+          type: integer
+          minimum: 0
+      required:
+      - item_id
+      - rating
+      - skill_type
+    ReviewResponse:
+      type: object
+      properties:
+        next_due:
+          type: string
+          format: date-time
+        difficulty:
+          type: number
+          format: double
+        stability:
+          type: number
+          format: double
+        reps:
+          type: integer
+        lapses:
+          type: integer
+        state:
+          type: integer
+      required:
+      - difficulty
+      - lapses
+      - next_due
+      - reps
+      - stability
+      - state
+    SectionDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        level:
+          type: string
+          format: uuid
+        level_code:
+          type: string
+          readOnly: true
+        category:
+          $ref: '#/components/schemas/CategoryEnum'
+        title:
+          type: string
+          maxLength: 255
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        content_type:
+          $ref: '#/components/schemas/ContentTypeEnum'
+        note:
+          type: string
+        note2:
+          type: string
+        headers:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SectionItem'
+          readOnly: true
+        created_by:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - category
+      - content_type
+      - created_at
+      - created_by
+      - headers
+      - id
+      - items
+      - level
+      - level_code
+      - title
+      - updated_at
+    SectionItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        cells:
+          type: array
+          items:
+            type: string
+          readOnly: true
+      required:
+      - cells
+      - id
+    SectionItemWrite:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        cells: {}
+      required:
+      - id
+    SectionItemWriteRequest:
+      type: object
+      properties:
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        cells: {}
+    SectionList:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        level_code:
+          type: string
+          readOnly: true
+        category:
+          $ref: '#/components/schemas/CategoryEnum'
+        title:
+          type: string
+          maxLength: 255
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        content_type:
+          $ref: '#/components/schemas/ContentTypeEnum'
+        item_count:
+          type: integer
+          readOnly: true
+      required:
+      - category
+      - content_type
+      - id
+      - item_count
+      - level_code
+      - title
+    SectionProgress:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        section:
+          type: string
+          format: uuid
+        section_title:
+          type: string
+          readOnly: true
+        is_completed:
+          type: boolean
+        completed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - completed_at
+      - id
+      - section
+      - section_title
+      - updated_at
+    SectionProgressRequest:
+      type: object
+      properties:
+        section:
+          type: string
+          format: uuid
+        is_completed:
+          type: boolean
+      required:
+      - section
+    SectionWrite:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        level:
+          type: string
+          format: uuid
+        category:
+          $ref: '#/components/schemas/CategoryEnum'
+        title:
+          type: string
+          maxLength: 255
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        content_type:
+          $ref: '#/components/schemas/ContentTypeEnum'
+        note:
+          type: string
+        note2:
+          type: string
+        headers: {}
+      required:
+      - category
+      - content_type
+      - id
+      - level
+      - title
+    SectionWriteRequest:
+      type: object
+      properties:
+        level:
+          type: string
+          format: uuid
+        category:
+          $ref: '#/components/schemas/CategoryEnum'
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        content_type:
+          $ref: '#/components/schemas/ContentTypeEnum'
+        note:
+          type: string
+        note2:
+          type: string
+        headers: {}
+      required:
+      - category
+      - content_type
+      - level
+      - title
+    SessionItem:
+      type: object
+      properties:
+        item_id:
+          type: string
+          format: uuid
+        item_text:
+          type: string
+        item_translation:
+          type: string
+        item_type:
+          type: string
+        skill_type:
+          type: string
+        is_new:
+          type: boolean
+        retrievability:
+          type: number
+          format: double
+      required:
+      - is_new
+      - item_id
+      - item_text
+      - item_translation
+      - item_type
+      - retrievability
+      - skill_type
+    ShareKeyResponse:
+      type: object
+      properties:
+        share_key:
+          type: string
+      required:
+      - share_key
+    SharedAIContent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        action_type:
+          allOf:
+          - $ref: '#/components/schemas/ActionTypeEnum'
+          readOnly: true
+        level_code:
+          type: string
+          readOnly: true
+        category:
+          type: string
+          readOnly: true
+        section_title:
+          type: string
+          readOnly: true
+        item_cells:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        section_headers:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        response_text:
+          type: string
+          readOnly: true
+        response_json:
+          readOnly: true
+        model_used:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - action_type
+      - category
+      - created_at
+      - id
+      - item_cells
+      - level_code
+      - model_used
+      - response_json
+      - response_text
+      - section_headers
+      - section_title
+    SubscribeRequestRequest:
+      type: object
+      properties:
+        pack_id:
+          type: string
+          format: uuid
+      required:
+      - pack_id
+    SubscriptionStatusEnum:
+      enum:
+      - active
+      - archived
+      - completed
+      type: string
+      description: |-
+        * `active` - Active
+        * `archived` - Archived
+        * `completed` - Completed
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        native_language:
+          type: string
+          maxLength: 10
+        learning_language:
+          type: string
+          maxLength: 10
+        current_level:
+          type: string
+          maxLength: 10
+        credit_balance:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,6})?$
+          readOnly: true
+        preferred_model_id:
+          type: string
+          nullable: true
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - credit_balance
+      - date_joined
+      - id
+      - username
+    UserAIContent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        ai_content:
+          allOf:
+          - $ref: '#/components/schemas/AIContent'
+          readOnly: true
+        share_key:
+          type: string
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - ai_content
+      - created_at
+      - id
+      - share_key
+    UserCreditResponse:
+      type: object
+      properties:
+        credit_balance:
+          type: string
+        currency:
+          type: string
+      required:
+      - credit_balance
+      - currency
+    UserPackSubscription:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        pack:
+          allOf:
+          - $ref: '#/components/schemas/Pack'
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/SubscriptionStatusEnum'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - pack
+      - status
+    UserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        native_language:
+          type: string
+          minLength: 1
+          maxLength: 10
+        learning_language:
+          type: string
+          minLength: 1
+          maxLength: 10
+        current_level:
+          type: string
+          minLength: 1
+          maxLength: 10
+        preferred_model_id:
+          type: string
+          nullable: true
+          minLength: 1
+      required:
+      - username
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"

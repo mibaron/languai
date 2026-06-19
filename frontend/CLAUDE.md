@@ -39,6 +39,7 @@ frontend/
 - Keep components small and focused — extract when a component exceeds ~100 lines
 - Use `cn()` utility (from shadcn) for conditional class merging — never string concatenation
 - **Destructive/modifying user actions (delete, regenerate, overwrite, etc.) must always require explicit confirmation via a `ConfirmDialog`** (`src/components/ui/confirm-dialog.tsx`). Never execute these actions on a single click.
+- **Every async operation must have a loading state** — show a spinner, skeleton, or progress indicator while the operation is in progress. Disable all CTAs/buttons that could conflict with the in-flight request to prevent double-submissions or race conditions. This applies to API calls, form submissions, AI generation, navigation triggers — any async function. No silent waiting.
 
 ### TypeScript Types
 - **All types must be in dedicated .ts files** — never define interfaces/types inline in .tsx files

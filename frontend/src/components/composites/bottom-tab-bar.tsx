@@ -1,21 +1,46 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { BookOpen, BarChart2, Lightbulb, User } from "lucide-react";
+import { BookOpen, BarChart2, Lightbulb, Sparkles, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+import { useExplainModeContext } from "@/contexts/explain-mode-context";
+import { useTabShellContext } from "@/contexts/tab-shell-context";
+import type { TabId } from "@/types/tab-shell";
 import type { BottomTabBarProps } from "./types";
 
-const tabs = [
-  { id: "learn", href: "/learn", icon: BookOpen, label: "Learn" },
-  { id: "explain", href: "/explain", icon: Lightbulb, label: "Explain" },
-  { id: "practice", href: "/practice", icon: BarChart2, label: "Practice" },
-  { id: "profile", href: "/profile", icon: User, label: "Profile" },
-] as const;
+const tabs: { id: TabId; icon: typeof BookOpen; label: string }[] = [
+  { id: "learn", icon: BookOpen, label: "Learn" },
+  { id: "explain", icon: Lightbulb, label: "Explain" },
+  { id: "practice", icon: BarChart2, label: "Practice" },
+  { id: "profile", icon: User, label: "Profile" },
+];
 
 export function BottomTabBar({ className }: BottomTabBarProps) {
-  const pathname = usePathname();
+  const { activeTab, switchTab } = useTabShellContext();
+  const {
+    explainMode,
+    hasExplainableContent,
+    isExplaining,
+    enterExplainMode,
+    exitExplainMode,
+  } = useExplainModeContext();
+
+  const handleTabClick = (tabId: TabId) => {
+    if (tabId === "explain") {
+      if (!explainMode) {
+        if (hasExplainableContent) {
+          enterExplainMode();
+        } else {
+          switchTab("explain");
+        }
+      } else {
+        switchTab("explain");
+      }
+    } else {
+      if (explainMode) exitExplainMode();
+      switchTab(tabId);
+    }
+  };
 
   return (
     <nav
@@ -25,21 +50,29 @@ export function BottomTabBar({ className }: BottomTabBarProps) {
       )}
     >
       {tabs.map((tab) => {
-        const isActive = pathname.startsWith(tab.href);
-        const Icon = tab.icon;
+        const isExplainTab = tab.id === "explain";
+        const isActive =
+          isExplainTab ? explainMode || activeTab === "explain" : activeTab === tab.id;
+        const Icon =
+          isExplainTab && explainMode ? Sparkles : tab.icon;
 
         return (
-          <Link
+          <button
             key={tab.id}
-            href={tab.href}
+            onClick={() => handleTabClick(tab.id)}
+            disabled={isExplaining}
             className={cn(
               "flex flex-1 flex-col items-center justify-center gap-[3px] py-[6px] transition-colors duration-150",
               isActive ? "text-brand" : "text-muted-foreground",
+              isExplaining && "pointer-events-none opacity-50",
             )}
           >
             <Icon
               size={22}
               strokeWidth={isActive ? 2.25 : 1.75}
+              className={cn(
+                isExplainTab && explainMode && "animate-pulse",
+              )}
             />
             <span
               className={cn(
@@ -49,7 +82,7 @@ export function BottomTabBar({ className }: BottomTabBarProps) {
             >
               {tab.label}
             </span>
-          </Link>
+          </button>
         );
       })}
     </nav>

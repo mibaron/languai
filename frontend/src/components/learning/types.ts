@@ -1,3 +1,4 @@
+import type { AIItemContext } from "@/types/ai-content";
 import type { CategoryId, LevelCode, Section, SectionItem } from "@/types/content";
 import type { SearchMatch, SearchResults } from "@/types/search";
 
@@ -36,22 +37,27 @@ export interface SectionContextProps {
   category: string;
 }
 
-export interface SectionCardProps extends SectionContextProps {
+export interface ExplainModeProps {
+  explainMode?: boolean;
+  onExplainItem?: (context: AIItemContext) => void;
+}
+
+export interface SectionCardProps extends SectionContextProps, ExplainModeProps {
   section: Section;
 }
 
-export interface SectionTableProps extends SectionContextProps {
+export interface SectionTableProps extends SectionContextProps, ExplainModeProps {
   sectionTitle: string;
   headers: string[];
   items: SectionItem[];
 }
 
-export interface SectionGridProps extends SectionContextProps {
+export interface SectionGridProps extends SectionContextProps, ExplainModeProps {
   sectionTitle: string;
   items: SectionItem[];
 }
 
-export interface SectionNotesProps extends SectionContextProps {
+export interface SectionNotesProps extends SectionContextProps, ExplainModeProps {
   sectionTitle: string;
   items: SectionItem[];
 }

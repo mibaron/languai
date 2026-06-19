@@ -7,11 +7,11 @@ vi.mock("next/navigation", () => ({
   useRouter: () => ({ push: mockPush }),
 }));
 
-import PracticePage from "./page";
+import { PracticeTabContent } from "./_components/practice-tab-content";
 
-describe("PracticePage", () => {
+describe("PracticeTabContent", () => {
   it("renders all four practice modes", () => {
-    render(<PracticePage />);
+    render(<PracticeTabContent />);
     expect(screen.getByText("Flashcards")).toBeInTheDocument();
     expect(screen.getByText("Quiz")).toBeInTheDocument();
     expect(screen.getByText("Fill in the Blanks")).toBeInTheDocument();
@@ -20,7 +20,7 @@ describe("PracticePage", () => {
 
   it("navigates to flashcard session when Flashcards is clicked", async () => {
     const user = userEvent.setup();
-    render(<PracticePage />);
+    render(<PracticeTabContent />);
     await user.click(screen.getByText("Flashcards"));
     expect(mockPush).toHaveBeenCalledWith("/practice/session?mode=flashcard");
   });
@@ -28,7 +28,7 @@ describe("PracticePage", () => {
   it("navigates to quiz session when Quiz is clicked", async () => {
     const user = userEvent.setup();
     mockPush.mockClear();
-    render(<PracticePage />);
+    render(<PracticeTabContent />);
     await user.click(screen.getByText("Quiz"));
     expect(mockPush).toHaveBeenCalledWith(
       "/practice/session?mode=mcq_recognition",
@@ -36,7 +36,7 @@ describe("PracticePage", () => {
   });
 
   it("disables Fill in the Blanks and Mock Exam", () => {
-    render(<PracticePage />);
+    render(<PracticeTabContent />);
     const fillBtn = screen.getByText("Fill in the Blanks").closest("button");
     const examBtn = screen.getByText("Mock Exam").closest("button");
     expect(fillBtn).toBeDisabled();
@@ -46,7 +46,7 @@ describe("PracticePage", () => {
   it("does not navigate when disabled mode is clicked", async () => {
     const user = userEvent.setup();
     mockPush.mockClear();
-    render(<PracticePage />);
+    render(<PracticeTabContent />);
     await user.click(screen.getByText("Fill in the Blanks"));
     expect(mockPush).not.toHaveBeenCalled();
   });

@@ -35,4 +35,9 @@ export interface UserRequest {
    * @maxLength 10
    */
   current_level?: string;
+  /**
+   * @minLength 1
+   * @nullable
+   */
+  preferred_model_id?: string | null;
 }

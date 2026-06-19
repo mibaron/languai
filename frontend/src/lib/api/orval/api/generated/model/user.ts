@@ -28,6 +28,7 @@ export interface User {
   current_level?: string;
   /** @pattern ^-?\d{0,4}(?:\.\d{0,6})?$ */
   readonly credit_balance: string;
-  readonly preferred_model_id: string;
+  /** @nullable */
+  preferred_model_id?: string | null;
   readonly date_joined: string;
 }

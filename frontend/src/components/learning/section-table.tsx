@@ -1,4 +1,4 @@
-import { AIButton } from "@/components/ai/ai-button";
+import { cn } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -10,7 +10,15 @@ import {
 
 import type { SectionTableProps } from "./types";
 
-export function SectionTable({ headers, items, sectionTitle, levelCode, category }: SectionTableProps) {
+export function SectionTable({
+  headers,
+  items,
+  sectionTitle,
+  levelCode,
+  category,
+  explainMode,
+  onExplainItem,
+}: SectionTableProps) {
   return (
     <div className="overflow-x-auto rounded-md border">
       <Table>
@@ -24,12 +32,30 @@ export function SectionTable({ headers, items, sectionTitle, levelCode, category
                 {header}
               </TableHead>
             ))}
-            <TableHead className="w-10" />
           </TableRow>
         </TableHeader>
         <TableBody>
           {items.map((item, i) => (
-            <TableRow key={item.id ?? i}>
+            <TableRow
+              key={item.id ?? i}
+              onClick={
+                explainMode
+                  ? () =>
+                      onExplainItem?.({
+                        levelCode,
+                        category,
+                        sectionTitle,
+                        sectionHeaders: headers,
+                        itemOrder: item.order ?? i,
+                        itemCells: item.cells,
+                      })
+                  : undefined
+              }
+              className={cn(
+                explainMode &&
+                  "cursor-pointer ring-1 ring-brand/30 bg-brand/5 hover:bg-brand/10",
+              )}
+            >
               {item.cells.map((cell, j) => (
                 <TableCell
                   key={j}
@@ -38,18 +64,6 @@ export function SectionTable({ headers, items, sectionTitle, levelCode, category
                   {cell}
                 </TableCell>
               ))}
-              <TableCell className="w-10 px-1">
-                <AIButton
-                  context={{
-                    levelCode,
-                    category,
-                    sectionTitle,
-                    sectionHeaders: headers,
-                    itemOrder: item.order ?? i,
-                    itemCells: item.cells,
-                  }}
-                />
-              </TableCell>
             </TableRow>
           ))}
         </TableBody>

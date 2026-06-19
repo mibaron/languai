@@ -57,3 +57,11 @@ export interface DeleteAccountDialogProps {
   onConfirm: () => void;
   isLoading: boolean;
 }
+
+export interface ModelSelectorDrawerProps {
+  open: boolean;
+  currentModelId: string | null;
+  onSave: (modelId: string | null) => void;
+  onClose: () => void;
+  isSaving: boolean;
+}

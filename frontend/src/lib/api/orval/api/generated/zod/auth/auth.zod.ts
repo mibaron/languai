@@ -48,7 +48,7 @@ export const authGoogleCreateResponse = zod.object({
   "learning_language": zod.string().max(authGoogleCreateResponseUserLearningLanguageMax).optional(),
   "current_level": zod.string().max(authGoogleCreateResponseUserCurrentLevelMax).optional(),
   "credit_balance": zod.string().regex(authGoogleCreateResponseUserCreditBalanceRegExp),
-  "preferred_model_id": zod.string(),
+  "preferred_model_id": zod.string().nullish(),
   "date_joined": zod.string().datetime({})
 }),
   "token": zod.string()
@@ -78,7 +78,7 @@ export const authLoginCreateResponse = zod.object({
   "learning_language": zod.string().max(authLoginCreateResponseUserLearningLanguageMax).optional(),
   "current_level": zod.string().max(authLoginCreateResponseUserCurrentLevelMax).optional(),
   "credit_balance": zod.string().regex(authLoginCreateResponseUserCreditBalanceRegExp),
-  "preferred_model_id": zod.string(),
+  "preferred_model_id": zod.string().nullish(),
   "date_joined": zod.string().datetime({})
 }),
   "token": zod.string()
@@ -102,7 +102,7 @@ export const authMeRetrieveResponse = zod.object({
   "learning_language": zod.string().max(authMeRetrieveResponseLearningLanguageMax).optional(),
   "current_level": zod.string().max(authMeRetrieveResponseCurrentLevelMax).optional(),
   "credit_balance": zod.string().regex(authMeRetrieveResponseCreditBalanceRegExp),
-  "preferred_model_id": zod.string(),
+  "preferred_model_id": zod.string().nullish(),
   "date_joined": zod.string().datetime({})
 })
 
@@ -120,7 +120,8 @@ export const authMeUpdateBody = zod.object({
   "last_name": zod.string().max(authMeUpdateBodyLastNameMax).optional(),
   "native_language": zod.string().min(1).max(authMeUpdateBodyNativeLanguageMax).optional(),
   "learning_language": zod.string().min(1).max(authMeUpdateBodyLearningLanguageMax).optional(),
-  "current_level": zod.string().min(1).max(authMeUpdateBodyCurrentLevelMax).optional()
+  "current_level": zod.string().min(1).max(authMeUpdateBodyCurrentLevelMax).optional(),
+  "preferred_model_id": zod.string().min(1).nullish()
 })
 
 export const authMeUpdateResponseUsernameMax = 150;
@@ -138,7 +139,7 @@ export const authMeUpdateResponse = zod.object({
   "learning_language": zod.string().max(authMeUpdateResponseLearningLanguageMax).optional(),
   "current_level": zod.string().max(authMeUpdateResponseCurrentLevelMax).optional(),
   "credit_balance": zod.string().regex(authMeUpdateResponseCreditBalanceRegExp),
-  "preferred_model_id": zod.string(),
+  "preferred_model_id": zod.string().nullish(),
   "date_joined": zod.string().datetime({})
 })
 
@@ -156,7 +157,8 @@ export const authMePartialUpdateBody = zod.object({
   "last_name": zod.string().max(authMePartialUpdateBodyLastNameMax).optional(),
   "native_language": zod.string().min(1).max(authMePartialUpdateBodyNativeLanguageMax).optional(),
   "learning_language": zod.string().min(1).max(authMePartialUpdateBodyLearningLanguageMax).optional(),
-  "current_level": zod.string().min(1).max(authMePartialUpdateBodyCurrentLevelMax).optional()
+  "current_level": zod.string().min(1).max(authMePartialUpdateBodyCurrentLevelMax).optional(),
+  "preferred_model_id": zod.string().min(1).nullish()
 })
 
 export const authMePartialUpdateResponseUsernameMax = 150;
@@ -174,7 +176,7 @@ export const authMePartialUpdateResponse = zod.object({
   "learning_language": zod.string().max(authMePartialUpdateResponseLearningLanguageMax).optional(),
   "current_level": zod.string().max(authMePartialUpdateResponseCurrentLevelMax).optional(),
   "credit_balance": zod.string().regex(authMePartialUpdateResponseCreditBalanceRegExp),
-  "preferred_model_id": zod.string(),
+  "preferred_model_id": zod.string().nullish(),
   "date_joined": zod.string().datetime({})
 })
 

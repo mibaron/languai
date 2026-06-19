@@ -26,7 +26,8 @@ type DrawerState =
   | { type: "editName" }
   | { type: "language"; mode: "speaks" | "learning" }
   | { type: "changePassword" }
-  | { type: "deleteAccount" };
+  | { type: "deleteAccount" }
+  | { type: "modelSelector" };
 
 export function useProfile() {
   const router = useRouter();
@@ -140,6 +141,21 @@ export function useProfile() {
     [drawer, updateMeMutation, invalidateMe],
   );
 
+  const handleSaveModel = useCallback(
+    (modelId: string | null) => {
+      updateMeMutation.mutate(
+        { data: { preferred_model_id: modelId } },
+        {
+          onSuccess: () => {
+            invalidateMe();
+            setDrawer({ type: "none" });
+          },
+        },
+      );
+    },
+    [updateMeMutation, invalidateMe],
+  );
+
   const handleDeleteAccount = useCallback(async () => {
     try {
       await deleteMeMutation.mutateAsync();
@@ -168,6 +184,7 @@ export function useProfile() {
     handleSignOut,
     handleSaveName,
     handleSaveLanguage,
+    handleSaveModel,
     handleDeleteAccount,
     isUpdatingProfile: updateMeMutation.isPending,
     isDeletingAccount: deleteMeMutation.isPending,

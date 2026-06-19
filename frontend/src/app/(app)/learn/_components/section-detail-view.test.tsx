@@ -22,6 +22,15 @@ vi.mock("@/components/learning/section-card", () => ({
   ),
 }));
 
+vi.mock("@/contexts/explain-mode-context", () => ({
+  useExplainModeContext: () => ({
+    explainMode: false,
+    isExplaining: false,
+    triggerExplain: vi.fn(),
+    setHasExplainableContent: vi.fn(),
+  }),
+}));
+
 import { SectionDetailView } from "./section-detail-view";
 
 const mockSection: Section = {

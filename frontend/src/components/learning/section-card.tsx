@@ -4,7 +4,13 @@ import { SectionNotes } from "./section-notes";
 import { SectionTable } from "./section-table";
 import type { SectionCardProps } from "./types";
 
-export function SectionCard({ section, levelCode, category }: SectionCardProps) {
+export function SectionCard({
+  section,
+  levelCode,
+  category,
+  explainMode,
+  onExplainItem,
+}: SectionCardProps) {
   return (
     <>
       {section.note && <NoteBox text={section.note} variant="warning" />}
@@ -16,6 +22,8 @@ export function SectionCard({ section, levelCode, category }: SectionCardProps) 
           sectionTitle={section.title}
           levelCode={levelCode}
           category={category}
+          explainMode={explainMode}
+          onExplainItem={onExplainItem}
         />
       )}
       {section.type === "grid" && (
@@ -24,6 +32,8 @@ export function SectionCard({ section, levelCode, category }: SectionCardProps) 
           sectionTitle={section.title}
           levelCode={levelCode}
           category={category}
+          explainMode={explainMode}
+          onExplainItem={onExplainItem}
         />
       )}
       {section.type === "notes" && (
@@ -32,6 +42,8 @@ export function SectionCard({ section, levelCode, category }: SectionCardProps) 
           sectionTitle={section.title}
           levelCode={levelCode}
           category={category}
+          explainMode={explainMode}
+          onExplainItem={onExplainItem}
         />
       )}
     </>

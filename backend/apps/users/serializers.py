@@ -65,7 +65,7 @@ class ShareKeyResponseSerializer(serializers.Serializer):
 
 class UserSerializer(serializers.ModelSerializer):
     preferred_model_id = serializers.CharField(
-        source="preferred_model.model_id", read_only=True, default=None
+        required=False, allow_null=True, default=None
     )
 
     class Meta:
@@ -83,7 +83,36 @@ class UserSerializer(serializers.ModelSerializer):
             "preferred_model_id",
             "date_joined",
         ]
-        read_only_fields = ["id", "date_joined", "credit_balance", "preferred_model_id"]
+        read_only_fields = ["id", "date_joined", "credit_balance"]
+
+    def to_representation(self, instance: User) -> dict:
+        data = super().to_representation(instance)
+        data["preferred_model_id"] = (
+            instance.preferred_model.model_id if instance.preferred_model else None
+        )
+        return data
+
+    def validate_preferred_model_id(self, value: str | None) -> str | None:
+        if value is None:
+            return None
+        from apps.ai_content.models import LLMModel
+
+        if not LLMModel.objects.filter(model_id=value, is_active=True).exists():
+            raise serializers.ValidationError("Invalid or inactive model.")
+        return value
+
+    def update(self, instance: User, validated_data: dict) -> User:
+        model_id = validated_data.pop("preferred_model_id", ...)
+        if model_id is not ...:
+            if model_id is None:
+                instance.preferred_model = None
+            else:
+                from apps.ai_content.models import LLMModel
+
+                instance.preferred_model = LLMModel.objects.get(
+                    model_id=model_id, is_active=True
+                )
+        return super().update(instance, validated_data)
 
 
 class OnboardingStatusSerializer(serializers.Serializer):
