@@ -6,6 +6,7 @@ class SkillType(models.TextChoices):
     PRODUCTION = "production", "Production"
     LISTENING = "listening", "Listening"
     SPELLING = "spelling", "Spelling"
+    APPLICATION = "application", "Application"
 
 
 DEFAULT_REQUEST_RETENTION = 0.9
