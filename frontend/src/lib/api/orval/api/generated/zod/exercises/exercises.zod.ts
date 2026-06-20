@@ -12,7 +12,7 @@ import zod from 'zod';
  * @summary Get an exercise session
  */
 export const exercisesSessionListQueryParams = zod.object({
-  "exercise_type": zod.enum(['flashcard', 'mcq_recognition']).describe('Type of exercises to generate'),
+  "exercise_type": zod.enum(['error_correction', 'fill_blank', 'flashcard', 'matching', 'mcq_recognition', 'sentence_order']).describe('Type of exercises to generate'),
   "max_items": zod.number().optional().describe('Maximum exercises in session (default 20)')
 })
 
@@ -27,4 +27,74 @@ export const exercisesSessionListResponseItem = zod.object({
   "back_extra": zod.string()
 })
 export const exercisesSessionListResponse = zod.array(exercisesSessionListResponseItem)
+
+/**
+ * @summary Get stored exercises from the database
+ */
+export const exercisesStoredSessionListQueryParams = zod.object({
+  "exercise_type": zod.enum(['error_correction', 'fill_blank', 'flashcard', 'matching', 'mcq_recognition', 'sentence_order']).optional().describe('Filter by exercise type'),
+  "max_items": zod.number().optional().describe('Maximum exercises to return (default 20)')
+})
+
+export const exercisesStoredSessionListResponseDetailFrontTextMax = 255;export const exercisesStoredSessionListResponseDetailBackTextMax = 255;export const exercisesStoredSessionListResponseDetailFrontContextMax = 255;export const exercisesStoredSessionListResponseDetailBackContextMax = 255;export const exercisesStoredSessionListResponseDetailQuestionMax = 500;export const exercisesStoredSessionListResponseDetailChoicesItemTextMax = 255;export const exercisesStoredSessionListResponseDetailChoicesItemOrderMin = 0;
+export const exercisesStoredSessionListResponseDetailChoicesItemOrderMax = 9223372036854776000;export const exercisesStoredSessionListResponseDetailTextBeforeMax = 500;export const exercisesStoredSessionListResponseDetailTextAfterMax = 500;export const exercisesStoredSessionListResponseDetailAnswerMax = 100;export const exercisesStoredSessionListResponseDetailHintMax = 255;export const exercisesStoredSessionListResponseDetailHintMaxOne = 255;export const exercisesStoredSessionListResponseDetailSentenceMax = 500;export const exercisesStoredSessionListResponseDetailErrorStartMin = 0;
+export const exercisesStoredSessionListResponseDetailErrorStartMax = 9223372036854776000;export const exercisesStoredSessionListResponseDetailErrorEndMin = 0;
+export const exercisesStoredSessionListResponseDetailErrorEndMax = 9223372036854776000;export const exercisesStoredSessionListResponseDetailCorrectReplacementMax = 100;export const exercisesStoredSessionListResponseDetailCorrectedSentenceMax = 500;export const exercisesStoredSessionListResponseDetailInstructionMax = 255;export const exercisesStoredSessionListResponseDetailPairsItemLeftMax = 255;export const exercisesStoredSessionListResponseDetailPairsItemRightMax = 255;export const exercisesStoredSessionListResponseDetailPairsItemOrderMin = 0;
+export const exercisesStoredSessionListResponseDetailPairsItemOrderMax = 9223372036854776000;
+
+export const exercisesStoredSessionListResponseItem = zod.object({
+  "id": zod.string().uuid(),
+  "exercise_type": zod.enum(['flashcard', 'mcq_recognition', 'fill_blank', 'sentence_order', 'error_correction', 'matching']).describe('* `flashcard` - Flashcard\n* `mcq_recognition` - MCQ Recognition\n* `fill_blank` - Fill in the Blank\n* `sentence_order` - Sentence Order\n* `error_correction` - Error Correction\n* `matching` - Matching'),
+  "source": zod.enum(['creator', 'engine', 'ai']).describe('* `creator` - Pack Creator\n* `engine` - Auto-generated\n* `ai` - AI-generated'),
+  "item_id": zod.string().uuid(),
+  "item_text": zod.string(),
+  "item_translation": zod.string(),
+  "detail": zod.union([zod.object({
+  "front_text": zod.string().max(exercisesStoredSessionListResponseDetailFrontTextMax),
+  "back_text": zod.string().max(exercisesStoredSessionListResponseDetailBackTextMax),
+  "front_context": zod.string().max(exercisesStoredSessionListResponseDetailFrontContextMax).optional(),
+  "back_context": zod.string().max(exercisesStoredSessionListResponseDetailBackContextMax).optional(),
+  "exercise_type": zod.enum(['flashcard'])
+}),zod.object({
+  "question": zod.string().max(exercisesStoredSessionListResponseDetailQuestionMax),
+  "explanation": zod.string().optional(),
+  "choices": zod.array(zod.object({
+  "id": zod.string().uuid(),
+  "text": zod.string().max(exercisesStoredSessionListResponseDetailChoicesItemTextMax),
+  "is_correct": zod.boolean().optional(),
+  "order": zod.number().min(exercisesStoredSessionListResponseDetailChoicesItemOrderMin).max(exercisesStoredSessionListResponseDetailChoicesItemOrderMax).optional()
+})),
+  "exercise_type": zod.enum(['mcq_recognition'])
+}),zod.object({
+  "text_before": zod.string().max(exercisesStoredSessionListResponseDetailTextBeforeMax),
+  "text_after": zod.string().max(exercisesStoredSessionListResponseDetailTextAfterMax),
+  "answer": zod.string().max(exercisesStoredSessionListResponseDetailAnswerMax),
+  "accept_alternatives": zod.any().optional(),
+  "hint": zod.string().max(exercisesStoredSessionListResponseDetailHintMax).optional(),
+  "explanation": zod.string().optional(),
+  "exercise_type": zod.enum(['fill_blank'])
+}),zod.object({
+  "jumbled_words": zod.any(),
+  "correct_answers": zod.any(),
+  "hint": zod.string().max(exercisesStoredSessionListResponseDetailHintMaxOne).optional(),
+  "exercise_type": zod.enum(['sentence_order'])
+}),zod.object({
+  "sentence": zod.string().max(exercisesStoredSessionListResponseDetailSentenceMax),
+  "error_start": zod.number().min(exercisesStoredSessionListResponseDetailErrorStartMin).max(exercisesStoredSessionListResponseDetailErrorStartMax),
+  "error_end": zod.number().min(exercisesStoredSessionListResponseDetailErrorEndMin).max(exercisesStoredSessionListResponseDetailErrorEndMax),
+  "correct_replacement": zod.string().max(exercisesStoredSessionListResponseDetailCorrectReplacementMax),
+  "corrected_sentence": zod.string().max(exercisesStoredSessionListResponseDetailCorrectedSentenceMax),
+  "explanation": zod.string().optional(),
+  "exercise_type": zod.enum(['error_correction'])
+}),zod.object({
+  "instruction": zod.string().max(exercisesStoredSessionListResponseDetailInstructionMax).optional(),
+  "pairs": zod.array(zod.object({
+  "left": zod.string().max(exercisesStoredSessionListResponseDetailPairsItemLeftMax),
+  "right": zod.string().max(exercisesStoredSessionListResponseDetailPairsItemRightMax),
+  "order": zod.number().min(exercisesStoredSessionListResponseDetailPairsItemOrderMin).max(exercisesStoredSessionListResponseDetailPairsItemOrderMax).optional()
+})),
+  "exercise_type": zod.enum(['matching'])
+})])
+})
+export const exercisesStoredSessionListResponse = zod.array(exercisesStoredSessionListResponseItem)
 

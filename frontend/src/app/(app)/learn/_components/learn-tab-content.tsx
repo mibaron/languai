@@ -8,6 +8,8 @@ import { CategoryTabs } from "./category-tabs";
 import { PackHeader } from "./pack-header";
 import { PackSelectorDrawer } from "./pack-selector-drawer";
 import { PackStatsDrawer } from "./pack-stats-drawer";
+import { PageDetailView } from "./page-detail-view";
+import { PageListView } from "./page-list-view";
 import { SectionDetailView } from "./section-detail-view";
 import { SectionList } from "./section-list";
 import { useLearnTab } from "../_hooks/use-learn-tab";
@@ -33,6 +35,7 @@ export function LearnTabContent() {
     closePackDrawer,
     openStats,
     closeStats,
+    learnPages,
   } = useLearnTab();
 
   if (isLoading) {
@@ -53,16 +56,37 @@ export function LearnTabContent() {
     );
   }
 
-  return (
-    <div className="relative flex flex-1 flex-col overflow-hidden">
-      <PackHeader
-        activePack={activePack}
-        overallProgress={0}
-        onOpenPackDrawer={openPackDrawer}
-        onOpenStats={openStats}
-      />
+  const showPages = learnPages.hasPages;
 
-      {selectedSection && selectedSectionIndex !== null ? (
+  const renderContent = () => {
+    if (showPages) {
+      if (learnPages.pageDetail && learnPages.selectedPageIndex !== null) {
+        return (
+          <PageDetailView
+            page={learnPages.pageDetail}
+            pageIndex={learnPages.selectedPageIndex}
+            totalPages={learnPages.pages.length}
+            onBack={learnPages.closePage}
+            onNavigate={learnPages.navigatePage}
+            onMarkStudied={learnPages.handleMarkStudied}
+            isMarkingStudied={learnPages.isMarkingStudied}
+          />
+        );
+      }
+
+      if (learnPages.selectedPage && learnPages.isDetailLoading) {
+        return (
+          <div className="flex flex-1 items-center justify-center">
+            <div className="size-6 animate-spin rounded-full border-2 border-brand border-t-transparent" />
+          </div>
+        );
+      }
+
+      return <PageListView pages={learnPages.pages} onOpenPage={learnPages.openPage} />;
+    }
+
+    if (selectedSection && selectedSectionIndex !== null) {
+      return (
         <SectionDetailView
           section={selectedSection}
           sectionIndex={selectedSectionIndex}
@@ -72,15 +96,30 @@ export function LearnTabContent() {
           onBack={closeSection}
           onNavigate={navigateSection}
         />
-      ) : (
-        <>
-          <CategoryTabs
-            activeCategory={category}
-            onCategoryChange={setCategory}
-          />
-          <SectionList sections={sections} onOpenSection={openSection} />
-        </>
-      )}
+      );
+    }
+
+    return (
+      <>
+        <CategoryTabs
+          activeCategory={category}
+          onCategoryChange={setCategory}
+        />
+        <SectionList sections={sections} onOpenSection={openSection} />
+      </>
+    );
+  };
+
+  return (
+    <div className="relative flex flex-1 flex-col overflow-hidden">
+      <PackHeader
+        activePack={activePack}
+        overallProgress={0}
+        onOpenPackDrawer={openPackDrawer}
+        onOpenStats={openStats}
+      />
+
+      {renderContent()}
 
       {packDrawerOpen && (
         <PackSelectorDrawer

@@ -1,4 +1,4 @@
-import type { Pack, UserPackSubscription } from "@/lib/api/orval/api/generated/model";
+import type { Pack, PageDetail, PageList, UserPackSubscription } from "@/lib/api/orval/api/generated/model";
 import type { CategoryId, Section } from "@/types/content";
 
 export interface PackHeaderProps {
@@ -55,4 +55,36 @@ export interface SectionDetailViewProps {
   category: string;
   onBack: () => void;
   onNavigate: (index: number) => void;
+}
+
+export interface PageCardProps {
+  page: PageList;
+  onOpen: (page: PageList) => void;
+}
+
+export interface PageListViewProps {
+  pages: PageList[];
+  onOpenPage: (page: PageList) => void;
+}
+
+export interface PageDetailViewProps {
+  page: PageDetail;
+  pageIndex: number;
+  totalPages: number;
+  onBack: () => void;
+  onNavigate: (index: number) => void;
+  onMarkStudied: () => void;
+  isMarkingStudied: boolean;
+}
+
+export interface PageDetailHeaderProps {
+  title: string;
+  pageIndex: number;
+  totalPages: number;
+  isStudied: boolean;
+  onBack: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+  hasPrev: boolean;
+  hasNext: boolean;
 }

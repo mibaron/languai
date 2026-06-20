@@ -17,7 +17,9 @@ import type {
 
 import type {
   ExercisesSessionListParams,
-  FlashcardExercise
+  ExercisesStoredSessionListParams,
+  FlashcardExercise,
+  StoredExercise
 } from '.././model';
 
 import { axiosInstance } from '../../../client';
@@ -87,6 +89,74 @@ export function useExercisesSessionList<TData = Awaited<ReturnType<typeof exerci
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getExercisesSessionListQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+/**
+ * @summary Get stored exercises from the database
+ */
+export const exercisesStoredSessionList = (
+    params?: ExercisesStoredSessionListParams,
+ signal?: AbortSignal
+) => {
+      
+      
+      return axiosInstance<StoredExercise[]>(
+      {url: `/api/v1/exercises/stored-session/`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+  
+
+
+
+export const getExercisesStoredSessionListQueryKey = (params?: ExercisesStoredSessionListParams,) => {
+    return [
+    `/api/v1/exercises/stored-session/`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getExercisesStoredSessionListQueryOptions = <TData = Awaited<ReturnType<typeof exercisesStoredSessionList>>, TError = unknown>(params?: ExercisesStoredSessionListParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof exercisesStoredSessionList>>, TError, TData>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getExercisesStoredSessionListQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof exercisesStoredSessionList>>> = ({ signal }) => exercisesStoredSessionList(params, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof exercisesStoredSessionList>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ExercisesStoredSessionListQueryResult = NonNullable<Awaited<ReturnType<typeof exercisesStoredSessionList>>>
+export type ExercisesStoredSessionListQueryError = unknown
+
+
+/**
+ * @summary Get stored exercises from the database
+ */
+
+export function useExercisesStoredSessionList<TData = Awaited<ReturnType<typeof exercisesStoredSessionList>>, TError = unknown>(
+ params?: ExercisesStoredSessionListParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof exercisesStoredSessionList>>, TError, TData>, }
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getExercisesStoredSessionListQueryOptions(params,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 

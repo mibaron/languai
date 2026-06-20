@@ -104,3 +104,18 @@ export const progressDestroyParams = zod.object({
   "id": zod.string().uuid().describe('A UUID string identifying this section progress.')
 })
 
+/**
+ * @summary Mark a page as studied
+ */
+export const progressPagesMarkStudiedCreateParams = zod.object({
+  "page_id": zod.string().uuid()
+})
+
+export const progressPagesMarkStudiedCreateResponse = zod.object({
+  "id": zod.string().uuid(),
+  "page": zod.string().uuid(),
+  "page_title": zod.string(),
+  "completed_at": zod.string().datetime({}).nullable(),
+  "updated_at": zod.string().datetime({})
+})
+

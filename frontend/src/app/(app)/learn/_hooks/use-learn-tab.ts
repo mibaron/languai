@@ -6,6 +6,8 @@ import { usePacksSubscriptionsList } from "@/lib/api/orval/api/generated/packs/p
 import { BOOKS } from "@/data/books";
 import type { CategoryId, LevelCode, Section } from "@/types/content";
 
+import { useLearnPages } from "./use-learn-pages";
+
 export function useLearnTab() {
   const [category, setCategory] = useState<CategoryId>("grammar");
   const [activePackId, setActivePackId] = useState<string | null>(null);
@@ -41,12 +43,15 @@ export function useLearnTab() {
     [sections, selectedSectionIndex],
   );
 
+  const learnPages = useLearnPages(activePack?.id ?? null);
+
   const selectPack = useCallback((packId: string) => {
     setActivePackId(packId);
     setPackDrawerOpen(false);
     setCategory("grammar");
     setSelectedSectionIndex(null);
-  }, []);
+    learnPages.resetPages();
+  }, [learnPages]);
 
   const changeCategory = useCallback((cat: CategoryId) => {
     setCategory(cat);
@@ -97,5 +102,6 @@ export function useLearnTab() {
     closePackDrawer,
     openStats,
     closeStats,
+    learnPages,
   };
 }

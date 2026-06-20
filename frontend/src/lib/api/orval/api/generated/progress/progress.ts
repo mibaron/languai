@@ -24,7 +24,8 @@ import type {
   PatchedSectionProgressRequest,
   ProgressListParams,
   SectionProgress,
-  SectionProgressRequest
+  SectionProgressRequest,
+  UserPageProgress
 } from '.././model';
 
 import { axiosInstance } from '../../../client';
@@ -421,6 +422,68 @@ export const useProgressDestroy = <TError = unknown,
       > => {
 
       const mutationOptions = getProgressDestroyMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    /**
+ * @summary Mark a page as studied
+ */
+export const progressPagesMarkStudiedCreate = (
+    pageId: string,
+ signal?: AbortSignal
+) => {
+      
+      
+      return axiosInstance<UserPageProgress>(
+      {url: `/api/v1/progress/pages/${pageId}/mark-studied/`, method: 'POST', signal
+    },
+      );
+    }
+  
+
+
+export const getProgressPagesMarkStudiedCreateMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof progressPagesMarkStudiedCreate>>, TError,{pageId: string}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof progressPagesMarkStudiedCreate>>, TError,{pageId: string}, TContext> => {
+
+const mutationKey = ['progressPagesMarkStudiedCreate'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof progressPagesMarkStudiedCreate>>, {pageId: string}> = (props) => {
+          const {pageId} = props ?? {};
+
+          return  progressPagesMarkStudiedCreate(pageId,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ProgressPagesMarkStudiedCreateMutationResult = NonNullable<Awaited<ReturnType<typeof progressPagesMarkStudiedCreate>>>
+    
+    export type ProgressPagesMarkStudiedCreateMutationError = unknown
+
+    /**
+ * @summary Mark a page as studied
+ */
+export const useProgressPagesMarkStudiedCreate = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof progressPagesMarkStudiedCreate>>, TError,{pageId: string}, TContext>, }
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof progressPagesMarkStudiedCreate>>,
+        TError,
+        {pageId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getProgressPagesMarkStudiedCreateMutationOptions(options);
 
       return useMutation(mutationOptions);
     }
