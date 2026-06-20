@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Zap, FileText, Award, Clock, ChevronRight, Lock } from "lucide-react";
+import { Zap, FileText, Award, ArrowUpDown, AlertTriangle, Link2, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const modes = [
@@ -12,7 +12,6 @@ const modes = [
     desc: "Review vocabulary at your own pace",
     bg: "bg-yellow-100/80 dark:bg-yellow-500/15",
     iconColor: "text-yellow-600 dark:text-yellow-400",
-    enabled: true,
   },
   {
     id: "mcq_recognition",
@@ -21,25 +20,38 @@ const modes = [
     desc: "Multiple-choice knowledge test",
     bg: "bg-green-50 dark:bg-green-500/15",
     iconColor: "text-green-600 dark:text-green-400",
-    enabled: true,
   },
   {
-    id: "fill",
+    id: "fill_blank",
     icon: FileText,
     title: "Fill in the Blanks",
     desc: "Complete sentences in context",
     bg: "bg-blue-50 dark:bg-blue-500/15",
     iconColor: "text-blue-600 dark:text-blue-400",
-    enabled: false,
   },
   {
-    id: "exam",
-    icon: Clock,
-    title: "Mock Exam",
-    desc: "Timed A1 exam simulation",
+    id: "sentence_order",
+    icon: ArrowUpDown,
+    title: "Sentence Order",
+    desc: "Arrange words into correct sentences",
     bg: "bg-purple-50 dark:bg-purple-500/15",
     iconColor: "text-purple-600 dark:text-purple-400",
-    enabled: false,
+  },
+  {
+    id: "error_correction",
+    icon: AlertTriangle,
+    title: "Error Correction",
+    desc: "Find and fix mistakes in sentences",
+    bg: "bg-orange-50 dark:bg-orange-500/15",
+    iconColor: "text-orange-600 dark:text-orange-400",
+  },
+  {
+    id: "matching",
+    icon: Link2,
+    title: "Matching",
+    desc: "Match words with their translations",
+    bg: "bg-teal-50 dark:bg-teal-500/15",
+    iconColor: "text-teal-600 dark:text-teal-400",
   },
 ] as const;
 
@@ -62,16 +74,8 @@ export function PracticeTabContent() {
           return (
             <button
               key={mode.id}
-              disabled={!mode.enabled}
-              onClick={
-                mode.enabled
-                  ? () => router.push(`/practice/session?mode=${mode.id}`)
-                  : undefined
-              }
-              className={cn(
-                "flex w-full items-center gap-3.5 rounded-[14px] border border-border bg-card p-4 text-left",
-                !mode.enabled && "opacity-50",
-              )}
+              onClick={() => router.push(`/practice/session?mode=${mode.id}`)}
+              className="flex w-full items-center gap-3.5 rounded-[14px] border border-border bg-card p-4 text-left"
             >
               <div
                 className={cn(
@@ -89,11 +93,7 @@ export function PracticeTabContent() {
                   {mode.desc}
                 </div>
               </div>
-              {mode.enabled ? (
-                <ChevronRight size={18} className="text-muted-foreground/40" />
-              ) : (
-                <Lock size={16} className="text-muted-foreground/30" />
-              )}
+              <ChevronRight size={18} className="text-muted-foreground/40" />
             </button>
           );
         })}

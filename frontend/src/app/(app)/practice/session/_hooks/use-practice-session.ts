@@ -18,6 +18,15 @@ import type {
 
 const FEEDBACK_DELAY_MS = 1200;
 
+const MODE_LABELS: Record<string, string> = {
+  flashcard: "Flashcards",
+  mcq_recognition: "Quiz",
+  fill_blank: "Fill in the Blank",
+  sentence_order: "Sentence Order",
+  error_correction: "Error Correction",
+  matching: "Matching",
+};
+
 export function usePracticeSession() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -60,6 +69,7 @@ export function usePracticeSession() {
 
   const currentExercise = exercises[currentIndex] ?? null;
   const progress = exercises.length > 0 ? Math.round((currentIndex / exercises.length) * 100) : 0;
+  const modeLabel = MODE_LABELS[mode] ?? mode;
 
   const submitReview = useCallback(
     (rating: number) => {
@@ -125,6 +135,20 @@ export function usePracticeSession() {
     [currentExercise, submitReview, advanceToNext],
   );
 
+  const submitExerciseAnswer = useCallback(
+    (isCorrect: boolean) => {
+      const rating = isCorrect ? 3 : 1;
+      submitReview(rating);
+      if (isCorrect) {
+        correctCount.current += 1;
+      }
+      setFeedback(isCorrect ? "correct" : "incorrect");
+      setPhase("feedback");
+      setTimeout(advanceToNext, FEEDBACK_DELAY_MS);
+    },
+    [submitReview, advanceToNext],
+  );
+
   const exitSession = useCallback(() => {
     router.back();
   }, [router]);
@@ -139,6 +163,7 @@ export function usePracticeSession() {
   return {
     phase,
     mode,
+    modeLabel,
     currentExercise,
     currentIndex,
     totalExercises: exercises.length,
@@ -152,6 +177,7 @@ export function usePracticeSession() {
     submitFlashcardRating,
     revealFlashcard,
     submitMCQAnswer,
+    submitExerciseAnswer,
     advanceToNext,
     exitSession,
   };

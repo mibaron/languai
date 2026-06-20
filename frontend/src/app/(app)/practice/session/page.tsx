@@ -5,15 +5,14 @@ import { X } from "lucide-react";
 
 import { usePracticeSession } from "./_hooks/use-practice-session";
 import { SessionProgressBar } from "./_components/session-progress-bar";
-import { FlashcardExercise } from "./_components/flashcard-exercise";
-import { MCQExercise } from "./_components/mcq-exercise";
+import { ExerciseRenderer } from "./_components/exercise-renderer";
 import { SessionResults } from "./_components/session-results";
 import { SessionEmpty } from "./_components/session-empty";
 
 function PracticeSessionContent() {
   const {
     phase,
-    mode,
+    modeLabel,
     currentExercise,
     currentIndex,
     totalExercises,
@@ -25,6 +24,7 @@ function PracticeSessionContent() {
     submitFlashcardRating,
     revealFlashcard,
     submitMCQAnswer,
+    submitExerciseAnswer,
     exitSession,
   } = usePracticeSession();
 
@@ -50,8 +50,8 @@ function PracticeSessionContent() {
         <button type="button" onClick={exitSession} className="p-1">
           <X size={22} className="text-muted-foreground" />
         </button>
-        <span className="text-sm font-medium capitalize text-muted-foreground">
-          {mode === "mcq_recognition" ? "Quiz" : "Flashcards"}
+        <span className="text-sm font-medium text-muted-foreground">
+          {modeLabel}
         </span>
         <div className="w-[30px]" />
       </div>
@@ -72,20 +72,17 @@ function PracticeSessionContent() {
         </div>
       )}
 
-      {currentExercise?.exercise_type === "flashcard" && (
-        <FlashcardExercise
+      {currentExercise && (
+        <ExerciseRenderer
+          key={currentIndex}
           exercise={currentExercise}
           isRevealed={isRevealed}
-          onReveal={revealFlashcard}
-          onRate={submitFlashcardRating}
-        />
-      )}
-
-      {currentExercise?.exercise_type === "mcq_recognition" && (
-        <MCQExercise
-          exercise={currentExercise}
           selectedChoiceId={selectedChoiceId}
-          onSelectChoice={submitMCQAnswer}
+          disabled={phase === "feedback"}
+          onRevealFlashcard={revealFlashcard}
+          onRateFlashcard={submitFlashcardRating}
+          onSelectMCQChoice={submitMCQAnswer}
+          onAnswerExercise={submitExerciseAnswer}
         />
       )}
     </div>

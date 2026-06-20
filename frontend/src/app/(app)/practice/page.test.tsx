@@ -10,12 +10,14 @@ vi.mock("next/navigation", () => ({
 import { PracticeTabContent } from "./_components/practice-tab-content";
 
 describe("PracticeTabContent", () => {
-  it("renders all four practice modes", () => {
+  it("renders all six practice modes", () => {
     render(<PracticeTabContent />);
     expect(screen.getByText("Flashcards")).toBeInTheDocument();
     expect(screen.getByText("Quiz")).toBeInTheDocument();
     expect(screen.getByText("Fill in the Blanks")).toBeInTheDocument();
-    expect(screen.getByText("Mock Exam")).toBeInTheDocument();
+    expect(screen.getByText("Sentence Order")).toBeInTheDocument();
+    expect(screen.getByText("Error Correction")).toBeInTheDocument();
+    expect(screen.getByText("Matching")).toBeInTheDocument();
   });
 
   it("navigates to flashcard session when Flashcards is clicked", async () => {
@@ -30,24 +32,38 @@ describe("PracticeTabContent", () => {
     mockPush.mockClear();
     render(<PracticeTabContent />);
     await user.click(screen.getByText("Quiz"));
-    expect(mockPush).toHaveBeenCalledWith(
-      "/practice/session?mode=mcq_recognition",
-    );
+    expect(mockPush).toHaveBeenCalledWith("/practice/session?mode=mcq_recognition");
   });
 
-  it("disables Fill in the Blanks and Mock Exam", () => {
-    render(<PracticeTabContent />);
-    const fillBtn = screen.getByText("Fill in the Blanks").closest("button");
-    const examBtn = screen.getByText("Mock Exam").closest("button");
-    expect(fillBtn).toBeDisabled();
-    expect(examBtn).toBeDisabled();
-  });
-
-  it("does not navigate when disabled mode is clicked", async () => {
+  it("navigates to fill-blank session", async () => {
     const user = userEvent.setup();
     mockPush.mockClear();
     render(<PracticeTabContent />);
     await user.click(screen.getByText("Fill in the Blanks"));
-    expect(mockPush).not.toHaveBeenCalled();
+    expect(mockPush).toHaveBeenCalledWith("/practice/session?mode=fill_blank");
+  });
+
+  it("navigates to sentence-order session", async () => {
+    const user = userEvent.setup();
+    mockPush.mockClear();
+    render(<PracticeTabContent />);
+    await user.click(screen.getByText("Sentence Order"));
+    expect(mockPush).toHaveBeenCalledWith("/practice/session?mode=sentence_order");
+  });
+
+  it("navigates to error-correction session", async () => {
+    const user = userEvent.setup();
+    mockPush.mockClear();
+    render(<PracticeTabContent />);
+    await user.click(screen.getByText("Error Correction"));
+    expect(mockPush).toHaveBeenCalledWith("/practice/session?mode=error_correction");
+  });
+
+  it("navigates to matching session", async () => {
+    const user = userEvent.setup();
+    mockPush.mockClear();
+    render(<PracticeTabContent />);
+    await user.click(screen.getByText("Matching"));
+    expect(mockPush).toHaveBeenCalledWith("/practice/session?mode=matching");
   });
 });
