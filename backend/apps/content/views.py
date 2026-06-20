@@ -1,13 +1,16 @@
-from django.db.models import Count
+from django.db.models import Count, Exists, OuterRef
 from drf_spectacular.utils import extend_schema, extend_schema_view
-from rest_framework import viewsets
+from rest_framework import generics, permissions, viewsets
 
 from api.v1.permissions import IsAdminOrReadOnly, IsOwnerOrAdminOrReadOnly
+from apps.progress.models import UserPageProgress
 
-from .models import Level, Section, SectionItem
+from .models import Level, Page, Section, SectionItem
 from .serializers import (
     LevelSerializer,
     LevelWriteSerializer,
+    PageDetailSerializer,
+    PageListSerializer,
     SectionDetailSerializer,
     SectionItemSerializer,
     SectionItemWriteSerializer,
@@ -101,3 +104,49 @@ class SectionItemViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         section = Section.objects.get(pk=self.kwargs["section_pk"])
         serializer.save(section=section, created_by=self.request.user)
+
+
+def _page_queryset_with_progress(user):
+    progress_subquery = UserPageProgress.objects.filter(
+        user=user,
+        page=OuterRef("pk"),
+        completed_at__isnull=False,
+    )
+    return Page.objects.annotate(is_studied=Exists(progress_subquery))
+
+
+@extend_schema(summary="List pages in a pack", tags=["pages"])
+class PackPageListView(generics.ListAPIView):
+    serializer_class = PageListSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            return Page.objects.none()
+        return (
+            _page_queryset_with_progress(self.request.user)
+            .filter(pack_id=self.kwargs["pack_id"])
+            .annotate(part_count=Count("parts"))
+            .order_by("order")
+        )
+
+
+@extend_schema(summary="Get page detail with parts and items", tags=["pages"])
+class PackPageDetailView(generics.RetrieveAPIView):
+    serializer_class = PageDetailSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_url_kwarg = "page_id"
+
+    def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            return Page.objects.none()
+        return (
+            _page_queryset_with_progress(self.request.user)
+            .filter(pack_id=self.kwargs["pack_id"])
+            .prefetch_related(
+                "parts__teaching_note",
+                "parts__fill_blank__item",
+                "parts__conversation__lines",
+                "page_lexical_items__item",
+            )
+        )

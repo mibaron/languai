@@ -13,7 +13,13 @@ from apps.ai_content.views import (
     UserSavedAIContentDeleteView,
     UserSavedAIContentView,
 )
-from apps.content.views import LevelViewSet, SectionItemViewSet, SectionViewSet
+from apps.content.views import (
+    LevelViewSet,
+    PackPageDetailView,
+    PackPageListView,
+    SectionItemViewSet,
+    SectionViewSet,
+)
 from apps.exercise_engine.views import ExerciseSessionView
 from apps.knowledge.views import LearningGoalListView
 from apps.memory_engine.views import ReviewView, SessionView
@@ -25,7 +31,7 @@ from apps.packs.views import (
     PackUnsubscribeView,
     UserPackSubscriptionListView,
 )
-from apps.progress.views import SectionProgressViewSet
+from apps.progress.views import MarkPageStudiedView, SectionProgressViewSet
 from apps.users.views import (
     ChangePasswordView,
     ForgotPasswordView,
@@ -78,6 +84,13 @@ urlpatterns = [
     ),
     path("packs/<uuid:pack_id>/archive/", PackArchiveView.as_view(), name="pack-archive"),
     path("packs/<uuid:pack_id>/unarchive/", PackUnarchiveView.as_view(), name="pack-unarchive"),
+    # Pack pages
+    path("packs/<uuid:pack_id>/pages/", PackPageListView.as_view(), name="pack-page-list"),
+    path(
+        "packs/<uuid:pack_id>/pages/<uuid:page_id>/",
+        PackPageDetailView.as_view(),
+        name="pack-page-detail",
+    ),
     # Goals
     path("goals/", LearningGoalListView.as_view(), name="goal-list"),
     # Exercises
@@ -85,6 +98,12 @@ urlpatterns = [
     # Memory Engine
     path("memory/session/", SessionView.as_view(), name="memory-session"),
     path("memory/review/", ReviewView.as_view(), name="memory-review"),
+    # Page progress
+    path(
+        "progress/pages/<uuid:page_id>/mark-studied/",
+        MarkPageStudiedView.as_view(),
+        name="page-mark-studied",
+    ),
     # Nested routes
     path("sections/<uuid:section_pk>/items/", include(items_router.urls)),
     path("", include(router.urls)),

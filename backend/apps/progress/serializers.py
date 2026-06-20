@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import SectionProgress
+from .models import SectionProgress, UserPageProgress
 
 
 class SectionProgressSerializer(serializers.ModelSerializer):
@@ -16,4 +16,13 @@ class SectionProgressSerializer(serializers.ModelSerializer):
             "completed_at",
             "updated_at",
         ]
+        read_only_fields = ["id", "completed_at", "updated_at"]
+
+
+class UserPageProgressSerializer(serializers.ModelSerializer):
+    page_title = serializers.CharField(source="page.title", read_only=True)
+
+    class Meta:
+        model = UserPageProgress
+        fields = ["id", "page", "page_title", "completed_at", "updated_at"]
         read_only_fields = ["id", "completed_at", "updated_at"]

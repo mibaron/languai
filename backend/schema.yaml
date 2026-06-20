@@ -899,6 +899,76 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserPackSubscription'
           description: ''
+  /api/v1/packs/{pack_id}/pages/:
+    get:
+      operationId: packs_pages_list
+      summary: List pages in a pack
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: path
+        name: pack_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - pages
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPageListList'
+          description: ''
+  /api/v1/packs/{pack_id}/pages/{page_id}/:
+    get:
+      operationId: packs_pages_retrieve
+      summary: Get page detail with parts and items
+      parameters:
+      - in: path
+        name: pack_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: page_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - pages
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageDetail'
+          description: ''
   /api/v1/packs/{pack_id}/unarchive/:
     post:
       operationId: packs_unarchive_create
@@ -1170,6 +1240,29 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/v1/progress/pages/{page_id}/mark-studied/:
+    post:
+      operationId: progress_pages_mark_studied_create
+      summary: Mark a page as studied
+      parameters:
+      - in: path
+        name: page_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - progress
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPageProgress'
+          description: ''
   /api/v1/sections/:
     get:
       operationId: sections_list
@@ -1771,6 +1864,73 @@ components:
         * `table` - Table
         * `notes` - Notes
         * `grid` - Grid
+    ConversationDetail:
+      type: object
+      properties:
+        context:
+          type: string
+          maxLength: 255
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConversationLine'
+          readOnly: true
+      required:
+      - lines
+    ConversationLine:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        speaker:
+          type: string
+          maxLength: 100
+        text:
+          type: string
+          maxLength: 500
+        translation:
+          type: string
+          maxLength: 500
+        is_blank:
+          type: boolean
+        blank_answer:
+          type: string
+          maxLength: 200
+      required:
+      - id
+      - speaker
+      - text
+    FillBlankDetail:
+      type: object
+      properties:
+        text_before:
+          type: string
+          maxLength: 500
+        text_after:
+          type: string
+          maxLength: 500
+        answer:
+          type: string
+          maxLength: 100
+        hint:
+          type: string
+          maxLength: 255
+        item_id:
+          type: string
+          format: uuid
+          readOnly: true
+      required:
+      - answer
+      - item_id
+      - text_after
+      - text_before
     FlashcardExercise:
       type: object
       properties:
@@ -2041,6 +2201,132 @@ components:
       - subscriber_count
       - title
       - vocab_count
+    PageDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PagePart'
+          readOnly: true
+        lexical_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PageLexicalItem'
+          readOnly: true
+        is_studied:
+          type: boolean
+          readOnly: true
+      required:
+      - id
+      - is_studied
+      - lexical_items
+      - parts
+      - title
+    PageLexicalItem:
+      type: object
+      properties:
+        item_id:
+          type: string
+          format: uuid
+          readOnly: true
+        text:
+          type: string
+          readOnly: true
+        translation:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        display_label:
+          type: string
+          maxLength: 255
+      required:
+      - item_id
+      - text
+      - translation
+      - type
+    PageList:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        part_count:
+          type: integer
+          readOnly: true
+        is_studied:
+          type: boolean
+          readOnly: true
+      required:
+      - id
+      - is_studied
+      - part_count
+      - title
+    PagePart:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        part_type:
+          $ref: '#/components/schemas/PartTypeEnum'
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        detail:
+          allOf:
+          - $ref: '#/components/schemas/PagePartDetail'
+          readOnly: true
+      required:
+      - detail
+      - id
+      - part_type
+    PagePartDetail:
+      oneOf:
+      - $ref: '#/components/schemas/TeachingNoteDetail'
+      - $ref: '#/components/schemas/FillBlankDetail'
+      - $ref: '#/components/schemas/ConversationDetail'
+      discriminator:
+        propertyName: part_type
+        mapping:
+          note: '#/components/schemas/TeachingNoteDetail'
+          fill_blank: '#/components/schemas/FillBlankDetail'
+          conversation: '#/components/schemas/ConversationDetail'
     PaginatedLevelList:
       type: object
       required:
@@ -2087,6 +2373,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Pack'
+    PaginatedPageListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PageList'
     PaginatedSectionItemList:
       type: object
       required:
@@ -2179,6 +2488,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserAIContent'
+    PartTypeEnum:
+      enum:
+      - note
+      - fill_blank
+      - conversation
+      type: string
+      description: |-
+        * `note` - Teaching Note
+        * `fill_blank` - Fill in the Blank
+        * `conversation` - Conversation
     PatchedLevelWriteRequest:
       type: object
       properties:
@@ -2711,6 +3030,13 @@ components:
         * `active` - Active
         * `archived` - Archived
         * `completed` - Completed
+    TeachingNoteDetail:
+      type: object
+      properties:
+        content:
+          type: string
+      required:
+      - content
     User:
       type: object
       properties:
@@ -2819,6 +3145,34 @@ components:
       - id
       - pack
       - status
+    UserPageProgress:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        page:
+          type: string
+          format: uuid
+        page_title:
+          type: string
+          readOnly: true
+        completed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - completed_at
+      - id
+      - page
+      - page_title
+      - updated_at
     UserRequest:
       type: object
       properties:
