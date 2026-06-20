@@ -20,7 +20,7 @@ from apps.content.views import (
     SectionItemViewSet,
     SectionViewSet,
 )
-from apps.exercise_engine.views import ExerciseSessionView
+from apps.exercise_engine.views import ExerciseSessionView, StoredExerciseSessionView
 from apps.knowledge.views import LearningGoalListView
 from apps.memory_engine.views import ReviewView, SessionView
 from apps.packs.views import (
@@ -95,6 +95,11 @@ urlpatterns = [
     path("goals/", LearningGoalListView.as_view(), name="goal-list"),
     # Exercises
     path("exercises/session/", ExerciseSessionView.as_view(), name="exercise-session"),
+    path(
+        "exercises/stored-session/",
+        StoredExerciseSessionView.as_view(),
+        name="stored-exercise-session",
+    ),
     # Memory Engine
     path("memory/session/", SessionView.as_view(), name="memory-session"),
     path("memory/review/", ReviewView.as_view(), name="memory-review"),

@@ -1,6 +1,5 @@
 import factory
 
-from apps.content.tests.factories import PageFactory
 from apps.exercise_engine.constants import ExerciseSource, ExerciseType
 from apps.exercise_engine.models import (
     ErrorCorrectionExercise,
