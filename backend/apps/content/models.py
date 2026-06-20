@@ -112,6 +112,7 @@ class PagePartType(models.TextChoices):
     NOTE = "note", "Teaching Note"
     FILL_BLANK = "fill_blank", "Fill in the Blank"
     CONVERSATION = "conversation", "Conversation"
+    TABLE = "table", "Table"
 
 
 class Page(TimeStampedModel):
@@ -289,3 +290,24 @@ class ConversationLine(TimeStampedModel):
 
     def __str__(self) -> str:
         return f"{self.speaker}: {self.text[:50]}"
+
+
+class TablePart(TimeStampedModel):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    page_part = models.OneToOneField(
+        PagePart,
+        on_delete=models.CASCADE,
+        related_name="table",
+    )
+    headers = models.JSONField(default=list)
+    rows = models.JSONField(default=list)
+    note = models.TextField(blank=True, default="")
+
+    class Meta:
+        verbose_name = "table part"
+        verbose_name_plural = "table parts"
+
+    def __str__(self) -> str:
+        col_count = len(self.headers) if self.headers else 0
+        row_count = len(self.rows) if self.rows else 0
+        return f"Table: {col_count} cols × {row_count} rows"

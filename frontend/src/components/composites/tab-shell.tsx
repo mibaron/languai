@@ -20,24 +20,22 @@ const TAB_IDS: TabId[] = ["learn", "explain", "practice", "profile"];
 export function TabShell({ children }: { children: React.ReactNode }) {
   const { activeTab, isSubRoute } = useTabShellContext();
 
-  if (isSubRoute) {
-    return <>{children}</>;
-  }
-
   return (
     <>
       {TAB_IDS.map((id) => {
         const Component = TAB_COMPONENTS[id];
+        const visible = !isSubRoute && activeTab === id;
         return (
           <div
             key={id}
-            style={{ display: activeTab === id ? "flex" : "none" }}
+            style={{ display: visible ? "flex" : "none" }}
             className="min-h-0 flex-1 flex-col overflow-hidden"
           >
             <Component />
           </div>
         );
       })}
+      {isSubRoute && children}
     </>
   );
 }

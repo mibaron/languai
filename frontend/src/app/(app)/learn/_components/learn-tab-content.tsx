@@ -66,6 +66,7 @@ export function LearnTabContent() {
             page={learnPages.pageDetail}
             pageIndex={learnPages.selectedPageIndex}
             totalPages={learnPages.pages.length}
+            levelCode={activePack.level_code}
             onBack={learnPages.closePage}
             onNavigate={learnPages.navigatePage}
             onMarkStudied={learnPages.handleMarkStudied}

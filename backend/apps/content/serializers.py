@@ -12,6 +12,7 @@ from .models import (
     PagePartType,
     Section,
     SectionItem,
+    TablePart,
     TeachingNotePart,
 )
 
@@ -144,6 +145,27 @@ class ConversationDetailSerializer(serializers.ModelSerializer):
         fields = ["context", "lines"]
 
 
+class TableDetailSerializer(serializers.ModelSerializer):
+    headers = serializers.SerializerMethodField()
+    rows = serializers.SerializerMethodField()
+
+    class Meta:
+        model = TablePart
+        fields = ["headers", "rows", "note"]
+
+    @extend_schema_field(serializers.ListField(child=serializers.CharField()))
+    def get_headers(self, obj: TablePart) -> list[str]:
+        return obj.headers
+
+    @extend_schema_field(
+        serializers.ListField(
+            child=serializers.ListField(child=serializers.CharField())
+        )
+    )
+    def get_rows(self, obj: TablePart) -> list[list[str]]:
+        return obj.rows
+
+
 class PagePartSerializer(serializers.ModelSerializer):
     detail = serializers.SerializerMethodField()
 
@@ -158,6 +180,7 @@ class PagePartSerializer(serializers.ModelSerializer):
                 "note": TeachingNoteDetailSerializer,
                 "fill_blank": FillBlankDetailSerializer,
                 "conversation": ConversationDetailSerializer,
+                "table": TableDetailSerializer,
             },
             resource_type_field_name="part_type",
         )
@@ -175,6 +198,10 @@ class PagePartSerializer(serializers.ModelSerializer):
             detail = getattr(obj, "conversation", None)
             if detail:
                 return ConversationDetailSerializer(detail).data
+        elif obj.part_type == PagePartType.TABLE:
+            detail = getattr(obj, "table", None)
+            if detail:
+                return TableDetailSerializer(detail).data
         return None
 
 

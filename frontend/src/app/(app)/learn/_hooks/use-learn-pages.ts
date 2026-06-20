@@ -82,6 +82,9 @@ export function useLearnPages(packId: string | null) {
           queryClient.invalidateQueries({
             queryKey: getPacksPagesListQueryKey(packId),
           });
+          queryClient.invalidateQueries({
+            queryKey: getPacksPagesRetrieveQueryKey(packId, selectedPage.id),
+          });
         },
       },
     );

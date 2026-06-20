@@ -147,6 +147,7 @@ class PackPageDetailView(generics.RetrieveAPIView):
                 "parts__teaching_note",
                 "parts__fill_blank__item",
                 "parts__conversation__lines",
+                "parts__table",
                 "page_lexical_items__item",
             )
         )

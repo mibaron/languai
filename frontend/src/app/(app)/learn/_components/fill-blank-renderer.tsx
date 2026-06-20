@@ -7,9 +7,10 @@ import type { FillBlankDetail } from "@/lib/api/orval/api/generated/model";
 
 interface FillBlankRendererProps {
   detail: FillBlankDetail;
+  onComplete?: () => void;
 }
 
-export function FillBlankRenderer({ detail }: FillBlankRendererProps) {
+export function FillBlankRenderer({ detail, onComplete }: FillBlankRendererProps) {
   const [userAnswer, setUserAnswer] = useState("");
   const [checked, setChecked] = useState(false);
   const [revealed, setRevealed] = useState(false);
@@ -20,6 +21,9 @@ export function FillBlankRenderer({ detail }: FillBlankRendererProps) {
   const handleCheck = () => {
     if (userAnswer.trim()) {
       setChecked(true);
+      if (userAnswer.trim().toLowerCase() === detail.answer.toLowerCase()) {
+        onComplete?.();
+      }
     }
   };
 
@@ -27,6 +31,7 @@ export function FillBlankRenderer({ detail }: FillBlankRendererProps) {
     setRevealed(true);
     setUserAnswer(detail.answer);
     setChecked(true);
+    onComplete?.();
   };
 
   return (

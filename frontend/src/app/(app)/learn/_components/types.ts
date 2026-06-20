@@ -71,6 +71,7 @@ export interface PageDetailViewProps {
   page: PageDetail;
   pageIndex: number;
   totalPages: number;
+  levelCode: string;
   onBack: () => void;
   onNavigate: (index: number) => void;
   onMarkStudied: () => void;

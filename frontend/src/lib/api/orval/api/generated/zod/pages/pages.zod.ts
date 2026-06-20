@@ -59,7 +59,7 @@ export const packsPagesRetrieveResponse = zod.object({
   "order": zod.number().min(packsPagesRetrieveResponseOrderMin).max(packsPagesRetrieveResponseOrderMax).optional(),
   "parts": zod.array(zod.object({
   "id": zod.string().uuid(),
-  "part_type": zod.enum(['note', 'fill_blank', 'conversation']).describe('* `note` - Teaching Note\n* `fill_blank` - Fill in the Blank\n* `conversation` - Conversation'),
+  "part_type": zod.enum(['note', 'fill_blank', 'conversation', 'table']).describe('* `note` - Teaching Note\n* `fill_blank` - Fill in the Blank\n* `conversation` - Conversation\n* `table` - Table'),
   "order": zod.number().min(packsPagesRetrieveResponsePartsItemOrderMin).max(packsPagesRetrieveResponsePartsItemOrderMax).optional(),
   "detail": zod.union([zod.object({
   "content": zod.string(),
@@ -83,6 +83,11 @@ export const packsPagesRetrieveResponse = zod.object({
   "blank_answer": zod.string().max(packsPagesRetrieveResponsePartsItemDetailLinesItemBlankAnswerMax).optional()
 })),
   "part_type": zod.enum(['conversation'])
+}),zod.object({
+  "headers": zod.array(zod.string()),
+  "rows": zod.array(zod.array(zod.string())),
+  "note": zod.string().optional(),
+  "part_type": zod.enum(['table'])
 })])
 })),
   "lexical_items": zod.array(zod.object({

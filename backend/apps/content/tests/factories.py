@@ -8,6 +8,7 @@ from apps.content.models import (
     PageLexicalItem,
     PagePart,
     PagePartType,
+    TablePart,
     TeachingNotePart,
 )
 from apps.knowledge.tests.factories import LexicalItemFactory
@@ -76,3 +77,13 @@ class ConversationLineFactory(factory.django.DjangoModelFactory):
     speaker = "Anna"
     text = "Guten Tag!"
     translation = "Good day!"
+
+
+class TablePartFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = TablePart
+
+    page_part = factory.SubFactory(PagePartFactory, part_type=PagePartType.TABLE)
+    headers = ["Deutsch", "English"]
+    rows = [["Hallo", "Hello"], ["Tschüss", "Bye"]]
+    note = ""

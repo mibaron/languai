@@ -11,6 +11,7 @@ from .factories import (
     PageFactory,
     PageLexicalItemFactory,
     PagePartFactory,
+    TablePartFactory,
     TeachingNotePartFactory,
 )
 
@@ -238,6 +239,24 @@ class TestPackPageDetailView:
         assert len(items) == 2
         assert items[0]["text"] == "Hund"
         assert items[1]["text"] == "Katze"
+
+    def test_table_part(self, auth_client):
+        pack = PackFactory()
+        page = PageFactory(pack=pack, order=0)
+        table_part = PagePartFactory(page=page, part_type="table", order=0)
+        TablePartFactory(
+            page_part=table_part,
+            headers=["Pronomen", "English"],
+            rows=[["ich", "I"], ["du", "you"]],
+            note="Subject pronouns",
+        )
+
+        response = auth_client.get(f"/api/v1/packs/{pack.id}/pages/{page.id}/")
+        assert response.status_code == 200
+        detail = response.data["parts"][0]["detail"]
+        assert detail["headers"] == ["Pronomen", "English"]
+        assert detail["rows"] == [["ich", "I"], ["du", "you"]]
+        assert detail["note"] == "Subject pronouns"
 
     def test_404_for_wrong_pack(self, auth_client):
         pack1 = PackFactory()

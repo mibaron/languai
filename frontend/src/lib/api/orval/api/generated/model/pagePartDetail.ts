@@ -8,5 +8,6 @@
 import type { TeachingNoteDetail } from './teachingNoteDetail';
 import type { FillBlankDetail } from './fillBlankDetail';
 import type { ConversationDetail } from './conversationDetail';
+import type { TableDetail } from './tableDetail';
 
-export type PagePartDetail = TeachingNoteDetail | FillBlankDetail | ConversationDetail;
+export type PagePartDetail = TeachingNoteDetail | FillBlankDetail | ConversationDetail | TableDetail;

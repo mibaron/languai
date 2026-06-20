@@ -103,6 +103,8 @@ export * from './storedSentenceOrderDetail';
 export * from './storedSentenceOrderDetailExerciseType';
 export * from './subscribeRequestRequest';
 export * from './subscriptionStatusEnum';
+export * from './tableDetail';
+export * from './tableDetailPartType';
 export * from './teachingNoteDetail';
 export * from './teachingNoteDetailPartType';
 export * from './user';

@@ -55,11 +55,12 @@ describe("TabShell", () => {
     expect(explainDiv?.style.display).toBe("none");
   });
 
-  it("shows children when on a sub-route", () => {
+  it("shows children and hides tabs when on a sub-route", () => {
     mockContextValue.isSubRoute = true;
     render(<TabShell><div data-testid="sub-route">Sub Route</div></TabShell>);
     expect(screen.getByTestId("sub-route")).toBeInTheDocument();
-    expect(screen.queryByTestId("learn-tab")).not.toBeInTheDocument();
+    const learnDiv = screen.getByTestId("learn-tab").parentElement;
+    expect(learnDiv?.style.display).toBe("none");
     mockContextValue.isSubRoute = false;
   });
 });

@@ -2373,12 +2373,14 @@ components:
       - $ref: '#/components/schemas/TeachingNoteDetail'
       - $ref: '#/components/schemas/FillBlankDetail'
       - $ref: '#/components/schemas/ConversationDetail'
+      - $ref: '#/components/schemas/TableDetail'
       discriminator:
         propertyName: part_type
         mapping:
           note: '#/components/schemas/TeachingNoteDetail'
           fill_blank: '#/components/schemas/FillBlankDetail'
           conversation: '#/components/schemas/ConversationDetail'
+          table: '#/components/schemas/TableDetail'
     PaginatedLevelList:
       type: object
       required:
@@ -2545,11 +2547,13 @@ components:
       - note
       - fill_blank
       - conversation
+      - table
       type: string
       description: |-
         * `note` - Teaching Note
         * `fill_blank` - Fill in the Blank
         * `conversation` - Conversation
+        * `table` - Table
     PatchedLevelWriteRequest:
       type: object
       properties:
@@ -3289,6 +3293,26 @@ components:
         * `active` - Active
         * `archived` - Archived
         * `completed` - Completed
+    TableDetail:
+      type: object
+      properties:
+        headers:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        rows:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+          readOnly: true
+        note:
+          type: string
+      required:
+      - headers
+      - rows
     TeachingNoteDetail:
       type: object
       properties:
