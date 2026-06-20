@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from django.db.models import QuerySet
+from django.db.models import Q, QuerySet
 from django.utils import timezone
 
 from apps.knowledge.models import LexicalItem
@@ -98,12 +98,15 @@ def get_due_items(
     ).select_related("item")
 
     if pack_ids:
-        qs = qs.filter(item__packs__id__in=pack_ids)
+        qs = qs.filter(
+            Q(item__packs__id__in=pack_ids)
+            | Q(item__page_lexical_items__page__pack_id__in=pack_ids)
+        )
 
     if skill_types:
         qs = qs.filter(skill_type__in=skill_types)
 
-    return qs.order_by("next_due")
+    return qs.order_by("next_due").distinct()
 
 
 def get_new_items(
@@ -115,14 +118,15 @@ def get_new_items(
 ) -> QuerySet[LexicalItem]:
     qs = (
         LexicalItem.objects.filter(
-            packs__id__in=pack_ids,
+            Q(packs__id__in=pack_ids)
+            | Q(page_lexical_items__page__pack_id__in=pack_ids),
             is_active=True,
         )
         .exclude(
             memory_states__user=user,
             memory_states__skill_type=skill_type,
         )
-        .order_by("pack_items__order")
+        .order_by("page_lexical_items__order", "pack_items__order")
     )
 
     if exclude_item_ids:

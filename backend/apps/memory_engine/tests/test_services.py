@@ -3,6 +3,7 @@ from datetime import timedelta
 import pytest
 from django.utils import timezone
 
+from apps.content.tests.factories import PageFactory, PageLexicalItemFactory
 from apps.knowledge.tests.factories import LexicalItemFactory
 from apps.memory_engine.constants import SkillType
 from apps.memory_engine.models import ReviewLog
@@ -150,6 +151,39 @@ class TestGetDueItems:
         assert due.count() == 1
         assert due.first() == ms_recognition
 
+    def test_finds_items_linked_via_page(self):
+        user = UserFactory()
+        pack = PackFactory()
+        item = LexicalItemFactory()
+        page = PageFactory(pack=pack)
+        PageLexicalItemFactory(page=page, item=item)
+
+        ms = MemoryStateFactory(
+            user=user,
+            item=item,
+            next_due=timezone.now() - timedelta(hours=1),
+        )
+
+        due = get_due_items(user=user, pack_ids=[str(pack.id)])
+        assert ms in due
+
+    def test_no_duplicates_when_item_in_both_pack_and_page(self):
+        user = UserFactory()
+        pack = PackFactory()
+        item = LexicalItemFactory()
+        pack.items.add(item)
+        page = PageFactory(pack=pack)
+        PageLexicalItemFactory(page=page, item=item)
+
+        MemoryStateFactory(
+            user=user,
+            item=item,
+            next_due=timezone.now() - timedelta(hours=1),
+        )
+
+        due = get_due_items(user=user, pack_ids=[str(pack.id)])
+        assert due.count() == 1
+
 
 @pytest.mark.django_db
 class TestGetNewItems:
@@ -226,3 +260,25 @@ class TestGetNewItems:
             skill_type=SkillType.PRODUCTION,
         )
         assert item in new_production
+
+    def test_returns_items_linked_via_page(self):
+        user = UserFactory()
+        pack = PackFactory()
+        item = LexicalItemFactory()
+        page = PageFactory(pack=pack)
+        PageLexicalItemFactory(page=page, item=item)
+
+        new = get_new_items(user=user, pack_ids=[str(pack.id)])
+        assert item in new
+
+    def test_no_duplicates_when_item_in_both_pack_and_page(self):
+        user = UserFactory()
+        pack = PackFactory()
+        item = LexicalItemFactory()
+        pack.items.add(item)
+        page = PageFactory(pack=pack)
+        PageLexicalItemFactory(page=page, item=item)
+
+        new = get_new_items(user=user, pack_ids=[str(pack.id)])
+        item_ids = list(new.values_list("id", flat=True))
+        assert item_ids.count(item.id) == 1

@@ -3,6 +3,8 @@ from __future__ import annotations
 import random
 from dataclasses import asdict, dataclass
 
+from django.db.models import Q
+
 from apps.knowledge.models import LexicalItem
 from apps.memory_engine.session import SessionConfig, SessionItem, build_session
 from apps.users.models import User
@@ -141,9 +143,12 @@ def _generate_mcq(
     item: LexicalItem | None,
     pack_ids: list[str],
 ) -> MCQExercise | None:
+    pack_q = Q(pack_items__pack_id__in=pack_ids) | Q(
+        page_lexical_items__page__pack_id__in=pack_ids
+    )
     distractors = list(
         LexicalItem.objects.filter(
-            pack_items__pack_id__in=pack_ids,
+            pack_q,
             type=session_item.item_type,
             is_active=True,
         )
@@ -155,7 +160,7 @@ def _generate_mcq(
     if len(distractors) < 3:
         extra = list(
             LexicalItem.objects.filter(
-                pack_items__pack_id__in=pack_ids,
+                pack_q,
                 is_active=True,
             )
             .exclude(pk=session_item.item_id)
