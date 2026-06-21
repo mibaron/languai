@@ -17,7 +17,7 @@ def get_exercises_for_pack(
     if exercise_type:
         qs = qs.filter(exercise_type=exercise_type)
 
-    qs = _prefetch_details(qs)
+    qs = _prefetch_details(qs).order_by("?")
     return qs[:limit]
 
 
