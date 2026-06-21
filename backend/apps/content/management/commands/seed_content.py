@@ -1,13 +1,22 @@
-"""Seed the database with German learning content from seed_data.json."""
+"""Seed the database with all learning content.
+
+Orchestrates the full seeding chain:
+  1. Levels, Sections, SectionItems (from seed_data.json)
+  2. Packs (initial pack definitions)
+  3. Knowledge (LexicalItems, ReferenceSheets — via seed_knowledge)
+  4. Pages (step-by-step learning pages — via seed_pages)
+"""
 
 import json
 from pathlib import Path
 
+from django.core.management import call_command
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from apps.content.models import Level, Section, SectionItem
-from apps.packs.models import Pack
+from apps.content.models import Level, Page, Section, SectionItem
+from apps.knowledge.models import LexicalItem, ReferenceSheet
+from apps.packs.models import Pack, PackItem, PackReferenceSheet, UserPackSubscription
 
 LEVELS = [
     {"code": "A1.1", "name": "Beginner 1", "order": 1},
@@ -74,9 +83,11 @@ PACKS = [
     },
 ]
 
+PACK_SLUGS_WITH_PAGES = ["a1-1-en"]
+
 
 class Command(BaseCommand):
-    help = "Seed the database with German learning content"
+    help = "Seed the database with all learning content (levels, sections, packs, knowledge, pages)"
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -87,17 +98,13 @@ class Command(BaseCommand):
         parser.add_argument(
             "--clear",
             action="store_true",
-            help="Clear existing content before seeding",
+            help="Clear ALL existing content before seeding (levels, sections, packs, knowledge, pages)",
         )
 
     @transaction.atomic
     def handle(self, *args, **options):
         if options["clear"]:
-            self.stdout.write("Clearing existing content...")
-            SectionItem.objects.all().delete()
-            Section.objects.all().delete()
-            Pack.objects.all().delete()
-            Level.objects.all().delete()
+            self._clear_all()
 
         levels_created = self._seed_levels()
         sections_created, items_created = self._seed_sections(options)
@@ -105,11 +112,34 @@ class Command(BaseCommand):
 
         self.stdout.write(
             self.style.SUCCESS(
-                f"Seeding complete: {levels_created} levels, "
+                f"Content: {levels_created} levels, "
                 f"{sections_created} sections, {items_created} items, "
                 f"{packs_created} packs"
             )
         )
+
+        self.stdout.write("\nSeeding knowledge (LexicalItems, ReferenceSheets)...")
+        call_command("seed_knowledge", stdout=self.stdout, stderr=self.stderr)
+
+        self.stdout.write("\nSeeding pages...")
+        for slug in PACK_SLUGS_WITH_PAGES:
+            call_command("seed_pages", pack=slug, stdout=self.stdout, stderr=self.stderr)
+
+        self.stdout.write(self.style.SUCCESS("\nAll seeding complete."))
+
+    def _clear_all(self):
+        self.stdout.write("Clearing all content...")
+        Page.objects.all().delete()
+        PackItem.objects.all().delete()
+        PackReferenceSheet.objects.all().delete()
+        UserPackSubscription.objects.all().delete()
+        LexicalItem.objects.all().delete()
+        ReferenceSheet.objects.all().delete()
+        SectionItem.objects.all().delete()
+        Section.objects.all().delete()
+        Pack.objects.all().delete()
+        Level.objects.all().delete()
+        self.stdout.write("  Cleared.")
 
     def _seed_levels(self) -> int:
         created_count = 0
