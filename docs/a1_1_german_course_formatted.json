@@ -1,0 +1,1087 @@
+[
+  {
+    "title": "Greetings & Farewells",
+    "description": "Learn to greet people, say goodbye, and use time-appropriate greetings in formal and informal contexts.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Use Guten Morgen in the morning, Guten Tag during the day, and Guten Abend in the evening. Hallo and Tschüss are informal; Auf Wiedersehen is more formal. Use Wie geht's? with people you know."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "meeting someone",
+        "lines": [
+          "A: Guten Morgen!",
+          "B: Guten Morgen! Wie geht's?",
+          "A: Gut, danke. Und dir?",
+          "B: Auch gut. Tschüss!",
+          "A: Auf Wiedersehen!"
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Guten ",
+        "answer": "Morgen",
+        "text_after": "! Wie geht's?",
+        "hint": "Use the morning greeting."
+      }
+    ]
+  },
+  {
+    "title": "Politeness & Survival Expressions",
+    "description": "Master the first interaction formulas needed to be polite, repair communication, and manage simple social exchanges.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Bitte can mean please or you're welcome. Danke and vielen Dank express thanks. Entschuldigung and entschuldigen Sie are used to apologize or get attention. Wie bitte? asks someone to repeat."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "general politeness",
+        "lines": [
+          "A: Entschuldigung!",
+          "B: Ja, bitte?",
+          "A: Wie bitte? Können Sie das wiederholen?",
+          "B: Ja, kein Problem.",
+          "A: Vielen Dank!"
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Vielen ",
+        "answer": "Dank",
+        "text_after": "!",
+        "hint": "Complete the phrase meaning 'many thanks'."
+      }
+    ]
+  },
+  {
+    "title": "Classroom Language & Communication Repair",
+    "description": "Handle classroom German: ask what something means, request repetition, and signal understanding or non-understanding.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Useful classroom phrases include Was ist das auf Deutsch?, Können Sie das bitte wiederholen?, Noch einmal, bitte, Langsamer, bitte, Ich verstehe nicht, Wie schreibt man das?, and Was bedeutet ...?"
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "in class",
+        "lines": [
+          "A: Was bedeutet 'Buch'?",
+          "B: 'Buch' heißt 'book'.",
+          "A: Wie schreibt man das?",
+          "B: B-U-C-H.",
+          "A: Danke!"
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Ich verstehe ",
+        "answer": "nicht",
+        "text_after": ".",
+        "hint": "Use the word for 'not'."
+      }
+    ]
+  },
+  {
+    "title": "Alphabet & Spelling",
+    "description": "Recognize the German alphabet and spell names, places, and contact details aloud.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Learn das Alphabet, der Buchstabe, and buchstabieren. For clarity, Germans often say A wie Anton, mit Doppel-m, or mit h when spelling names and email addresses."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "spelling a name",
+        "lines": [
+          "A: Wie heißen Sie?",
+          "B: Ich heiße Anna Sommer.",
+          "A: Wie schreibt man Sommer?",
+          "B: S-O-M-M-E-R, mit Doppel-m.",
+          "A: Danke."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Wie schreibt ",
+        "answer": "man",
+        "text_after": " das?",
+        "hint": "Complete the phrase: How do you spell that?"
+      }
+    ]
+  },
+  {
+    "title": "Numbers, Telephone Numbers & Email Details",
+    "description": "Use numbers for age, prices, room numbers, telephone numbers, and simple contact information.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Learn null to zwanzig, the tens dreißig, vierzig, fünfzig, sechzig, siebzig, achtzig, neunzig, and hundert. Compound numbers use unit + und + tens, for example einundzwanzig. Key words: die Telefonnummer and die E-Mail-Adresse."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "exchanging contact details",
+        "lines": [
+          "A: Wie ist Ihre Telefonnummer?",
+          "B: Null eins sieben sechs, drei vier fünf.",
+          "A: Und Ihre E-Mail-Adresse?",
+          "B: Meine E-Mail-Adresse ist anna@mail.de.",
+          "A: Danke."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Meine E-Mail-",
+        "answer": "Adresse",
+        "text_after": " ist anna@mail.de.",
+        "hint": "Complete the word for email address."
+      }
+    ]
+  },
+  {
+    "title": "Countries, Cities, Languages & Origin",
+    "description": "Talk about where someone comes from, where they live, and which languages they speak.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Use aus for origin and in for location: aus Deutschland, in Berlin. Key words include das Land, die Stadt, die Sprache, Deutsch, Englisch, and sprechen."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "first meeting",
+        "lines": [
+          "A: Woher kommst du?",
+          "B: Ich komme aus Deutschland.",
+          "A: Wo wohnst du?",
+          "B: Ich wohne in Berlin.",
+          "A: Sprichst du Englisch?"
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Ich komme ",
+        "answer": "aus",
+        "text_after": " Deutschland.",
+        "hint": "Use the preposition for origin."
+      }
+    ]
+  },
+  {
+    "title": "Introductions, Personal Information & Formal vs Informal Address",
+    "description": "Introduce yourself and others, exchange basic personal details, and distinguish between du and Sie.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Use Ich heiße ..., Ich bin ..., and Das ist ... to introduce people. Ask formally with Wie heißen Sie? and Woher kommen Sie? Use du for informal singular and Sie for formal singular or plural."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "meeting someone formally",
+        "lines": [
+          "A: Guten Tag. Wie heißen Sie?",
+          "B: Ich heiße Maria Keller.",
+          "A: Woher kommen Sie?",
+          "B: Ich komme aus Österreich.",
+          "A: Freut mich."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Wie heißen ",
+        "answer": "Sie",
+        "text_after": "?",
+        "hint": "Use the formal form of 'you'."
+      }
+    ]
+  },
+  {
+    "title": "Personal Pronouns — Nominative Case",
+    "description": "Use nominative personal pronouns to build very simple statements about yourself and other people.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "The nominative personal pronouns are ich, du, er, sie, es, wir, ihr, sie, and Sie. They are used as the subject of a sentence."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "talking about people",
+        "lines": [
+          "A: Wer ist das?",
+          "B: Das ist Paul. Er kommt aus Köln.",
+          "A: Und Maria?",
+          "B: Sie wohnt in Berlin.",
+          "A: Wir lernen Deutsch."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Paul ist hier. ",
+        "answer": "Er",
+        "text_after": " lernt Deutsch.",
+        "hint": "Use the pronoun for a masculine person."
+      }
+    ]
+  },
+  {
+    "title": "The Verb sein in the Present Tense",
+    "description": "Conjugate sein to say who someone is, where someone is, and basic facts about people or things.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "The present forms are ich bin, du bist, er/sie/es ist, wir sind, ihr seid, sie/Sie sind. Sein is irregular and very frequent."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "self-description",
+        "lines": [
+          "A: Wer bist du?",
+          "B: Ich bin Lukas.",
+          "A: Bist du Student?",
+          "B: Ja, ich bin Student.",
+          "A: Wir sind auch Studenten."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Ich ",
+        "answer": "bin",
+        "text_after": " Student.",
+        "hint": "Use the ich-form of sein."
+      }
+    ]
+  },
+  {
+    "title": "Self-Introduction Verbs",
+    "description": "Use core beginner verbs for name, origin, residence, and language ability in simple present-tense statements.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Important verbs are heißen, kommen, wohnen, leben, and sprechen. Use them in sentences like Ich heiße Sara, Ich komme aus Kanada, Ich wohne in Köln, and Ich spreche Deutsch."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "introducing yourself",
+        "lines": [
+          "A: Wie heißt du?",
+          "B: Ich heiße Sara.",
+          "A: Woher kommst du?",
+          "B: Ich komme aus Kanada und wohne in Köln.",
+          "A: Sprichst du Deutsch?"
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Ich ",
+        "answer": "wohne",
+        "text_after": " in Köln.",
+        "hint": "Use the verb meaning 'to live/reside'."
+      }
+    ]
+  },
+  {
+    "title": "Regular Present-Tense Verb Conjugation",
+    "description": "Conjugate common regular verbs in the present tense and match endings to the subject pronoun.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Regular present-tense endings are ich -e, du -st, er/sie/es -t, wir -en, ihr -t, sie/Sie -en. Useful verbs include machen, fragen, reisen, lernen, and arbeiten."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "in class",
+        "lines": [
+          "A: Was machst du?",
+          "B: Ich lerne Deutsch.",
+          "A: Fragst du den Lehrer?",
+          "B: Ja, ich frage den Lehrer.",
+          "A: Wir lernen zusammen."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Ich ",
+        "answer": "lerne",
+        "text_after": " Deutsch.",
+        "hint": "Use the ich-form of a regular verb."
+      }
+    ]
+  },
+  {
+    "title": "Stem-Changing Irregular Verbs in the Present",
+    "description": "Recognize the most frequent vowel-changing verbs and use their du and er/sie/es forms correctly.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Some verbs change the stem vowel in du and er/sie/es forms: fahren → du fährst, er fährt; lesen → du liest, er liest; sehen → du siehst, er sieht; geben → du gibst, es gibt."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "daily activities",
+        "lines": [
+          "A: Fährst du heute nach Berlin?",
+          "B: Ja, ich fahre heute.",
+          "A: Liest du die E-Mail?",
+          "B: Ja, ich lese die E-Mail.",
+          "A: Es gibt Kaffee."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Du ",
+        "answer": "fährst",
+        "text_after": " heute früh.",
+        "hint": "Use the du-form of fahren."
+      }
+    ]
+  },
+  {
+    "title": "The Verb haben in the Present Tense",
+    "description": "Use haben for possession and everyday statements about what people have, need, or carry.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "The present forms are ich habe, du hast, er/sie/es hat, wir haben, ihr habt, sie/Sie haben. Use haben in phrases such as Ich habe eine Frage and Wir haben Zeit."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "small talk",
+        "lines": [
+          "A: Hast du Zeit?",
+          "B: Ja, ich habe Zeit.",
+          "A: Haben Sie Kinder?",
+          "B: Ja, ich habe zwei Kinder.",
+          "A: Ich habe eine Frage."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Wir ",
+        "answer": "haben",
+        "text_after": " Zeit.",
+        "hint": "Use the wir-form of haben."
+      }
+    ]
+  },
+  {
+    "title": "W-Questions",
+    "description": "Ask for names, places, origins, times, reasons, and things using core German question words.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Core W-question words are wer, wie, wo, woher, was, wann, and warum. The pattern is question word + verb + subject + rest."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "asking questions",
+        "lines": [
+          "A: Wie heißt du?",
+          "B: Ich heiße Ali.",
+          "A: Wo wohnst du?",
+          "B: Ich wohne in Hamburg.",
+          "A: Wann lernst du Deutsch?"
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Woher ",
+        "answer": "kommst",
+        "text_after": " du?",
+        "hint": "Use the du-form of kommen after the question word."
+      }
+    ]
+  },
+  {
+    "title": "Statements, Yes-No Questions & Verb-Second Word Order",
+    "description": "Build simple statements and turn them into yes-no questions while keeping the finite verb in the correct position.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "In a statement, use subject + finite verb + rest. In a yes/no question, place the finite verb first: Kommst du aus Italien? Main clauses follow verb-second word order."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "first meeting",
+        "lines": [
+          "A: Kommst du aus Italien?",
+          "B: Nein, ich komme aus Spanien.",
+          "A: Arbeitest du heute?",
+          "B: Ja, ich arbeite heute.",
+          "A: Wohnst du in Berlin?"
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "",
+        "answer": "Kommst",
+        "text_after": " du aus Italien?",
+        "hint": "In a yes/no question, the finite verb comes first."
+      }
+    ]
+  },
+  {
+    "title": "Nouns, Gender & Articles in the Nominative",
+    "description": "Learn that every German noun has grammatical gender and that the article is learned together with the noun.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Definite articles in the nominative are der for masculine, die for feminine, and das for neuter nouns. Indefinite articles are ein for masculine/neuter and eine for feminine."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "naming objects",
+        "lines": [
+          "A: Was ist das?",
+          "B: Das ist ein Buch.",
+          "A: Und das?",
+          "B: Das ist eine Tasche.",
+          "A: Der Tisch ist groß."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Das ist ",
+        "answer": "ein",
+        "text_after": " Buch.",
+        "hint": "Buch is neuter, so use ein."
+      }
+    ]
+  },
+  {
+    "title": "Plural Forms & Everyday Objects",
+    "description": "Notice common plural patterns and build a first core vocabulary for classroom and daily objects.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "German plural endings vary, so learn nouns with their plural forms. Examples: der Stift → Stifte, die Uhr → Uhren, das Handy → Handys, der Computer → Computer, das Formular → Formulare."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "classroom objects",
+        "lines": [
+          "A: Hast du einen Stift?",
+          "B: Ja, ich habe zwei Stifte.",
+          "A: Wo ist die Uhr?",
+          "B: Die Uhr ist dort.",
+          "A: Ich brauche das Formular."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Ich habe zwei ",
+        "answer": "Stifte",
+        "text_after": ".",
+        "hint": "Use the plural form of der Stift."
+      }
+    ]
+  },
+  {
+    "title": "Negation with nicht and kein",
+    "description": "Negate whole statements, adjectives, verbs, and nouns with the two basic beginner negation patterns.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Use nicht to negate verbs, adjectives, adverbs, or whole clauses. Use kein instead of an indefinite article to negate nouns: Das ist kein Problem."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "personal information",
+        "lines": [
+          "A: Kommst du aus Österreich?",
+          "B: Nein, ich komme nicht aus Österreich.",
+          "A: Ist das ein Problem?",
+          "B: Nein, das ist kein Problem.",
+          "A: Das Büro ist nicht groß."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Das ist ",
+        "answer": "kein",
+        "text_after": " Problem.",
+        "hint": "Use the noun-negation word."
+      }
+    ]
+  },
+  {
+    "title": "Family Words & Possessive Articles",
+    "description": "Talk about family members and say whose person or thing something is using basic possessive forms.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Family words include die Familie, die Mutter, der Vater, der Bruder, die Schwester, die Eltern, and das Kind. Possessives include mein/meine, dein/deine, and Ihr/Ihre."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "talking about family",
+        "lines": [
+          "A: Ist das deine Familie?",
+          "B: Ja, das ist meine Mutter und das ist mein Vater.",
+          "A: Hast du Geschwister?",
+          "B: Ja, ich habe einen Bruder und eine Schwester.",
+          "A: Meine Eltern wohnen in Berlin."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Das ist ",
+        "answer": "meine",
+        "text_after": " Mutter.",
+        "hint": "Mutter is feminine."
+      }
+    ]
+  },
+  {
+    "title": "Professions, Study & Basic Workplaces",
+    "description": "Say what someone does, where someone works or studies, and understand basic job nouns.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Important words include der Beruf, der Student, die Studentin, der Lehrer, die Lehrerin, das Büro, and die Schule. Use sein for profession: Ich bin Lehrerin."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "talking about work and study",
+        "lines": [
+          "A: Was bist du von Beruf?",
+          "B: Ich bin Lehrer.",
+          "A: Arbeitest du in der Schule?",
+          "B: Ja, ich arbeite in der Schule.",
+          "A: Ich bin Studentin."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Ich bin ",
+        "answer": "Lehrerin",
+        "text_after": ".",
+        "hint": "Use the feminine form of teacher."
+      }
+    ]
+  },
+  {
+    "title": "Days, Parts of the Day, Months, Seasons & Dates",
+    "description": "Name the calendar words needed for plans, routines, birthdays, travel, and simple date expressions.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Learn the days Montag to Sonntag, parts of the day Morgen, Vormittag, Nachmittag, Abend, Nacht, months Januar to Dezember, and seasons Frühling, Sommer, Herbst, Winter. Use am with days and dates, and im with months and seasons."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "making plans",
+        "lines": [
+          "A: Wann hast du Zeit?",
+          "B: Am Montagabend.",
+          "A: Im März?",
+          "B: Ja, im März.",
+          "A: Im Frühling ist es schön."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Wir treffen uns ",
+        "answer": "am",
+        "text_after": " Montag.",
+        "hint": "Use the preposition for days."
+      }
+    ]
+  },
+  {
+    "title": "Telling Time & Making Appointments",
+    "description": "Tell the time, ask when something happens, and make or confirm simple appointments.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Ask Wie spät ist es? and answer Es ist drei Uhr. Use um with clock times, as in um neun Uhr. Use von ... bis for time spans."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "appointment making",
+        "lines": [
+          "A: Wie spät ist es?",
+          "B: Es ist drei Uhr.",
+          "A: Wann hast du Zeit?",
+          "B: Um sechs Uhr.",
+          "A: Wir treffen uns um sechs."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Es ist drei ",
+        "answer": "Uhr",
+        "text_after": ".",
+        "hint": "Complete the German time expression."
+      }
+    ]
+  },
+  {
+    "title": "Daily Routine Verbs",
+    "description": "Describe a simple day using high-frequency routine verbs in the present tense.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Core routine verbs include aufstehen, anfangen, arbeiten, and gehen. Aufstehen and anfangen are separable verbs: Ich stehe um sieben Uhr auf."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "daily routine",
+        "lines": [
+          "A: Wann stehst du auf?",
+          "B: Ich stehe um sieben Uhr auf.",
+          "A: Wann fängst du an?",
+          "B: Ich fange um neun Uhr an.",
+          "A: Dann gehe ich zur Arbeit."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Ich stehe um sieben Uhr ",
+        "answer": "auf",
+        "text_after": ".",
+        "hint": "Use the separated prefix of aufstehen."
+      }
+    ]
+  },
+  {
+    "title": "Modal Verbs müssen and wollen",
+    "description": "Express basic necessity and intention, especially for everyday obligations and simple plans.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Müssen means must or have to; wollen means want to. The pattern is subject + modal verb + rest + infinitive: Ich muss morgen arbeiten."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "daily plans",
+        "lines": [
+          "A: Was musst du morgen machen?",
+          "B: Ich muss morgen arbeiten.",
+          "A: Willst du danach ins Kino gehen?",
+          "B: Ja, ich will ins Kino gehen.",
+          "A: Wir wollen zusammen gehen."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Ich muss morgen ",
+        "answer": "arbeiten",
+        "text_after": ".",
+        "hint": "After a modal verb, use the infinitive at the end."
+      }
+    ]
+  },
+  {
+    "title": "Hobbies, Free Time & the Modal Verb können",
+    "description": "Talk about what you can do and what you like doing in your free time.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Key words include das Hobby, die Freizeit, können, schwimmen, tanzen, and kochen. Use können + infinitive: Ich kann gut schwimmen."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "talking about hobbies",
+        "lines": [
+          "A: Was machst du in der Freizeit?",
+          "B: Ich schwimme und koche gern.",
+          "A: Kannst du tanzen?",
+          "B: Ja, ich kann gut tanzen.",
+          "A: Mein Hobby ist Kochen."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Ich kann gut ",
+        "answer": "schwimmen",
+        "text_after": ".",
+        "hint": "Use the infinitive after können."
+      }
+    ]
+  },
+  {
+    "title": "Food, Drinks, Preferences & mögen / möchten",
+    "description": "Name common food and drink categories and express likes, dislikes, and simple wants.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Useful words include das Essen, das Getränk, das Brot, der Kaffee, der Tee, and das Wasser. Mögen means to like; möchten means would like."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "talking about food and drinks",
+        "lines": [
+          "A: Magst du Kaffee?",
+          "B: Ja, ich mag Kaffee.",
+          "A: Möchtest du Tee?",
+          "B: Nein, ich möchte Wasser.",
+          "A: Ich möchte Brot."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Ich ",
+        "answer": "möchte",
+        "text_after": " einen Kaffee.",
+        "hint": "Use the polite form meaning 'would like'."
+      }
+    ]
+  },
+  {
+    "title": "Ordering Food, Paying & Restaurant Expressions",
+    "description": "Use fixed expressions needed to order, ask for the bill, and manage a short café or restaurant exchange.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Important service phrases include Ich möchte einen Kaffee, Was möchten Sie?, Für mich bitte ..., Noch etwas?, Die Rechnung, bitte, Zahlen, bitte, and Das macht zehn Euro."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "at a café",
+        "lines": [
+          "A: Guten Tag. Was möchten Sie?",
+          "B: Ich möchte einen Kaffee.",
+          "A: Noch etwas?",
+          "B: Nein, danke. Die Rechnung, bitte.",
+          "A: Das macht zehn Euro."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Die ",
+        "answer": "Rechnung",
+        "text_after": ", bitte.",
+        "hint": "Complete the phrase for asking for the bill."
+      }
+    ]
+  },
+  {
+    "title": "Shopping, Prices, Colors & Basic Adjectives",
+    "description": "Ask about prices, describe simple objects, and use colors and easy adjectives to choose or evaluate things.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Learn der Preis, teuer, billig, schön, groß, klein, and colors such as rot, blau, grün, gelb, schwarz, and weiß. Ask Wie viel kostet das? Use sein + adjective: Das ist schön."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "shopping",
+        "lines": [
+          "A: Wie viel kostet das?",
+          "B: Das kostet zehn Euro.",
+          "A: Ist das teuer?",
+          "B: Nein, das ist billig.",
+          "A: Ich nehme das rote Buch."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Wie viel ",
+        "answer": "kostet",
+        "text_after": " das?",
+        "hint": "Use the verb meaning 'costs'."
+      }
+    ]
+  },
+  {
+    "title": "Home, Rooms & Furniture",
+    "description": "Describe where you live and name important rooms and furniture items in simple housing conversations.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Important words include die Wohnung, das Haus, das Zimmer, die Küche, das Bad, das Bett, der Stuhl, and der Schrank. Use adjectives with sein: Die Wohnung ist groß."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "describing a home",
+        "lines": [
+          "A: Wie ist deine Wohnung?",
+          "B: Meine Wohnung ist klein, aber schön.",
+          "A: Hat sie eine Küche?",
+          "B: Ja, und ein Bad.",
+          "A: Das Zimmer hat ein Bett und einen Stuhl."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Meine ",
+        "answer": "Wohnung",
+        "text_after": " ist klein.",
+        "hint": "Use the word for apartment."
+      }
+    ]
+  },
+  {
+    "title": "The Accusative Case & Common Accusative Verbs",
+    "description": "Use the accusative for direct objects with frequent beginner verbs and article forms.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Accusative definite articles are den, die, das; indefinite articles are einen, eine, ein. Masculine changes: der/ein → den/einen. Common verbs include brauchen, nehmen, and kaufen."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "shopping and objects",
+        "lines": [
+          "A: Was brauchst du?",
+          "B: Ich brauche einen Tisch.",
+          "A: Kaufst du das Brot?",
+          "B: Ja, ich kaufe das Brot.",
+          "A: Ich nehme den Stuhl."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Ich brauche ",
+        "answer": "einen",
+        "text_after": " Tisch.",
+        "hint": "Tisch is masculine and is the direct object."
+      }
+    ]
+  },
+  {
+    "title": "Places in Town, Orientation & Transportation",
+    "description": "Name common places and means of transport, and understand core vocabulary for navigating a city.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Important words include die Post, der Bahnhof, der Supermarkt, die Straße, der Bus, die U-Bahn, zu Fuß, links, rechts, and geradeaus."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "in town",
+        "lines": [
+          "A: Wo ist der Bahnhof?",
+          "B: Der Bahnhof ist rechts.",
+          "A: Gibt es hier einen Supermarkt?",
+          "B: Ja, gehen Sie geradeaus.",
+          "A: Ich fahre mit dem Bus."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Gehen Sie ",
+        "answer": "geradeaus",
+        "text_after": ".",
+        "hint": "Use the word meaning straight ahead."
+      }
+    ]
+  },
+  {
+    "title": "Asking for Directions & Simple Route Phrases",
+    "description": "Ask where a place is and understand very simple route instructions in shops, stations, and cities.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Useful phrases include Wo ist ...?, Gibt es hier ...?, Entschuldigung, wo ist der Bahnhof?, Gehen Sie geradeaus, Dann links, Dann rechts, and Das ist gleich hier. Es gibt means there is/there are."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "asking for directions",
+        "lines": [
+          "A: Entschuldigung, wo ist der Bahnhof?",
+          "B: Gehen Sie geradeaus.",
+          "A: Dann links?",
+          "B: Ja, dann links und dann rechts.",
+          "A: Danke!"
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Gibt ",
+        "answer": "es",
+        "text_after": " hier eine Post?",
+        "hint": "Complete the expression meaning 'Is there ...?'"
+      }
+    ]
+  },
+  {
+    "title": "Separable Verbs & the Sentence Bracket",
+    "description": "Understand that some common verbs split in the present tense and send their prefix to the end of the clause.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "In main clauses, separable prefixes move to the end: aufstehen → Ich stehe um sieben auf. Useful separable verbs include einkaufen, anrufen, mitkommen, einsteigen, aufstehen, and anfangen."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "making plans",
+        "lines": [
+          "A: Rufst du mich später an?",
+          "B: Ja, ich rufe dich später an.",
+          "A: Kommst du mit?",
+          "B: Ja, ich komme mit.",
+          "A: Wir kaufen heute ein."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Ich rufe dich später ",
+        "answer": "an",
+        "text_after": ".",
+        "hint": "Use the separated prefix of anrufen."
+      }
+    ]
+  },
+  {
+    "title": "Body Parts, Symptoms & Basic Doctor Phrases",
+    "description": "Name useful body parts and say in a very simple way what hurts or what is wrong.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Body words include der Kopf, der Bauch, der Rücken, der Arm, das Bein, die Hand, der Fuß, and der Mund. Useful phrases include Ich muss zum Arzt, Mein Bein tut weh, and Ich bin krank."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "at the doctor",
+        "lines": [
+          "A: Was fehlt Ihnen?",
+          "B: Ich bin krank.",
+          "A: Was tut weh?",
+          "B: Mein Bein tut weh.",
+          "A: Ich muss zum Arzt."
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Mein Bein tut ",
+        "answer": "weh",
+        "text_after": ".",
+        "hint": "Complete the phrase meaning 'hurts'."
+      }
+    ]
+  },
+  {
+    "title": "Invitations, Plans & Accepting or Refusing",
+    "description": "Make simple social plans, invite someone, and answer with easy acceptance or refusal formulas.",
+    "parts": [
+      {
+        "order": 1,
+        "type": "teaching_note",
+        "content": "Useful phrases include Hast du Zeit?, Wollen wir ins Café gehen?, Ja, gern, Gerne, Tut mir leid, ich kann nicht, Vielleicht später, and Bis später."
+      },
+      {
+        "order": 2,
+        "type": "conversation",
+        "context": "making plans",
+        "lines": [
+          "A: Hast du Zeit?",
+          "B: Ja, gern.",
+          "A: Wollen wir ins Café gehen?",
+          "B: Gerne.",
+          "A: Bis später!"
+        ]
+      },
+      {
+        "order": 3,
+        "type": "fill_blank",
+        "text_before": "Tut mir leid, ich ",
+        "answer": "kann",
+        "text_after": " nicht.",
+        "hint": "Use the modal verb meaning can/am able to."
+      }
+    ]
+  }
+]

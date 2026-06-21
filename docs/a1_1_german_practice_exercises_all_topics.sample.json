@@ -1,0 +1,97 @@
+[
+  {
+    "topic_title": "Greetings & Farewells",
+    "exercises": [
+      {
+        "exercise_type": "flashcard",
+        "item_text": "Guten Morgen",
+        "front_text": "Guten Morgen",
+        "back_text": "Good morning",
+        "front_context": "Guten Morgen, Anna!",
+        "back_context": "Meaning in context: Good morning"
+      },
+      {
+        "exercise_type": "matching",
+        "item_text": "Guten Morgen / Guten Tag / Guten Abend / Hallo / Tschüss / Auf Wiedersehen",
+        "instruction": "Match each German item with its English meaning.",
+        "pairs": [
+          {
+            "left": "Guten Morgen",
+            "right": "Good morning"
+          },
+          {
+            "left": "Guten Tag",
+            "right": "Good day / Hello"
+          },
+          {
+            "left": "Guten Abend",
+            "right": "Good evening"
+          },
+          {
+            "left": "Hallo",
+            "right": "Hello"
+          },
+          {
+            "left": "Tschüss",
+            "right": "Bye"
+          },
+          {
+            "left": "Auf Wiedersehen",
+            "right": "Goodbye"
+          }
+        ]
+      },
+      {
+        "exercise_type": "mcq",
+        "item_text": "Guten Morgen",
+        "question": "What is the best meaning of “Guten Morgen” in this A1.1 topic?",
+        "choices": [
+          {
+            "text": "Good day / Hello",
+            "is_correct": false
+          },
+          {
+            "text": "Good evening",
+            "is_correct": false
+          },
+          {
+            "text": "Hello",
+            "is_correct": false
+          },
+          {
+            "text": "Good morning",
+            "is_correct": true
+          }
+        ],
+        "explanation": "“Guten Morgen” means “Good morning”. The other options are different A1.1 words or phrases from the same learning area."
+      },
+      {
+        "exercise_type": "sentence_order",
+        "item_text": "Wie geht's?",
+        "jumbled_words": ["geht's?", "Wie", "dir"],
+        "correct_answers": [["Wie", "geht's?", "dir"]],
+        "hint": "Start with the question phrase Wie geht's?"
+      },
+      {
+        "exercise_type": "error_correction",
+        "item_text": "Guten Morgen",
+        "sentence": "Guten morgn, Anna!",
+        "error_start": 6,
+        "error_end": 11,
+        "correct_replacement": "Morgen",
+        "corrected_sentence": "Guten Morgen, Anna!",
+        "explanation": "The morning greeting is spelled “Guten Morgen”."
+      },
+      {
+        "exercise_type": "fill_blank",
+        "item_text": "A wie Anton",
+        "text_before": "",
+        "text_after": ", N wie Nordpol.",
+        "answer": "A wie Anton",
+        "accept_alternatives": ["a wie Anton"],
+        "hint": "Recall “A wie Anton” in context.",
+        "explanation": "The correct A1.1 form here is “A wie Anton”."
+      }
+    ]
+  }
+]

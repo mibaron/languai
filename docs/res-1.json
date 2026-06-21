@@ -1,0 +1,2350 @@
+[
+  {
+    "order": 1,
+    "title": "Greetings & Farewells",
+    "description": "Learn the standard ways to greet people, ask how they are, and say goodbye in neutral and informal everyday encounters.",
+    "category": "phrase",
+    "lexical_items": [
+      {
+        "text": "Guten Morgen",
+        "translation": "Good morning",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "morning greeting"
+      },
+      {
+        "text": "Guten Tag",
+        "translation": "Good day / Hello",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "daytime greeting"
+      },
+      {
+        "text": "Guten Abend",
+        "translation": "Good evening",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "evening greeting"
+      },
+      {
+        "text": "Hallo",
+        "translation": "Hello",
+        "type": "phrase",
+        "formality_level": "informal",
+        "context": "casual greeting"
+      },
+      {
+        "text": "Tschüss",
+        "translation": "Bye",
+        "type": "phrase",
+        "formality_level": "informal",
+        "context": "casual farewell"
+      },
+      {
+        "text": "Auf Wiedersehen",
+        "translation": "Goodbye",
+        "type": "phrase",
+        "formality_level": "formal",
+        "context": "formal farewell"
+      },
+      {
+        "text": "Wie geht's?",
+        "translation": "How are you?",
+        "type": "phrase",
+        "formality_level": "informal",
+        "context": "small talk"
+      },
+      {
+        "text": "Gut, danke.",
+        "translation": "Good, thanks.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "answering about well-being"
+      }
+    ],
+    "sources": "citeturn2view1turn9view0turn18view2turn18view1"
+  },
+  {
+    "order": 2,
+    "title": "Politeness & Survival Expressions",
+    "description": "Master the first interaction formulas needed to be polite, repair communication, and manage simple social exchanges from the first lesson onward.",
+    "category": "phrase",
+    "lexical_items": [
+      {
+        "text": "bitte",
+        "translation": "please / you're welcome",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "general politeness"
+      },
+      {
+        "text": "danke",
+        "translation": "thanks",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "general politeness"
+      },
+      {
+        "text": "vielen Dank",
+        "translation": "many thanks",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "formal or warm thanks"
+      },
+      {
+        "text": "Entschuldigung",
+        "translation": "sorry / excuse me",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "minor apology or interruption"
+      },
+      {
+        "text": "entschuldigen Sie",
+        "translation": "excuse me",
+        "type": "phrase",
+        "formality_level": "formal",
+        "context": "getting attention / apologizing"
+      },
+      {
+        "text": "Wie bitte?",
+        "translation": "Pardon?",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "asking for repetition"
+      },
+      {
+        "text": "Schon gut.",
+        "translation": "It's okay.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "accepting an apology"
+      },
+      {
+        "text": "Kein Problem.",
+        "translation": "No problem.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "responding casually"
+      }
+    ],
+    "sources": "citeturn23view0turn18view2turn18view1"
+  },
+  {
+    "order": 3,
+    "title": "Classroom Language & Communication Repair",
+    "description": "Handle the mini-language of the classroom: ask what something means, request repetition, and signal that you do or do not understand.",
+    "category": "phrase",
+    "lexical_items": [
+      {
+        "text": "Was ist das auf Deutsch?",
+        "translation": "What is that in German?",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "in class"
+      },
+      {
+        "text": "Können Sie das bitte wiederholen?",
+        "translation": "Can you repeat that, please?",
+        "type": "phrase",
+        "formality_level": "formal",
+        "context": "in class"
+      },
+      {
+        "text": "Noch einmal, bitte.",
+        "translation": "Once again, please.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "in class"
+      },
+      {
+        "text": "Langsamer, bitte.",
+        "translation": "More slowly, please.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "in class"
+      },
+      {
+        "text": "Ich verstehe nicht.",
+        "translation": "I don't understand.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "in class"
+      },
+      {
+        "text": "Wie schreibt man das?",
+        "translation": "How do you spell that?",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "in class"
+      },
+      {
+        "text": "Was bedeutet ...?",
+        "translation": "What does ... mean?",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "asking for meaning"
+      }
+    ],
+    "sources": "citeturn23view0turn9view0turn18view2turn18view1"
+  },
+  {
+    "order": 4,
+    "title": "Alphabet & Spelling",
+    "description": "Recognize the German alphabet and spell names, places, and contact details aloud when filling in forms or introducing yourself.",
+    "category": "vocab",
+    "lexical_items": [
+      {
+        "text": "das Alphabet",
+        "translation": "alphabet",
+        "type": "vocab",
+        "gender": "n",
+        "plural_form": "Alphabete"
+      },
+      {
+        "text": "buchstabieren",
+        "translation": "to spell",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "regular"
+      },
+      {
+        "text": "der Buchstabe",
+        "translation": "letter",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Buchstaben"
+      },
+      {
+        "text": "A wie Anton",
+        "translation": "A as in Anton",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "spelling clearly"
+      },
+      {
+        "text": "mit Doppel-m",
+        "translation": "with double m",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "spelling names"
+      },
+      {
+        "text": "mit h",
+        "translation": "with h",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "spelling names"
+      }
+    ],
+    "sources": "citeturn23view0turn18view2turn18view1"
+  },
+  {
+    "order": 5,
+    "title": "Numbers, Telephone Numbers & Email Details",
+    "description": "Use numbers for age, prices, room numbers, phone numbers, and simple contact information.",
+    "category": "vocab",
+    "lexical_items": [
+      {
+        "text": "null",
+        "translation": "zero",
+        "type": "vocab"
+      },
+      {
+        "text": "eins",
+        "translation": "one",
+        "type": "vocab"
+      },
+      {
+        "text": "zwei",
+        "translation": "two",
+        "type": "vocab"
+      },
+      {
+        "text": "drei",
+        "translation": "three",
+        "type": "vocab"
+      },
+      {
+        "text": "vier",
+        "translation": "four",
+        "type": "vocab"
+      },
+      {
+        "text": "fünf",
+        "translation": "five",
+        "type": "vocab"
+      },
+      {
+        "text": "sechs",
+        "translation": "six",
+        "type": "vocab"
+      },
+      {
+        "text": "sieben",
+        "translation": "seven",
+        "type": "vocab"
+      },
+      {
+        "text": "acht",
+        "translation": "eight",
+        "type": "vocab"
+      },
+      {
+        "text": "neun",
+        "translation": "nine",
+        "type": "vocab"
+      },
+      {
+        "text": "zehn",
+        "translation": "ten",
+        "type": "vocab"
+      },
+      {
+        "text": "elf",
+        "translation": "eleven",
+        "type": "vocab"
+      },
+      {
+        "text": "zwölf",
+        "translation": "twelve",
+        "type": "vocab"
+      },
+      {
+        "text": "dreizehn",
+        "translation": "thirteen",
+        "type": "vocab"
+      },
+      {
+        "text": "vierzehn",
+        "translation": "fourteen",
+        "type": "vocab"
+      },
+      {
+        "text": "fünfzehn",
+        "translation": "fifteen",
+        "type": "vocab"
+      },
+      {
+        "text": "sechzehn",
+        "translation": "sixteen",
+        "type": "vocab"
+      },
+      {
+        "text": "siebzehn",
+        "translation": "seventeen",
+        "type": "vocab"
+      },
+      {
+        "text": "achtzehn",
+        "translation": "eighteen",
+        "type": "vocab"
+      },
+      {
+        "text": "neunzehn",
+        "translation": "nineteen",
+        "type": "vocab"
+      },
+      {
+        "text": "zwanzig",
+        "translation": "twenty",
+        "type": "vocab"
+      },
+      {
+        "text": "dreißig",
+        "translation": "thirty",
+        "type": "vocab"
+      },
+      {
+        "text": "vierzig",
+        "translation": "forty",
+        "type": "vocab"
+      },
+      {
+        "text": "fünfzig",
+        "translation": "fifty",
+        "type": "vocab"
+      },
+      {
+        "text": "sechzig",
+        "translation": "sixty",
+        "type": "vocab"
+      },
+      {
+        "text": "siebzig",
+        "translation": "seventy",
+        "type": "vocab"
+      },
+      {
+        "text": "achtzig",
+        "translation": "eighty",
+        "type": "vocab"
+      },
+      {
+        "text": "neunzig",
+        "translation": "ninety",
+        "type": "vocab"
+      },
+      {
+        "text": "hundert",
+        "translation": "one hundred",
+        "type": "vocab"
+      },
+      {
+        "text": "21–99",
+        "translation": "compound numbers",
+        "type": "grammar_rule",
+        "pattern": "Unit + und + tens: einundzwanzig, zweiunddreißig, vierundfünfzig."
+      },
+      {
+        "text": "die Telefonnummer",
+        "translation": "telephone number",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "Telefonnummern"
+      },
+      {
+        "text": "die E-Mail-Adresse",
+        "translation": "email address",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "E-Mail-Adressen"
+      },
+      {
+        "text": "Wie ist Ihre Telefonnummer?",
+        "translation": "What is your phone number?",
+        "type": "phrase",
+        "formality_level": "formal",
+        "context": "exchanging contact details"
+      },
+      {
+        "text": "Meine E-Mail-Adresse ist ...",
+        "translation": "My email address is ...",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "giving contact details"
+      }
+    ],
+    "sources": "citeturn21view0turn9view0turn18view2turn18view1"
+  },
+  {
+    "order": 6,
+    "title": "Countries, Cities, Languages & Origin",
+    "description": "Talk about where someone comes from, where they live, and which language they speak.",
+    "category": "vocab",
+    "lexical_items": [
+      {
+        "text": "das Land",
+        "translation": "country",
+        "type": "vocab",
+        "gender": "n",
+        "plural_form": "Länder"
+      },
+      {
+        "text": "die Stadt",
+        "translation": "city",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "Städte"
+      },
+      {
+        "text": "die Sprache",
+        "translation": "language",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "Sprachen"
+      },
+      {
+        "text": "Deutsch",
+        "translation": "German",
+        "type": "vocab"
+      },
+      {
+        "text": "Englisch",
+        "translation": "English",
+        "type": "vocab"
+      },
+      {
+        "text": "in / aus",
+        "translation": "in / from",
+        "type": "grammar_rule",
+        "pattern": "Use in for location and aus for origin from countries, cities, and some places."
+      },
+      {
+        "text": "aus Deutschland",
+        "translation": "from Germany",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "saying origin"
+      },
+      {
+        "text": "in Berlin",
+        "translation": "in Berlin",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "saying where one lives"
+      },
+      {
+        "text": "sprechen",
+        "translation": "to speak",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "irregular"
+      }
+    ],
+    "sources": "citeturn20view3turn9view0turn18view2turn18view1"
+  },
+  {
+    "order": 7,
+    "title": "Introductions, Personal Information & Formal vs Informal Address",
+    "description": "Introduce yourself and others, exchange basic personal details, and distinguish between du and Sie in beginner contexts.",
+    "category": "phrase",
+    "lexical_items": [
+      {
+        "text": "Ich heiße ...",
+        "translation": "My name is ...",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "introducing yourself"
+      },
+      {
+        "text": "Ich bin ...",
+        "translation": "I am ...",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "introducing yourself"
+      },
+      {
+        "text": "Das ist ...",
+        "translation": "This is ...",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "introducing another person"
+      },
+      {
+        "text": "Wie heißen Sie?",
+        "translation": "What is your name?",
+        "type": "phrase",
+        "formality_level": "formal",
+        "context": "first meeting"
+      },
+      {
+        "text": "Wie heißt du?",
+        "translation": "What is your name?",
+        "type": "phrase",
+        "formality_level": "informal",
+        "context": "first meeting"
+      },
+      {
+        "text": "Woher kommen Sie?",
+        "translation": "Where are you from?",
+        "type": "phrase",
+        "formality_level": "formal",
+        "context": "first meeting"
+      },
+      {
+        "text": "Woher kommst du?",
+        "translation": "Where are you from?",
+        "type": "phrase",
+        "formality_level": "informal",
+        "context": "first meeting"
+      },
+      {
+        "text": "du vs. Sie",
+        "translation": "informal vs. formal 'you'",
+        "type": "grammar_rule",
+        "pattern": "Use du for informal singular; use Sie for formal singular and plural."
+      }
+    ],
+    "sources": "citeturn2view1turn21view0turn9view0turn18view2turn18view1"
+  },
+  {
+    "order": 8,
+    "title": "Personal Pronouns",
+    "description": "Use nominative personal pronouns to build very simple statements about yourself and other people.",
+    "category": "grammar",
+    "lexical_items": [
+      {
+        "text": "ich",
+        "translation": "I",
+        "type": "vocab"
+      },
+      {
+        "text": "du",
+        "translation": "you",
+        "type": "vocab"
+      },
+      {
+        "text": "er",
+        "translation": "he",
+        "type": "vocab"
+      },
+      {
+        "text": "sie",
+        "translation": "she / they",
+        "type": "vocab"
+      },
+      {
+        "text": "es",
+        "translation": "it",
+        "type": "vocab"
+      },
+      {
+        "text": "wir",
+        "translation": "we",
+        "type": "vocab"
+      },
+      {
+        "text": "ihr",
+        "translation": "you all",
+        "type": "vocab"
+      },
+      {
+        "text": "Personalpronomen im Nominativ",
+        "translation": "nominative personal pronouns",
+        "type": "grammar_rule",
+        "pattern": "ich / du / er / sie / es / wir / ihr / sie"
+      }
+    ],
+    "sources": "citeturn20view3turn9view0turn18view2turn18view1"
+  },
+  {
+    "order": 9,
+    "title": "The Verb sein in the Present Tense",
+    "description": "Conjugate sein to say who someone is, where someone is, and basic facts about people or things.",
+    "category": "verb",
+    "lexical_items": [
+      {
+        "text": "sein — ich bin, du bist, er/sie/es ist, wir sind, ihr seid, sie/Sie sind",
+        "translation": "to be",
+        "type": "verb",
+        "auxiliary_verb": "sein",
+        "conjugation_group": "irregular"
+      },
+      {
+        "text": "Ich bin Student.",
+        "translation": "I am a student.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "self-description"
+      },
+      {
+        "text": "Wir sind hier.",
+        "translation": "We are here.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "location"
+      },
+      {
+        "text": "Sind Sie aus Spanien?",
+        "translation": "Are you from Spain?",
+        "type": "phrase",
+        "formality_level": "formal",
+        "context": "first meeting"
+      }
+    ],
+    "sources": "citeturn23view2turn9view0turn18view2turn18view1"
+  },
+  {
+    "order": 10,
+    "title": "Self-Introduction Verbs",
+    "description": "Use the core beginner verbs for name, origin, residence, and language ability in simple present-tense statements.",
+    "category": "verb",
+    "lexical_items": [
+      {
+        "text": "heißen",
+        "translation": "to be called / to be named",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "irregular"
+      },
+      {
+        "text": "kommen",
+        "translation": "to come",
+        "type": "verb",
+        "auxiliary_verb": "sein",
+        "conjugation_group": "irregular"
+      },
+      {
+        "text": "wohnen",
+        "translation": "to live / reside",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "regular"
+      },
+      {
+        "text": "leben",
+        "translation": "to live",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "regular"
+      },
+      {
+        "text": "Ich komme aus Kanada.",
+        "translation": "I come from Canada.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "introducing yourself"
+      },
+      {
+        "text": "Ich wohne in Köln.",
+        "translation": "I live in Cologne.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "introducing yourself"
+      }
+    ],
+    "sources": "citeturn20view3turn9view0turn18view2turn18view1"
+  },
+  {
+    "order": 11,
+    "title": "Regular Present-Tense Verb Conjugation",
+    "description": "Conjugate common regular verbs in the present tense and match endings to the subject pronoun.",
+    "category": "grammar",
+    "lexical_items": [
+      {
+        "text": "-e, -st, -t, -en, -t, -en",
+        "translation": "regular present-tense endings",
+        "type": "grammar_rule",
+        "pattern": "ich -e / du -st / er-sie-es -t / wir -en / ihr -t / sie-Sie -en"
+      },
+      {
+        "text": "reisen",
+        "translation": "to travel",
+        "type": "verb",
+        "auxiliary_verb": "sein",
+        "conjugation_group": "regular"
+      },
+      {
+        "text": "machen",
+        "translation": "to do / make",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "regular"
+      },
+      {
+        "text": "fragen",
+        "translation": "to ask",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "regular"
+      },
+      {
+        "text": "Wir reisen morgen.",
+        "translation": "We are traveling tomorrow.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "future plan"
+      },
+      {
+        "text": "Wir fragen den Lehrer.",
+        "translation": "We ask the teacher.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "in class"
+      }
+    ],
+    "sources": "citeturn9view0turn18view2"
+  },
+  {
+    "order": 12,
+    "title": "Stem-Changing Irregular Verbs in the Present",
+    "description": "Recognize the most frequent vowel-changing verbs and use their du and er/sie/es forms correctly.",
+    "category": "verb",
+    "lexical_items": [
+      {
+        "text": "fahren",
+        "translation": "to drive / go",
+        "type": "verb",
+        "auxiliary_verb": "sein",
+        "conjugation_group": "irregular"
+      },
+      {
+        "text": "lesen",
+        "translation": "to read",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "irregular"
+      },
+      {
+        "text": "sehen",
+        "translation": "to see",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "irregular"
+      },
+      {
+        "text": "geben",
+        "translation": "to give / there is",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "irregular"
+      },
+      {
+        "text": "Du fährst heute früh.",
+        "translation": "You are going early today.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "daily routine"
+      },
+      {
+        "text": "Er liest die E-Mail.",
+        "translation": "He is reading the email.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "reading"
+      }
+    ],
+    "sources": "citeturn9view0turn18view2"
+  },
+  {
+    "order": 13,
+    "title": "The Verb haben",
+    "description": "Use haben for possession and many everyday statements about what people have, need, or carry.",
+    "category": "verb",
+    "lexical_items": [
+      {
+        "text": "haben — ich habe, du hast, er/sie/es hat, wir haben, ihr habt, sie/Sie haben",
+        "translation": "to have",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "irregular"
+      },
+      {
+        "text": "Ich habe eine Frage.",
+        "translation": "I have a question.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "in class"
+      },
+      {
+        "text": "Wir haben Zeit.",
+        "translation": "We have time.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "making plans"
+      },
+      {
+        "text": "Haben Sie Kinder?",
+        "translation": "Do you have children?",
+        "type": "phrase",
+        "formality_level": "formal",
+        "context": "small talk"
+      }
+    ],
+    "sources": "citeturn23view2turn9view0turn18view2"
+  },
+  {
+    "order": 14,
+    "title": "W-Questions",
+    "description": "Ask for names, places, origins, times, reasons, and things using the core German question words.",
+    "category": "grammar",
+    "lexical_items": [
+      {
+        "text": "wer",
+        "translation": "who",
+        "type": "vocab"
+      },
+      {
+        "text": "wie",
+        "translation": "how",
+        "type": "vocab"
+      },
+      {
+        "text": "wo",
+        "translation": "where",
+        "type": "vocab"
+      },
+      {
+        "text": "woher",
+        "translation": "where from",
+        "type": "vocab"
+      },
+      {
+        "text": "was",
+        "translation": "what",
+        "type": "vocab"
+      },
+      {
+        "text": "wann",
+        "translation": "when",
+        "type": "vocab"
+      },
+      {
+        "text": "warum",
+        "translation": "why",
+        "type": "vocab"
+      },
+      {
+        "text": "W-Frage",
+        "translation": "wh-question",
+        "type": "grammar_rule",
+        "pattern": "Question word + verb + subject + rest"
+      }
+    ],
+    "sources": "citeturn20view3turn9view0turn18view2turn18view1"
+  },
+  {
+    "order": 15,
+    "title": "Statements, Yes-No Questions & Verb-Second Word Order",
+    "description": "Build simple statements and turn them into yes-no questions while keeping the finite verb in the correct position.",
+    "category": "grammar",
+    "lexical_items": [
+      {
+        "text": "Aussagesatz",
+        "translation": "statement sentence",
+        "type": "grammar_rule",
+        "pattern": "Subject + finite verb + rest"
+      },
+      {
+        "text": "Ja/Nein-Frage",
+        "translation": "yes-no question",
+        "type": "grammar_rule",
+        "pattern": "Finite verb + subject + rest"
+      },
+      {
+        "text": "Verbzweitstellung",
+        "translation": "verb in second position",
+        "type": "grammar_rule",
+        "pattern": "In main clauses, the conjugated verb is the second element."
+      },
+      {
+        "text": "Kommst du aus Italien?",
+        "translation": "Are you from Italy?",
+        "type": "phrase",
+        "formality_level": "informal",
+        "context": "first meeting"
+      },
+      {
+        "text": "Arbeiten Sie heute?",
+        "translation": "Are you working today?",
+        "type": "phrase",
+        "formality_level": "formal",
+        "context": "asking about plans"
+      },
+      {
+        "text": "Ja.",
+        "translation": "Yes.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "answering"
+      },
+      {
+        "text": "Nein.",
+        "translation": "No.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "answering"
+      },
+      {
+        "text": "Doch.",
+        "translation": "Yes, on the contrary.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "contradicting a negative question"
+      }
+    ],
+    "sources": "citeturn23view0turn9view0turn18view2turn18view1"
+  },
+  {
+    "order": 16,
+    "title": "Nouns, Gender & Articles in the Nominative",
+    "description": "Learn that every German noun has grammatical gender and that the article normally has to be learned together with the noun.",
+    "category": "grammar",
+    "lexical_items": [
+      {
+        "text": "der / die / das",
+        "translation": "definite articles in the nominative",
+        "type": "grammar_rule",
+        "pattern": "der + masculine noun / die + feminine noun / das + neuter noun"
+      },
+      {
+        "text": "ein / eine",
+        "translation": "indefinite articles in the nominative",
+        "type": "grammar_rule",
+        "pattern": "ein + masculine or neuter noun / eine + feminine noun"
+      },
+      {
+        "text": "der Tisch",
+        "translation": "table",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Tische"
+      },
+      {
+        "text": "die Tasche",
+        "translation": "bag",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "Taschen"
+      },
+      {
+        "text": "das Buch",
+        "translation": "book",
+        "type": "vocab",
+        "gender": "n",
+        "plural_form": "Bücher"
+      }
+    ],
+    "sources": "citeturn23view2turn9view0turn18view2turn18view1"
+  },
+  {
+    "order": 17,
+    "title": "Plural Forms & Everyday Objects",
+    "description": "Notice the most common plural patterns and build a first core vocabulary for classroom and daily objects.",
+    "category": "vocab",
+    "lexical_items": [
+      {
+        "text": "Singular und Plural",
+        "translation": "singular and plural",
+        "type": "grammar_rule",
+        "pattern": "Learn each noun with its plural form because plural endings vary."
+      },
+      {
+        "text": "Pluralmuster",
+        "translation": "basic plural patterns",
+        "type": "grammar_rule",
+        "pattern": "Common beginner plural endings include -e, -er, -n/-en, -s, and zero ending."
+      },
+      {
+        "text": "der Stift",
+        "translation": "pen",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Stifte"
+      },
+      {
+        "text": "die Uhr",
+        "translation": "clock / watch",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "Uhren"
+      },
+      {
+        "text": "das Handy",
+        "translation": "mobile phone",
+        "type": "vocab",
+        "gender": "n",
+        "plural_form": "Handys"
+      },
+      {
+        "text": "der Computer",
+        "translation": "computer",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Computer"
+      },
+      {
+        "text": "das Formular",
+        "translation": "form",
+        "type": "vocab",
+        "gender": "n",
+        "plural_form": "Formulare"
+      }
+    ],
+    "sources": "citeturn23view2turn9view0turn18view2turn18view1"
+  },
+  {
+    "order": 18,
+    "title": "Negation with nicht and kein",
+    "description": "Negate whole statements, adjectives, and nouns with the two basic beginner negation patterns.",
+    "category": "grammar",
+    "lexical_items": [
+      {
+        "text": "nicht",
+        "translation": "not",
+        "type": "grammar_rule",
+        "pattern": "Use nicht to negate verbs, adjectives, adverbs, or a whole clause."
+      },
+      {
+        "text": "kein + noun",
+        "translation": "no / not a",
+        "type": "grammar_rule",
+        "pattern": "Use kein instead of an indefinite article to negate a noun."
+      },
+      {
+        "text": "Ich komme nicht aus Österreich.",
+        "translation": "I am not from Austria.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "personal information"
+      },
+      {
+        "text": "Das ist kein Problem.",
+        "translation": "That is no problem.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "everyday interaction"
+      },
+      {
+        "text": "Das Büro ist nicht groß.",
+        "translation": "The office is not big.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "description"
+      }
+    ],
+    "sources": "citeturn23view2turn9view0turn18view2"
+  },
+  {
+    "order": 19,
+    "title": "Family Words & Possessive Articles",
+    "description": "Talk about family members and say whose person or thing something is using basic possessive forms.",
+    "category": "vocab",
+    "lexical_items": [
+      {
+        "text": "die Familie",
+        "translation": "family",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "Familien"
+      },
+      {
+        "text": "die Mutter",
+        "translation": "mother",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "Mütter"
+      },
+      {
+        "text": "der Vater",
+        "translation": "father",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Väter"
+      },
+      {
+        "text": "der Bruder",
+        "translation": "brother",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Brüder"
+      },
+      {
+        "text": "die Schwester",
+        "translation": "sister",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "Schwestern"
+      },
+      {
+        "text": "die Eltern",
+        "translation": "parents",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "Eltern"
+      },
+      {
+        "text": "das Kind",
+        "translation": "child",
+        "type": "vocab",
+        "gender": "n",
+        "plural_form": "Kinder"
+      },
+      {
+        "text": "mein / meine",
+        "translation": "my",
+        "type": "grammar_rule",
+        "pattern": "Use mein with masculine/neuter nouns and meine with feminine/plural nouns in the nominative."
+      },
+      {
+        "text": "dein / deine",
+        "translation": "your",
+        "type": "grammar_rule",
+        "pattern": "Use dein with masculine/neuter nouns and deine with feminine/plural nouns in the nominative."
+      },
+      {
+        "text": "Ihr / Ihre",
+        "translation": "your",
+        "type": "grammar_rule",
+        "pattern": "Use Ihr / Ihre for formal 'your'."
+      }
+    ],
+    "sources": "citeturn20view0turn9view0turn18view2"
+  },
+  {
+    "order": 20,
+    "title": "Professions, Study & Basic Workplaces",
+    "description": "Say what someone does, where someone works or studies, and understand a small everyday set of job nouns.",
+    "category": "vocab",
+    "lexical_items": [
+      {
+        "text": "der Beruf",
+        "translation": "profession / job",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Berufe"
+      },
+      {
+        "text": "der Student",
+        "translation": "student",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Studenten"
+      },
+      {
+        "text": "die Studentin",
+        "translation": "female student",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "Studentinnen"
+      },
+      {
+        "text": "der Lehrer",
+        "translation": "teacher",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Lehrer"
+      },
+      {
+        "text": "die Lehrerin",
+        "translation": "female teacher",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "Lehrerinnen"
+      },
+      {
+        "text": "das Büro",
+        "translation": "office",
+        "type": "vocab",
+        "gender": "n",
+        "plural_form": "Büros"
+      },
+      {
+        "text": "die Schule",
+        "translation": "school",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "Schulen"
+      },
+      {
+        "text": "Ich bin Lehrerin.",
+        "translation": "I am a teacher.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "self-description"
+      }
+    ],
+    "sources": "citeturn2view1turn21view0turn9view0turn18view2turn18view1"
+  },
+  {
+    "order": 21,
+    "title": "Days, Parts of the Day, Months, Seasons & Dates",
+    "description": "Name the calendar words needed for plans, routines, birthdays, travel, and the first simple date expressions.",
+    "category": "vocab",
+    "lexical_items": [
+      {
+        "text": "der Montag",
+        "translation": "Monday",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Montage"
+      },
+      {
+        "text": "der Dienstag",
+        "translation": "Tuesday",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Dienstage"
+      },
+      {
+        "text": "der Mittwoch",
+        "translation": "Wednesday",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Mittwoche"
+      },
+      {
+        "text": "der Donnerstag",
+        "translation": "Thursday",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Donnerstage"
+      },
+      {
+        "text": "der Freitag",
+        "translation": "Friday",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Freitage"
+      },
+      {
+        "text": "der Samstag",
+        "translation": "Saturday",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Samstage"
+      },
+      {
+        "text": "der Sonntag",
+        "translation": "Sunday",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Sonntage"
+      },
+      {
+        "text": "der Morgen",
+        "translation": "morning",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Morgen"
+      },
+      {
+        "text": "der Vormittag",
+        "translation": "late morning",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Vormittage"
+      },
+      {
+        "text": "der Nachmittag",
+        "translation": "afternoon",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Nachmittage"
+      },
+      {
+        "text": "der Abend",
+        "translation": "evening",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Abende"
+      },
+      {
+        "text": "die Nacht",
+        "translation": "night",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "Nächte"
+      },
+      {
+        "text": "der Monat",
+        "translation": "month",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Monate"
+      },
+      {
+        "text": "der Januar",
+        "translation": "January",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Januare"
+      },
+      {
+        "text": "der Februar",
+        "translation": "February",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Februare"
+      },
+      {
+        "text": "der März",
+        "translation": "March",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Märze"
+      },
+      {
+        "text": "der April",
+        "translation": "April",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Aprile"
+      },
+      {
+        "text": "der Mai",
+        "translation": "May",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Maie"
+      },
+      {
+        "text": "der Juni",
+        "translation": "June",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Junis"
+      },
+      {
+        "text": "der Juli",
+        "translation": "July",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Julis"
+      },
+      {
+        "text": "der August",
+        "translation": "August",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Auguste"
+      },
+      {
+        "text": "der September",
+        "translation": "September",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "September"
+      },
+      {
+        "text": "der Oktober",
+        "translation": "October",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Oktober"
+      },
+      {
+        "text": "der November",
+        "translation": "November",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "November"
+      },
+      {
+        "text": "der Dezember",
+        "translation": "December",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Dezember"
+      },
+      {
+        "text": "der Frühling",
+        "translation": "spring",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Frühlinge"
+      },
+      {
+        "text": "der Sommer",
+        "translation": "summer",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Sommer"
+      },
+      {
+        "text": "der Herbst",
+        "translation": "autumn",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Herbste"
+      },
+      {
+        "text": "der Winter",
+        "translation": "winter",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Winter"
+      },
+      {
+        "text": "das Datum",
+        "translation": "date",
+        "type": "vocab",
+        "gender": "n",
+        "plural_form": "Daten"
+      },
+      {
+        "text": "erste / zweite / dritte ...",
+        "translation": "ordinal numbers",
+        "type": "grammar_rule",
+        "pattern": "Use ordinal numbers for dates: am ersten Mai, am dritten Juli."
+      },
+      {
+        "text": "am + Tag/Datum/Tageszeit",
+        "translation": "on + day/date/part of day",
+        "type": "grammar_rule",
+        "pattern": "Use am with days, dates, and parts of the day."
+      },
+      {
+        "text": "im + Monat/Jahreszeit",
+        "translation": "in + month/season",
+        "type": "grammar_rule",
+        "pattern": "Use im with months and seasons."
+      }
+    ],
+    "sources": "citeturn20view3turn9view0turn19view0turn18view1"
+  },
+  {
+    "order": 22,
+    "title": "Telling Time & Making Appointments",
+    "description": "Tell the time, ask when something happens, and make or confirm simple appointments.",
+    "category": "phrase",
+    "lexical_items": [
+      {
+        "text": "Wie spät ist es?",
+        "translation": "What time is it?",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "asking the time"
+      },
+      {
+        "text": "Es ist drei Uhr.",
+        "translation": "It is three o'clock.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "telling the time"
+      },
+      {
+        "text": "um neun Uhr",
+        "translation": "at nine o'clock",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "time expression"
+      },
+      {
+        "text": "Wann hast du Zeit?",
+        "translation": "When do you have time?",
+        "type": "phrase",
+        "formality_level": "informal",
+        "context": "making plans"
+      },
+      {
+        "text": "Haben Sie am Montag Zeit?",
+        "translation": "Do you have time on Monday?",
+        "type": "phrase",
+        "formality_level": "formal",
+        "context": "making plans"
+      },
+      {
+        "text": "Wir treffen uns um sechs.",
+        "translation": "We'll meet at six.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "appointment making"
+      },
+      {
+        "text": "um + time",
+        "translation": "at",
+        "type": "grammar_rule",
+        "pattern": "Use um with clock times."
+      },
+      {
+        "text": "von ... bis",
+        "translation": "from ... to",
+        "type": "grammar_rule",
+        "pattern": "Use von ... bis to express a start and end time span."
+      }
+    ],
+    "sources": "citeturn23view2turn9view0turn19view0turn18view1"
+  },
+  {
+    "order": 23,
+    "title": "Daily Routine Verbs",
+    "description": "Describe a simple day using high-frequency routine verbs in the present tense.",
+    "category": "verb",
+    "lexical_items": [
+      {
+        "text": "aufstehen",
+        "translation": "to get up",
+        "type": "verb",
+        "auxiliary_verb": "sein",
+        "separable_prefix": "auf",
+        "conjugation_group": "regular"
+      },
+      {
+        "text": "anfangen",
+        "translation": "to begin",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "separable_prefix": "an",
+        "conjugation_group": "irregular"
+      },
+      {
+        "text": "arbeiten",
+        "translation": "to work",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "regular"
+      },
+      {
+        "text": "gehen",
+        "translation": "to go",
+        "type": "verb",
+        "auxiliary_verb": "sein",
+        "conjugation_group": "irregular"
+      },
+      {
+        "text": "Ich stehe um sieben Uhr auf.",
+        "translation": "I get up at seven o'clock.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "daily routine"
+      }
+    ],
+    "sources": "citeturn9view0turn19view0turn18view1"
+  },
+  {
+    "order": 24,
+    "title": "Modal Verbs müssen and wollen",
+    "description": "Express basic necessity and intention, especially for everyday obligations and simple plans.",
+    "category": "verb",
+    "lexical_items": [
+      {
+        "text": "müssen",
+        "translation": "to have to / must",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "irregular"
+      },
+      {
+        "text": "wollen",
+        "translation": "to want",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "irregular"
+      },
+      {
+        "text": "Ich muss morgen arbeiten.",
+        "translation": "I have to work tomorrow.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "daily plans"
+      },
+      {
+        "text": "Wir wollen ins Kino gehen.",
+        "translation": "We want to go to the cinema.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "making plans"
+      },
+      {
+        "text": "müssen / wollen + Infinitiv",
+        "translation": "modal verb with infinitive",
+        "type": "grammar_rule",
+        "pattern": "Subject + müssen/wollen + rest + infinitive"
+      }
+    ],
+    "sources": "citeturn20view3turn19view0turn18view1"
+  },
+  {
+    "order": 25,
+    "title": "Hobbies, Free Time & the Modal Verb können",
+    "description": "Talk about what you can do and what you like doing in your free time.",
+    "category": "verb",
+    "lexical_items": [
+      {
+        "text": "das Hobby",
+        "translation": "hobby",
+        "type": "vocab",
+        "gender": "n",
+        "plural_form": "Hobbys"
+      },
+      {
+        "text": "die Freizeit",
+        "translation": "free time",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "Freizeiten"
+      },
+      {
+        "text": "können",
+        "translation": "to be able to / can",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "irregular"
+      },
+      {
+        "text": "schwimmen",
+        "translation": "to swim",
+        "type": "verb",
+        "auxiliary_verb": "sein",
+        "conjugation_group": "regular"
+      },
+      {
+        "text": "tanzen",
+        "translation": "to dance",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "regular"
+      },
+      {
+        "text": "kochen",
+        "translation": "to cook",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "regular"
+      },
+      {
+        "text": "Ich kann gut schwimmen.",
+        "translation": "I can swim well.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "talking about abilities"
+      },
+      {
+        "text": "Modalverb + Infinitiv",
+        "translation": "modal verb with infinitive",
+        "type": "grammar_rule",
+        "pattern": "Subject + modal verb + rest + infinitive"
+      }
+    ],
+    "sources": "citeturn9view0turn18view2turn18view1"
+  },
+  {
+    "order": 26,
+    "title": "Food, Drinks, Preferences & mögen / möchten",
+    "description": "Name common food and drink categories and express likes, dislikes, and simple wants in cafés or at home.",
+    "category": "vocab",
+    "lexical_items": [
+      {
+        "text": "das Essen",
+        "translation": "food / meal",
+        "type": "vocab",
+        "gender": "n",
+        "plural_form": "—"
+      },
+      {
+        "text": "das Getränk",
+        "translation": "drink",
+        "type": "vocab",
+        "gender": "n",
+        "plural_form": "Getränke"
+      },
+      {
+        "text": "das Brot",
+        "translation": "bread",
+        "type": "vocab",
+        "gender": "n",
+        "plural_form": "Brote"
+      },
+      {
+        "text": "der Kaffee",
+        "translation": "coffee",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Kaffees"
+      },
+      {
+        "text": "der Tee",
+        "translation": "tea",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Tees"
+      },
+      {
+        "text": "das Wasser",
+        "translation": "water",
+        "type": "vocab",
+        "gender": "n",
+        "plural_form": "—"
+      },
+      {
+        "text": "mögen",
+        "translation": "to like",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "irregular"
+      },
+      {
+        "text": "möchten",
+        "translation": "would like",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "mixed"
+      }
+    ],
+    "sources": "citeturn20view1turn9view0turn19view0turn18view1"
+  },
+  {
+    "order": 27,
+    "title": "Ordering Food, Paying & Restaurant Expressions",
+    "description": "Use the fixed expressions needed to order, ask for the bill, and manage a very short café or restaurant exchange.",
+    "category": "phrase",
+    "lexical_items": [
+      {
+        "text": "Ich möchte einen Kaffee.",
+        "translation": "I'd like a coffee.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "at a café"
+      },
+      {
+        "text": "Was möchten Sie?",
+        "translation": "What would you like?",
+        "type": "phrase",
+        "formality_level": "formal",
+        "context": "at a café"
+      },
+      {
+        "text": "Für mich bitte ...",
+        "translation": "For me ..., please.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "ordering"
+      },
+      {
+        "text": "Noch etwas?",
+        "translation": "Anything else?",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "service encounter"
+      },
+      {
+        "text": "Die Rechnung, bitte.",
+        "translation": "The bill, please.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "paying"
+      },
+      {
+        "text": "Zahlen, bitte.",
+        "translation": "I'd like to pay, please.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "paying"
+      },
+      {
+        "text": "Das macht zehn Euro.",
+        "translation": "That comes to ten euros.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "paying"
+      }
+    ],
+    "sources": "citeturn20view1turn9view0turn19view0turn18view1"
+  },
+  {
+    "order": 28,
+    "title": "Shopping, Prices, Colors & Basic Adjectives",
+    "description": "Ask about prices, describe simple objects, and use colors and easy adjectives to choose or evaluate things.",
+    "category": "vocab",
+    "lexical_items": [
+      {
+        "text": "der Preis",
+        "translation": "price",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Preise"
+      },
+      {
+        "text": "teuer",
+        "translation": "expensive",
+        "type": "vocab"
+      },
+      {
+        "text": "billig",
+        "translation": "cheap",
+        "type": "vocab"
+      },
+      {
+        "text": "schön",
+        "translation": "beautiful / nice",
+        "type": "vocab"
+      },
+      {
+        "text": "groß",
+        "translation": "big / tall",
+        "type": "vocab"
+      },
+      {
+        "text": "klein",
+        "translation": "small",
+        "type": "vocab"
+      },
+      {
+        "text": "rot",
+        "translation": "red",
+        "type": "vocab"
+      },
+      {
+        "text": "blau",
+        "translation": "blue",
+        "type": "vocab"
+      },
+      {
+        "text": "grün",
+        "translation": "green",
+        "type": "vocab"
+      },
+      {
+        "text": "gelb",
+        "translation": "yellow",
+        "type": "vocab"
+      },
+      {
+        "text": "schwarz",
+        "translation": "black",
+        "type": "vocab"
+      },
+      {
+        "text": "weiß",
+        "translation": "white",
+        "type": "vocab"
+      },
+      {
+        "text": "Wie viel kostet das?",
+        "translation": "How much does that cost?",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "shopping"
+      },
+      {
+        "text": "Das ist sehr schön.",
+        "translation": "That is very nice.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "shopping / evaluation"
+      },
+      {
+        "text": "Adjektiv mit sein",
+        "translation": "predicate adjective with 'to be'",
+        "type": "grammar_rule",
+        "pattern": "Use sein + adjective: Das ist schön. / Die Wohnung ist groß."
+      }
+    ],
+    "sources": "citeturn20view1turn9view0turn18view2"
+  },
+  {
+    "order": 29,
+    "title": "Home, Rooms & Furniture",
+    "description": "Describe where you live and name the most important rooms and furniture items in simple housing conversations.",
+    "category": "vocab",
+    "lexical_items": [
+      {
+        "text": "die Wohnung",
+        "translation": "apartment",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "Wohnungen"
+      },
+      {
+        "text": "das Haus",
+        "translation": "house",
+        "type": "vocab",
+        "gender": "n",
+        "plural_form": "Häuser"
+      },
+      {
+        "text": "das Zimmer",
+        "translation": "room",
+        "type": "vocab",
+        "gender": "n",
+        "plural_form": "Zimmer"
+      },
+      {
+        "text": "die Küche",
+        "translation": "kitchen",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "Küchen"
+      },
+      {
+        "text": "das Bad",
+        "translation": "bathroom",
+        "type": "vocab",
+        "gender": "n",
+        "plural_form": "Bäder"
+      },
+      {
+        "text": "das Bett",
+        "translation": "bed",
+        "type": "vocab",
+        "gender": "n",
+        "plural_form": "Betten"
+      },
+      {
+        "text": "der Stuhl",
+        "translation": "chair",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Stühle"
+      },
+      {
+        "text": "der Schrank",
+        "translation": "cupboard / wardrobe",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Schränke"
+      }
+    ],
+    "sources": "citeturn2view1turn9view0turn18view1"
+  },
+  {
+    "order": 30,
+    "title": "The Accusative Case & Common Accusative Verbs",
+    "description": "Use the accusative for direct objects with the most frequent beginner verbs and article forms.",
+    "category": "grammar",
+    "lexical_items": [
+      {
+        "text": "den / die / das",
+        "translation": "definite articles in the accusative",
+        "type": "grammar_rule",
+        "pattern": "den + masculine noun / die + feminine noun / das + neuter noun"
+      },
+      {
+        "text": "einen / eine / ein",
+        "translation": "indefinite articles in the accusative",
+        "type": "grammar_rule",
+        "pattern": "einen + masculine noun / eine + feminine noun / ein + neuter noun"
+      },
+      {
+        "text": "brauchen",
+        "translation": "to need",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "regular"
+      },
+      {
+        "text": "nehmen",
+        "translation": "to take",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "irregular"
+      },
+      {
+        "text": "kaufen",
+        "translation": "to buy",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "conjugation_group": "regular"
+      },
+      {
+        "text": "Ich brauche einen Tisch.",
+        "translation": "I need a table.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "shopping / furniture"
+      },
+      {
+        "text": "Wir kaufen das Brot.",
+        "translation": "We are buying the bread.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "shopping"
+      }
+    ],
+    "sources": "citeturn23view2turn9view0turn19view0turn18view1"
+  },
+  {
+    "order": 31,
+    "title": "Places in Town, Orientation & Transportation",
+    "description": "Name common places and means of transport, and understand the core vocabulary for navigating a city.",
+    "category": "vocab",
+    "lexical_items": [
+      {
+        "text": "die Post",
+        "translation": "post office",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "Postämter"
+      },
+      {
+        "text": "der Bahnhof",
+        "translation": "train station",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Bahnhöfe"
+      },
+      {
+        "text": "der Supermarkt",
+        "translation": "supermarket",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Supermärkte"
+      },
+      {
+        "text": "die Straße",
+        "translation": "street",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "Straßen"
+      },
+      {
+        "text": "der Bus",
+        "translation": "bus",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Busse"
+      },
+      {
+        "text": "die U-Bahn",
+        "translation": "subway",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "U-Bahnen"
+      },
+      {
+        "text": "zu Fuß",
+        "translation": "on foot",
+        "type": "vocab"
+      },
+      {
+        "text": "links",
+        "translation": "left",
+        "type": "vocab"
+      },
+      {
+        "text": "rechts",
+        "translation": "right",
+        "type": "vocab"
+      },
+      {
+        "text": "geradeaus",
+        "translation": "straight ahead",
+        "type": "vocab"
+      }
+    ],
+    "sources": "citeturn20view1turn21view0turn19view0turn18view1"
+  },
+  {
+    "order": 32,
+    "title": "Asking for Directions & Simple Route Phrases",
+    "description": "Ask where a place is and understand very simple route instructions in shops, stations, and cities.",
+    "category": "phrase",
+    "lexical_items": [
+      {
+        "text": "Wo ist ...?",
+        "translation": "Where is ...?",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "asking for directions"
+      },
+      {
+        "text": "Gibt es hier ...?",
+        "translation": "Is there a ... here?",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "asking in town"
+      },
+      {
+        "text": "Entschuldigung, wo ist der Bahnhof?",
+        "translation": "Excuse me, where is the station?",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "asking for directions"
+      },
+      {
+        "text": "Gehen Sie geradeaus.",
+        "translation": "Go straight ahead.",
+        "type": "phrase",
+        "formality_level": "formal",
+        "context": "giving directions"
+      },
+      {
+        "text": "Dann links.",
+        "translation": "Then left.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "giving directions"
+      },
+      {
+        "text": "Dann rechts.",
+        "translation": "Then right.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "giving directions"
+      },
+      {
+        "text": "Das ist gleich hier.",
+        "translation": "It's right here.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "giving directions"
+      },
+      {
+        "text": "es gibt",
+        "translation": "there is / there are",
+        "type": "grammar_rule",
+        "pattern": "Use es gibt to say that something exists or is available."
+      }
+    ],
+    "sources": "citeturn20view1turn19view0turn18view1"
+  },
+  {
+    "order": 33,
+    "title": "Separable Verbs & the Sentence Bracket",
+    "description": "Understand that some common verbs split in the present tense and send their prefix to the end of the clause.",
+    "category": "grammar",
+    "lexical_items": [
+      {
+        "text": "trennbares Verb",
+        "translation": "separable verb",
+        "type": "grammar_rule",
+        "pattern": "In main clauses the prefix moves to the end: aufstehen → Ich stehe um sieben auf."
+      },
+      {
+        "text": "einkaufen",
+        "translation": "to shop",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "separable_prefix": "ein",
+        "conjugation_group": "regular"
+      },
+      {
+        "text": "anrufen",
+        "translation": "to call",
+        "type": "verb",
+        "auxiliary_verb": "haben",
+        "separable_prefix": "an",
+        "conjugation_group": "regular"
+      },
+      {
+        "text": "mitkommen",
+        "translation": "to come along",
+        "type": "verb",
+        "auxiliary_verb": "sein",
+        "separable_prefix": "mit",
+        "conjugation_group": "regular"
+      },
+      {
+        "text": "einsteigen",
+        "translation": "to get on / board",
+        "type": "verb",
+        "auxiliary_verb": "sein",
+        "separable_prefix": "ein",
+        "conjugation_group": "irregular"
+      },
+      {
+        "text": "Ich rufe dich später an.",
+        "translation": "I'll call you later.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "making plans"
+      }
+    ],
+    "sources": "citeturn9view0turn19view0turn18view1"
+  },
+  {
+    "order": 34,
+    "title": "Body Parts, Symptoms & Basic Doctor Phrases",
+    "description": "Name the most useful body parts and say in a very simple way what hurts or what is wrong.",
+    "category": "phrase",
+    "lexical_items": [
+      {
+        "text": "der Kopf",
+        "translation": "head",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Köpfe"
+      },
+      {
+        "text": "der Bauch",
+        "translation": "stomach / belly",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Bäuche"
+      },
+      {
+        "text": "der Rücken",
+        "translation": "back",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Rücken"
+      },
+      {
+        "text": "der Arm",
+        "translation": "arm",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Arme"
+      },
+      {
+        "text": "das Bein",
+        "translation": "leg",
+        "type": "vocab",
+        "gender": "n",
+        "plural_form": "Beine"
+      },
+      {
+        "text": "die Hand",
+        "translation": "hand",
+        "type": "vocab",
+        "gender": "f",
+        "plural_form": "Hände"
+      },
+      {
+        "text": "der Fuß",
+        "translation": "foot",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Füße"
+      },
+      {
+        "text": "der Mund",
+        "translation": "mouth",
+        "type": "vocab",
+        "gender": "m",
+        "plural_form": "Münder"
+      },
+      {
+        "text": "Ich muss zum Arzt.",
+        "translation": "I have to go to the doctor.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "health problem"
+      },
+      {
+        "text": "Mein Bein tut weh.",
+        "translation": "My leg hurts.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "at the doctor"
+      },
+      {
+        "text": "Ich bin krank.",
+        "translation": "I am sick.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "general health"
+      }
+    ],
+    "sources": "citeturn26view1turn18view1"
+  },
+  {
+    "order": 35,
+    "title": "Invitations, Plans & Accepting or Refusing",
+    "description": "Make simple social plans, invite someone, and answer with easy acceptance or refusal formulas.",
+    "category": "phrase",
+    "lexical_items": [
+      {
+        "text": "Hast du Zeit?",
+        "translation": "Do you have time?",
+        "type": "phrase",
+        "formality_level": "informal",
+        "context": "making plans"
+      },
+      {
+        "text": "Wollen wir ins Café gehen?",
+        "translation": "Shall we go to the café?",
+        "type": "phrase",
+        "formality_level": "informal",
+        "context": "suggestion"
+      },
+      {
+        "text": "Ja, gern.",
+        "translation": "Yes, gladly.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "accepting"
+      },
+      {
+        "text": "Gerne.",
+        "translation": "Gladly.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "accepting"
+      },
+      {
+        "text": "Tut mir leid, ich kann nicht.",
+        "translation": "Sorry, I can't.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "refusing"
+      },
+      {
+        "text": "Vielleicht später.",
+        "translation": "Maybe later.",
+        "type": "phrase",
+        "formality_level": "neutral",
+        "context": "postponing"
+      },
+      {
+        "text": "Bis später!",
+        "translation": "See you later!",
+        "type": "phrase",
+        "formality_level": "informal",
+        "context": "ending a plan"
+      }
+    ],
+    "sources": "citeturn23view0turn9view0turn19view0turn18view1"
+  }
+]

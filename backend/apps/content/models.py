@@ -311,3 +311,62 @@ class TablePart(TimeStampedModel):
         col_count = len(self.headers) if self.headers else 0
         row_count = len(self.rows) if self.rows else 0
         return f"Table: {col_count} cols × {row_count} rows"
+
+
+class ImportStatus(models.TextChoices):
+    PENDING = "pending", "Pending"
+    PROCESSING = "processing", "Processing"
+    COMPLETED = "completed", "Completed"
+    FAILED = "failed", "Failed"
+
+
+def _import_upload_path(instance: "ContentImport", filename: str) -> str:
+    return f"content_imports/{instance.level_code}/{filename}"
+
+
+class ContentImport(TimeStampedModel):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    level_code = models.CharField(
+        max_length=10,
+        db_index=True,
+        help_text="Level code, e.g. A1.1, A1.2, A2.1",
+    )
+    pack_slug = models.SlugField(
+        max_length=100,
+        help_text="Pack slug (created automatically if it doesn't exist)",
+    )
+    topics_file = models.FileField(
+        upload_to=_import_upload_path,
+        help_text="Phase 1 JSON: topic list with lexical items",
+    )
+    pages_file = models.FileField(
+        upload_to=_import_upload_path,
+        help_text="Phase 2 JSON: teaching content (pages + parts)",
+    )
+    exercises_file = models.FileField(
+        upload_to=_import_upload_path,
+        blank=True,
+        help_text="Phase 3 JSON: practice exercises (optional — can import later)",
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=ImportStatus.choices,
+        default=ImportStatus.PENDING,
+        db_index=True,
+    )
+    result_log = models.TextField(
+        blank=True,
+        default="",
+        help_text="Import results, warnings, and errors",
+    )
+    items_created = models.PositiveIntegerField(default=0)
+    pages_created = models.PositiveIntegerField(default=0)
+    exercises_created = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "content import"
+        verbose_name_plural = "content imports"
+
+    def __str__(self) -> str:
+        return f"{self.level_code} / {self.pack_slug} — {self.get_status_display()}"

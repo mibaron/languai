@@ -21,7 +21,7 @@ export function ExplainItemsOverlay({
 }: ExplainItemsOverlayProps) {
   return (
     <div className="fixed inset-0 z-50 mb-13 flex-row items-end justify-center bg-black/50">
-      <div className="fixed bottom-13 w-full border-t bg-black px-4 py-4">
+      <div className="fixed bottom-13 w-full max-w-md justify-self-center border-t bg-black px-4 py-4">
         <div className="mb-8 flex flex-row justify-between">
           <div className="text-brand flex items-center gap-1.5 text-xs font-medium">
             <Sparkles size={14} /> Tap any item for an AI explanation{" "}
