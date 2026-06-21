@@ -26,6 +26,8 @@ services:
         condition: service_healthy
     expose:
       - "8000"
+    volumes:
+      - backend_media:/app/media
 
   frontend:
     build:
@@ -63,5 +65,6 @@ networks:
 
 volumes:
   pgdata:
+  backend_media:
   caddy_data:
   caddy_config:

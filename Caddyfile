@@ -11,6 +11,9 @@ langu-ai.de, www.langu-ai.de {
 	handle /static/* {
 		reverse_proxy backend:8000
 	}
+	handle /media/* {
+		reverse_proxy backend:8000
+	}
 	handle {
 		reverse_proxy frontend:3000
 	}
