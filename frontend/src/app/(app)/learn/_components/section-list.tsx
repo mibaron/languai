@@ -6,7 +6,7 @@ export function SectionList({ sections, onOpenSection }: SectionListProps) {
     <div className="flex-1 overflow-y-auto">
       {sections.map((section) => (
         <SectionCard
-          key={section.title}
+          key={section.id}
           section={section}
           onOpen={onOpenSection}
         />

@@ -2,9 +2,10 @@
 
 import { useCallback, useMemo, useState } from "react";
 
+import type { SectionList } from "@/lib/api/orval/api/generated/model";
 import { usePacksSubscriptionsList } from "@/lib/api/orval/api/generated/packs/packs";
-import { BOOKS } from "@/data/books";
-import type { CategoryId, LevelCode, Section } from "@/types/content";
+import { getSectionsListQueryKey, useSectionsList } from "@/lib/api/orval/api/generated/sections/sections";
+import type { CategoryId } from "@/types/content";
 
 import { useLearnPages } from "./use-learn-pages";
 
@@ -17,7 +18,7 @@ export function useLearnTab() {
     number | null
   >(null);
 
-  const { data: subscriptions, isLoading } = usePacksSubscriptionsList({
+  const { data: subscriptions, isLoading: isLoadingPacks } = usePacksSubscriptionsList({
     status: "active",
   });
 
@@ -30,12 +31,15 @@ export function useLearnTab() {
     return subscriptions[0].pack;
   }, [subscriptions, activePackId]);
 
-  const levelCode = activePack?.level_code as LevelCode | undefined;
+  const levelCode = activePack?.level_code;
 
-  const sections: Section[] = useMemo(() => {
-    if (!levelCode || !BOOKS[levelCode]) return [];
-    return BOOKS[levelCode][category] ?? [];
-  }, [levelCode, category]);
+  const sectionsParams = { level__code: levelCode, category, ordering: "order" };
+  const { data: sectionsData, isLoading: isLoadingSections } = useSectionsList(
+    sectionsParams,
+    { query: { queryKey: getSectionsListQueryKey(sectionsParams), enabled: !!levelCode } },
+  );
+
+  const sections: SectionList[] = sectionsData?.results ?? [];
 
   const selectedSection = useMemo(
     () =>
@@ -59,8 +63,8 @@ export function useLearnTab() {
   }, []);
 
   const openSection = useCallback(
-    (section: Section) => {
-      const idx = sections.indexOf(section);
+    (section: SectionList) => {
+      const idx = sections.findIndex((s) => s.id === section.id);
       if (idx !== -1) setSelectedSectionIndex(idx);
     },
     [sections],
@@ -88,7 +92,7 @@ export function useLearnTab() {
     activePack,
     activePackId: activePack?.id ?? null,
     subscriptions: subscriptions ?? [],
-    isLoading,
+    isLoading: isLoadingPacks || isLoadingSections,
     sections,
     selectedSection,
     selectedSectionIndex,

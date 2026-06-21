@@ -27,7 +27,7 @@ const typeConfig = {
 } as const;
 
 export function SectionCard({ section, onOpen }: SectionCardProps) {
-  const config = typeConfig[section.type] || typeConfig.notes;
+  const config = typeConfig[section.content_type] || typeConfig.notes;
   const Icon = config.icon;
 
   return (
@@ -48,7 +48,7 @@ export function SectionCard({ section, onOpen }: SectionCardProps) {
           {section.title}
         </div>
         <span className="text-xs text-muted-foreground/70">
-          {section.items.length} {config.itemLabel}
+          {section.item_count} {config.itemLabel}
         </span>
       </div>
       <ChevronRight size={16} className="text-muted-foreground/30" />

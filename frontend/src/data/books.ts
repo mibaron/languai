@@ -1,4 +1,10 @@
-import type { BooksData } from "@/types/content";
+// Retired from active use — kept as reference data for migration to database.
+// See seed_content management command for the DB import process.
+
+type SectionItem = { order: number; cells: string[] };
+type Section = { title: string; type: string; note?: string; note2?: string; headers?: string[]; items: SectionItem[] };
+type LevelContent = Record<string, Section[]>;
+type BooksData = Record<string, LevelContent>;
 
 export const BOOKS: BooksData = {
   "A1.1": {

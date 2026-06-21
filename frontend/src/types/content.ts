@@ -20,10 +20,6 @@ export interface Section {
   items: SectionItem[];
 }
 
-export type LevelContent = Record<CategoryId, Section[]>;
-
-export type BooksData = Record<LevelCode, LevelContent>;
-
 export interface CategoryTab {
   id: CategoryId;
   label: string;

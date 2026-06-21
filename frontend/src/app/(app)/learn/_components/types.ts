@@ -1,5 +1,5 @@
-import type { Pack, PageDetail, PageList, UserPackSubscription } from "@/lib/api/orval/api/generated/model";
-import type { CategoryId, Section } from "@/types/content";
+import type { Pack, PageDetail, PageList, SectionList, UserPackSubscription } from "@/lib/api/orval/api/generated/model";
+import type { CategoryId } from "@/types/content";
 
 export interface PackHeaderProps {
   activePack: Pack | null;
@@ -14,13 +14,13 @@ export interface CategoryTabsProps {
 }
 
 export interface SectionCardProps {
-  section: Section;
-  onOpen: (section: Section) => void;
+  section: SectionList;
+  onOpen: (section: SectionList) => void;
 }
 
 export interface SectionListProps {
-  sections: Section[];
-  onOpenSection: (section: Section) => void;
+  sections: SectionList[];
+  onOpenSection: (section: SectionList) => void;
 }
 
 export interface PackSelectorDrawerProps {
@@ -48,7 +48,7 @@ export interface SectionDetailHeaderProps {
 }
 
 export interface SectionDetailViewProps {
-  section: Section;
+  sectionId: string;
   sectionIndex: number;
   totalSections: number;
   levelCode: string;

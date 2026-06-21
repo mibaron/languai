@@ -2,7 +2,34 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import type { Section } from "@/types/content";
+import type { SectionDetail } from "@/lib/api/orval/api/generated/model";
+
+const mockSectionDetail: SectionDetail = {
+  id: "sec-1",
+  level: "level-1",
+  level_code: "A1.1",
+  category: "grammar",
+  title: "Personal Pronouns — Nominativ",
+  order: 0,
+  content_type: "table",
+  note: "",
+  note2: "",
+  headers: ["Pronomen", "English"],
+  items: [
+    { id: "item-1", order: 0, cells: ["ich", "I"] },
+    { id: "item-2", order: 1, cells: ["du", "you"] },
+  ],
+  created_by: "admin",
+  created_at: "2024-01-01T00:00:00Z",
+  updated_at: "2024-01-01T00:00:00Z",
+};
+
+vi.mock("@/lib/api/orval/api/generated/sections/sections", () => ({
+  useSectionsRetrieve: () => ({
+    data: mockSectionDetail,
+    isLoading: false,
+  }),
+}));
 
 vi.mock("@/components/learning/section-card", () => ({
   SectionCard: ({
@@ -10,7 +37,7 @@ vi.mock("@/components/learning/section-card", () => ({
     levelCode,
     category,
   }: {
-    section: Section;
+    section: { title: string };
     levelCode: string;
     category: string;
   }) => (
@@ -33,18 +60,8 @@ vi.mock("@/contexts/explain-mode-context", () => ({
 
 import { SectionDetailView } from "./section-detail-view";
 
-const mockSection: Section = {
-  title: "Personal Pronouns — Nominativ",
-  type: "table",
-  headers: ["Pronomen", "English"],
-  items: [
-    { order: 0, cells: ["ich", "I"] },
-    { order: 1, cells: ["du", "you"] },
-  ],
-};
-
 const defaultProps = {
-  section: mockSection,
+  sectionId: "sec-1",
   sectionIndex: 1,
   totalSections: 5,
   levelCode: "A1.1",

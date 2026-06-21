@@ -89,7 +89,7 @@ export function LearnTabContent() {
     if (selectedSection && selectedSectionIndex !== null) {
       return (
         <SectionDetailView
-          section={selectedSection}
+          sectionId={selectedSection.id}
           sectionIndex={selectedSectionIndex}
           totalSections={sections.length}
           levelCode={activePack.level_code}

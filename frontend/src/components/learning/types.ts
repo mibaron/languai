@@ -17,13 +17,6 @@ export interface NavbarProps {
   onSearchChange: (value: string) => void;
 }
 
-export interface ContentPanelProps {
-  currentLevel: LevelCode;
-  currentCategory: CategoryId;
-  onLevelChange: (level: LevelCode) => void;
-  onCategoryChange: (category: CategoryId) => void;
-}
-
 export interface ContentFilterDrawerProps {
   currentLevel: LevelCode;
   currentCategory: CategoryId;

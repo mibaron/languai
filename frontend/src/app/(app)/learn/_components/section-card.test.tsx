@@ -1,27 +1,28 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import type { Section } from "@/types/content";
+import type { SectionList } from "@/lib/api/orval/api/generated/model";
 
 import { SectionCard } from "./section-card";
 
-const tableSection: Section = {
+const tableSection: SectionList = {
+  id: "1",
+  level_code: "A1.1",
+  category: "grammar",
   title: "Personal Pronouns",
-  type: "table",
-  headers: ["Pronoun", "English"],
-  items: [
-    { order: 0, cells: ["ich", "I"] },
-    { order: 1, cells: ["du", "you"] },
-  ],
+  order: 0,
+  content_type: "table",
+  item_count: 2,
 };
 
-const gridSection: Section = {
+const gridSection: SectionList = {
+  id: "2",
+  level_code: "A1.1",
+  category: "vocab",
   title: "Greetings",
-  type: "grid",
-  items: Array.from({ length: 5 }, (_, i) => ({
-    order: i,
-    cells: ["hello", "hallo"],
-  })),
+  order: 0,
+  content_type: "grid",
+  item_count: 5,
 };
 
 describe("SectionCard", () => {
