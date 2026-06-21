@@ -3,6 +3,7 @@ import type { QueryClient } from "@tanstack/react-query";
 import { getAuthMeRetrieveQueryKey } from "@/lib/api/orval/api/generated/auth/auth";
 import { getExercisesAvailableTypesRetrieveQueryKey } from "@/lib/api/orval/api/generated/exercises/exercises";
 import { getPacksSubscriptionsListQueryKey } from "@/lib/api/orval/api/generated/packs/packs";
+import { getProgressPacksRetrieveQueryKey } from "@/lib/api/orval/api/generated/progress/progress";
 
 function invalidatePackPages(qc: QueryClient, packId: string) {
   qc.invalidateQueries({
@@ -17,6 +18,9 @@ export function onProgressChanged(qc: QueryClient, packId: string) {
   invalidatePackPages(qc, packId);
   qc.invalidateQueries({
     queryKey: getExercisesAvailableTypesRetrieveQueryKey(),
+  });
+  qc.invalidateQueries({
+    queryKey: getProgressPacksRetrieveQueryKey(packId),
   });
 }
 

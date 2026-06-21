@@ -13,6 +13,7 @@ import { PageListView } from "./page-list-view";
 import { SectionDetailView } from "./section-detail-view";
 import { SectionList } from "./section-list";
 import { useLearnTab } from "../_hooks/use-learn-tab";
+import { usePackProgress } from "../_hooks/use-pack-progress";
 
 export function LearnTabContent() {
   const {
@@ -37,6 +38,8 @@ export function LearnTabContent() {
     closeStats,
     learnPages,
   } = useLearnTab();
+
+  const packProgress = usePackProgress(activePack?.id ?? null);
 
   if (isLoading) {
     return (
@@ -115,7 +118,7 @@ export function LearnTabContent() {
     <div className="relative flex flex-1 flex-col overflow-hidden">
       <PackHeader
         activePack={activePack}
-        overallProgress={0}
+        overallProgress={packProgress.overallPercent}
         onOpenPackDrawer={openPackDrawer}
         onOpenStats={openStats}
       />
@@ -136,6 +139,10 @@ export function LearnTabContent() {
           pack={activePack}
           open={statsDrawerOpen}
           onClose={closeStats}
+          totalPages={packProgress.totalPages}
+          studiedPages={packProgress.studiedPages}
+          overallPercent={packProgress.overallPercent}
+          categories={packProgress.categories}
         />
       )}
     </div>

@@ -31,7 +31,7 @@ from apps.packs.views import (
     PackUnsubscribeView,
     UserPackSubscriptionListView,
 )
-from apps.progress.views import MarkPageStudiedView, ResetPackProgressView, SectionProgressViewSet
+from apps.progress.views import MarkPageStudiedView, PackProgressView, ResetPackProgressView, SectionProgressViewSet
 from apps.users.views import (
     ChangePasswordView,
     ForgotPasswordView,
@@ -104,6 +104,11 @@ urlpatterns = [
         "progress/pages/<uuid:page_id>/mark-studied/",
         MarkPageStudiedView.as_view(),
         name="page-mark-studied",
+    ),
+    path(
+        "progress/packs/<uuid:pack_id>/",
+        PackProgressView.as_view(),
+        name="pack-progress",
     ),
     path(
         "progress/packs/<uuid:pack_id>/reset/",

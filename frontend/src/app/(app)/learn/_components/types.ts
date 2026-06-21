@@ -34,6 +34,16 @@ export interface PackStatsDrawerProps {
   pack: Pack;
   open: boolean;
   onClose: () => void;
+  totalPages: number;
+  studiedPages: number;
+  overallPercent: number;
+  categories: {
+    key: string;
+    label: string;
+    total: number;
+    studied: number;
+    percent: number;
+  }[];
 }
 
 export interface SectionDetailHeaderProps {

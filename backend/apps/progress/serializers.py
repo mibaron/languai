@@ -3,6 +3,17 @@ from rest_framework import serializers
 from .models import SectionProgress, UserPageProgress
 
 
+class CategoryProgressSerializer(serializers.Serializer):
+    total = serializers.IntegerField()
+    studied = serializers.IntegerField()
+
+
+class PackProgressSerializer(serializers.Serializer):
+    total_pages = serializers.IntegerField()
+    studied_pages = serializers.IntegerField()
+    categories = serializers.DictField(child=CategoryProgressSerializer())
+
+
 class SectionProgressSerializer(serializers.ModelSerializer):
     section_title = serializers.CharField(source="section.title", read_only=True)
 

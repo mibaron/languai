@@ -5,22 +5,21 @@ import { ProgressRing } from "@/components/composites/progress-ring";
 
 import type { PackStatsDrawerProps } from "./types";
 
-const categoryLabels = [
-  { label: "Grammar", key: "grammar" },
-  { label: "Vocabulary", key: "vocabulary" },
-  { label: "Verbs", key: "verbs" },
-  { label: "Phrases", key: "phrases" },
-] as const;
-
 export function PackStatsDrawer({
   pack,
   open,
   onClose,
+  totalPages,
+  studiedPages,
+  overallPercent,
+  categories,
 }: PackStatsDrawerProps) {
+  const remaining = totalPages - studiedPages;
+
   return (
     <BottomDrawer open={open} onClose={onClose} className="max-h-[80%] overflow-y-auto">
       <div className="flex items-center gap-4 border-b border-border/50 px-5 pb-3.5 pt-2">
-        <ProgressRing value={0} size={56} strokeWidth={4} />
+        <ProgressRing value={overallPercent} size={56} strokeWidth={4} />
         <div>
           <div className="text-base font-bold tracking-[-0.02em] text-foreground">
             {pack.title}
@@ -30,44 +29,43 @@ export function PackStatsDrawer({
           </div>
           <div className="mt-1.5 flex gap-2.5">
             <span className="text-[11px] font-medium text-green-500">
-              0 done
-            </span>
-            <span className="text-[11px] font-medium text-brand">
-              0 in progress
+              {studiedPages} studied
             </span>
             <span className="text-[11px] font-medium text-muted-foreground">
-              0 not started
+              {remaining} remaining
             </span>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 px-5 py-4">
-        {categoryLabels.map((cat) => (
-          <div key={cat.key}>
-            <div className="mb-[7px] flex items-baseline justify-between">
-              <span className="text-[13px] font-medium text-foreground">
-                {cat.label}
-              </span>
-              <span className="text-[11px] text-muted-foreground">
-                0/0 sections &middot; 0%
-              </span>
+      {categories.length > 0 && (
+        <div className="flex flex-col gap-4 px-5 py-4">
+          {categories.map((cat) => (
+            <div key={cat.key}>
+              <div className="mb-[7px] flex items-baseline justify-between">
+                <span className="text-[13px] font-medium text-foreground">
+                  {cat.label}
+                </span>
+                <span className="text-[11px] text-muted-foreground">
+                  {cat.studied}/{cat.total} items &middot; {cat.percent}%
+                </span>
+              </div>
+              <div className="h-[5px] overflow-hidden rounded-full bg-muted">
+                <div
+                  className="h-full rounded-full bg-brand transition-all duration-300"
+                  style={{ width: `${cat.percent}%` }}
+                />
+              </div>
             </div>
-            <div className="h-[5px] overflow-hidden rounded-full bg-muted">
-              <div
-                className="h-full rounded-full bg-brand"
-                style={{ width: "0%" }}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       <div className="mx-5 mb-5 flex rounded-xl bg-muted/50 py-3.5">
         {[
-          { val: pack.grammar_count, label: "Grammar rules" },
-          { val: pack.vocab_count, label: "Vocab words" },
-          { val: pack.exercise_count, label: "Exercises" },
+          { val: totalPages, label: "Pages" },
+          { val: studiedPages, label: "Studied" },
+          { val: `${overallPercent}%`, label: "Complete" },
         ].map((item, i) => (
           <div
             key={item.label}

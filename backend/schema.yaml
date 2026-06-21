@@ -1259,6 +1259,52 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/v1/progress/packs/{pack_id}/:
+    get:
+      operationId: progress_packs_retrieve
+      summary: Get progress stats for a pack
+      parameters:
+      - in: path
+        name: pack_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - progress
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackProgress'
+          description: ''
+  /api/v1/progress/packs/{pack_id}/reset/:
+    post:
+      operationId: progress_packs_reset_create
+      summary: Reset all page progress for a pack
+      parameters:
+      - in: path
+        name: pack_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - progress
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResetPackProgressResponse'
+          description: ''
   /api/v1/progress/pages/{page_id}/mark-studied/:
     post:
       operationId: progress_pages_mark_studied_create
@@ -1868,6 +1914,16 @@ components:
         * `vocab` - Wortschatz
         * `verbs` - Verben
         * `phrases` - Phrasen
+    CategoryProgress:
+      type: object
+      properties:
+        total:
+          type: integer
+        studied:
+          type: integer
+      required:
+      - studied
+      - total
     ChangePasswordRequest:
       type: object
       properties:
@@ -2471,6 +2527,21 @@ components:
       - subscriber_count
       - title
       - vocab_count
+    PackProgress:
+      type: object
+      properties:
+        total_pages:
+          type: integer
+        studied_pages:
+          type: integer
+        categories:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CategoryProgress'
+      required:
+      - categories
+      - studied_pages
+      - total_pages
     PageDetail:
       type: object
       properties:
@@ -2896,6 +2967,13 @@ components:
       required:
       - password
       - username
+    ResetPackProgressResponse:
+      type: object
+      properties:
+        deleted_count:
+          type: integer
+      required:
+      - deleted_count
     ResetPasswordRequest:
       type: object
       properties:

@@ -7,7 +7,8 @@ from rest_framework.views import APIView
 
 from apps.progress.models import SectionProgress, UserPageProgress
 
-from .serializers import SectionProgressSerializer, UserPageProgressSerializer
+from .selectors import get_pack_progress
+from .serializers import PackProgressSerializer, SectionProgressSerializer, UserPageProgressSerializer
 from .services import reset_pack_progress
 
 
@@ -54,6 +55,19 @@ class MarkPageStudiedView(APIView):
             UserPageProgressSerializer(progress).data,
             status=status.HTTP_200_OK,
         )
+
+
+class PackProgressView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @extend_schema(
+        summary="Get progress stats for a pack",
+        tags=["progress"],
+        responses={200: PackProgressSerializer},
+    )
+    def get(self, request: Request, pack_id: str) -> Response:
+        progress = get_pack_progress(user=request.user, pack_id=pack_id)
+        return Response(PackProgressSerializer(progress).data, status=status.HTTP_200_OK)
 
 
 class ResetPackProgressResponseSerializer(serializers.Serializer):

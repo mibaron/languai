@@ -17,6 +17,7 @@ import type {
 } from "@tanstack/react-query";
 
 import type {
+  PackProgress,
   PaginatedSectionProgressList,
   PatchedSectionProgressRequest,
   ProgressListParams,
@@ -429,6 +430,71 @@ export const useProgressDestroy = <TError = unknown, TContext = unknown>(options
 
   return useMutation(mutationOptions);
 };
+/**
+ * @summary Get progress stats for a pack
+ */
+export const progressPacksRetrieve = (packId: string, signal?: AbortSignal) => {
+  return axiosInstance<PackProgress>({
+    url: `/api/v1/progress/packs/${packId}/`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getProgressPacksRetrieveQueryKey = (packId?: string) => {
+  return [`/api/v1/progress/packs/${packId}/`] as const;
+};
+
+export const getProgressPacksRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof progressPacksRetrieve>>,
+  TError = unknown,
+>(
+  packId: string,
+  options?: {
+    query?: UseQueryOptions<Awaited<ReturnType<typeof progressPacksRetrieve>>, TError, TData>;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getProgressPacksRetrieveQueryKey(packId);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof progressPacksRetrieve>>> = ({ signal }) =>
+    progressPacksRetrieve(packId, signal);
+
+  return { queryKey, queryFn, enabled: !!packId, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof progressPacksRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ProgressPacksRetrieveQueryResult = NonNullable<
+  Awaited<ReturnType<typeof progressPacksRetrieve>>
+>;
+export type ProgressPacksRetrieveQueryError = unknown;
+
+/**
+ * @summary Get progress stats for a pack
+ */
+
+export function useProgressPacksRetrieve<
+  TData = Awaited<ReturnType<typeof progressPacksRetrieve>>,
+  TError = unknown,
+>(
+  packId: string,
+  options?: {
+    query?: UseQueryOptions<Awaited<ReturnType<typeof progressPacksRetrieve>>, TError, TData>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getProgressPacksRetrieveQueryOptions(packId, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
 /**
  * @summary Reset all page progress for a pack
  */
