@@ -11,6 +11,7 @@ import {
 } from "@/lib/api/orval/api/generated/pages/pages";
 import { useProgressPagesMarkStudiedCreate } from "@/lib/api/orval/api/generated/progress/progress";
 import type { PageList } from "@/lib/api/orval/api/generated/model";
+import { onProgressChanged } from "@/lib/query-invalidation";
 
 export function useLearnPages(packId: string | null) {
   const [selectedPageIndex, setSelectedPageIndex] = useState<number | null>(null);
@@ -78,14 +79,7 @@ export function useLearnPages(packId: string | null) {
     markStudied.mutate(
       { pageId: selectedPage.id },
       {
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: getPacksPagesListQueryKey(packId),
-          });
-          queryClient.invalidateQueries({
-            queryKey: getPacksPagesRetrieveQueryKey(packId, selectedPage.id),
-          });
-        },
+        onSuccess: () => onProgressChanged(queryClient, packId),
       },
     );
   }, [selectedPage, packId, markStudied, queryClient]);

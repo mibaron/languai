@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { BookOpen, HelpCircle, Lightbulb, Loader2, Plus } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +24,8 @@ import {
 } from "@/lib/api/orval/api/generated/ai-content/ai-content";
 import type { ActionTypeEnum, AIContent, CategoryEnum, LLMModel } from "@/lib/api/orval/api/generated/model";
 
+import { onCreditChanged } from "@/lib/query-invalidation";
+
 import { AIContentCard } from "./ai-content-card";
 import { ModelSelect } from "./model-select";
 import type { AIContentModalProps } from "./types";
@@ -34,6 +37,7 @@ const ACTION_BUTTONS = [
 ];
 
 export function AIContentModal({ open, onOpenChange, context }: AIContentModalProps) {
+  const queryClient = useQueryClient();
   const [allContent, setAllContent] = useState<AIContent[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(false);
@@ -134,6 +138,7 @@ export function AIContentModal({ open, onOpenChange, context }: AIContentModalPr
       });
 
       aiCreditRetrieve().then((data) => setCreditBalance(parseFloat(data.credit_balance))).catch(() => {});
+      onCreditChanged(queryClient);
     } catch (err: unknown) {
       const errorObj = err as { response?: { data?: { error?: { code?: string } } } };
       if (errorObj?.response?.data?.error?.code === "insufficient_credit") {
@@ -145,7 +150,7 @@ export function AIContentModal({ open, onOpenChange, context }: AIContentModalPr
     } finally {
       setIsLoading(false);
     }
-  }, [context, selectedModel, saveAsDefault]);
+  }, [context, selectedModel, saveAsDefault, queryClient]);
 
   const handleDelete = useCallback(async (id: string) => {
     setIsDeleting(true);

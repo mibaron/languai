@@ -50,6 +50,7 @@ export function ProfileTabContent() {
     handleSaveLanguage,
     handleSaveModel,
     handleDeleteAccount,
+    estimatedPrompts,
     isUpdatingProfile,
     isDeletingAccount,
   } = useProfile();
@@ -164,8 +165,8 @@ export function ProfileTabContent() {
               icon={Sparkles}
               label="AI Credits"
               value={
-                user?.credit_balance
-                  ? `€${parseFloat(user.credit_balance).toFixed(2)} remaining`
+                estimatedPrompts !== null
+                  ? `~${estimatedPrompts} prompts left`
                   : undefined
               }
             />

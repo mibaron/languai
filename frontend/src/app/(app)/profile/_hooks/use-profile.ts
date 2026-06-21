@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 
+import { useAiModelsList } from "@/lib/api/orval/api/generated/ai-content/ai-content";
 import {
   useAuthMeRetrieve,
   useAuthMePartialUpdate,
@@ -16,9 +17,9 @@ import {
   usePacksSubscribeCreate,
   usePacksArchiveCreate,
   usePacksUnsubscribeDestroy,
-  getPacksSubscriptionsListQueryKey,
 } from "@/lib/api/orval/api/generated/packs/packs";
 import { useProgressPacksResetCreate } from "@/lib/api/orval/api/generated/progress/progress";
+import { onProgressChanged, onSubscriptionChanged } from "@/lib/query-invalidation";
 import { setUserToken } from "@/lib/utils/auth/cookie-utils";
 import type { UserPackSubscription } from "@/lib/api/orval/api/generated/model";
 
@@ -40,6 +41,7 @@ export function useProfile() {
   const [drawer, setDrawer] = useState<DrawerState>({ type: "none" });
 
   const { data: user } = useAuthMeRetrieve();
+  const { data: models } = useAiModelsList();
   const { data: subscriptions } = usePacksSubscriptionsList({
     status: "active",
   });
@@ -57,12 +59,6 @@ export function useProfile() {
     [subscriptions],
   );
 
-  const invalidateSubscriptions = useCallback(() => {
-    queryClient.invalidateQueries({
-      queryKey: getPacksSubscriptionsListQueryKey(),
-    });
-  }, [queryClient]);
-
   const invalidateMe = useCallback(() => {
     queryClient.invalidateQueries({
       queryKey: getAuthMeRetrieveQueryKey(),
@@ -74,40 +70,45 @@ export function useProfile() {
       if (subscribedPackIds.includes(packId)) return;
       subscribeMutation.mutate(
         { data: { pack_id: packId } },
-        { onSuccess: invalidateSubscriptions },
+        { onSuccess: () => onSubscriptionChanged(queryClient) },
       );
     },
-    [subscribedPackIds, subscribeMutation, invalidateSubscriptions],
+    [subscribedPackIds, subscribeMutation, queryClient],
   );
 
   const handleArchive = useCallback(
     (packId: string) => {
       archiveMutation.mutate(
         { packId },
-        { onSuccess: invalidateSubscriptions },
+        { onSuccess: () => onSubscriptionChanged(queryClient) },
       );
     },
-    [archiveMutation, invalidateSubscriptions],
+    [archiveMutation, queryClient],
   );
 
   const handleUnsubscribe = useCallback(
     (packId: string) => {
       unsubscribeMutation.mutate(
         { packId },
-        { onSuccess: invalidateSubscriptions },
+        { onSuccess: () => onSubscriptionChanged(queryClient) },
       );
     },
-    [unsubscribeMutation, invalidateSubscriptions],
+    [unsubscribeMutation, queryClient],
   );
 
   const handleResetProgress = useCallback(
     (packId: string) => {
       resetProgressMutation.mutate(
         { packId },
-        { onSuccess: invalidateSubscriptions },
+        {
+          onSuccess: () => {
+            onProgressChanged(queryClient, packId);
+            onSubscriptionChanged(queryClient);
+          },
+        },
       );
     },
-    [resetProgressMutation, invalidateSubscriptions],
+    [resetProgressMutation, queryClient],
   );
 
   const handleSignOut = useCallback(async () => {
@@ -179,6 +180,15 @@ export function useProfile() {
 
   const closeDrawer = useCallback(() => setDrawer({ type: "none" }), []);
 
+  const estimatedPrompts = useMemo(() => {
+    if (!user?.credit_balance || !models?.length) return null;
+    const balance = parseFloat(user.credit_balance);
+    const model = models.find((m) => m.id === user.preferred_model_id)
+      ?? models.find((m) => m.is_default);
+    if (!model || model.approx_cost_eur <= 0) return null;
+    return Math.floor(balance / model.approx_cost_eur);
+  }, [user?.credit_balance, user?.preferred_model_id, models]);
+
   return {
     user,
     subscriptions: subscriptions ?? [],
@@ -199,6 +209,7 @@ export function useProfile() {
     handleSaveLanguage,
     handleSaveModel,
     handleDeleteAccount,
+    estimatedPrompts,
     isUpdatingProfile: updateMeMutation.isPending,
     isDeletingAccount: deleteMeMutation.isPending,
   };

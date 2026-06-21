@@ -20,10 +20,14 @@ export function PackSelectorDrawer({
           <div className="text-muted-foreground text-xs font-semibold tracking-[0.07em] uppercase">
             Switch Pack
           </div>
-          <button className="border-brand/30 bg-brand-muted flex items-center gap-1 rounded-full border px-2.5 py-1">
+          <Link
+            href="/profile"
+            onClick={onClose}
+            className="border-brand/30 bg-brand-muted flex items-center gap-1 rounded-full border px-2.5 py-1"
+          >
             <Compass size={12} className="text-brand" />
             <span className="text-brand text-xs font-semibold">Browse all</span>
-          </button>
+          </Link>
         </div>
         {packs.map((sub) => {
           const isActive = activePackId === sub.pack.id;
