@@ -71,6 +71,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write(self.style.MIGRATE_HEADING("Initializing database...\n"))
 
+        self.stdout.write("  Running migrations...")
+        call_command("migrate", stdout=self.stdout, stderr=self.stderr)
+
         self._seed_levels()
         self._seed_goals()
 

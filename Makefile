@@ -92,7 +92,6 @@ makemigrations: ## Create new Django migrations
 	cd backend && uv run python manage.py makemigrations
 
 init-db: ## Initialize database with base data (levels, goals, LLM models, superuser)
-	cd backend && uv run python manage.py migrate
 	cd backend && uv run python manage.py init_db
 
 createsuperuser: ## Create Django admin superuser

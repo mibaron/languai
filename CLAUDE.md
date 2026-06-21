@@ -241,6 +241,34 @@ python manage.py sync_models       # Fetch/update models from OpenRouter (new mo
 - Django admin is on a separate subdomain: `admin.langu-ai.de` (not `/admin` on the main site)
 - See `DEPLOYMENT.md` for full setup guide, env vars, and troubleshooting
 
+### Production Infrastructure
+- **Server**: SSH alias `languai-prod`, project at `/home/aron/langu-ai-website/languai`
+- **Database**: PostgreSQL 16 (`postgres:16-alpine`), persisted in Docker named volume `pgdata`
+- **Backend container**: uses `uv` for package management — **all commands must use `uv run`**
+- **Dev uses SQLite**, production uses PostgreSQL — never assume SQLite on the server
+
+#### Running commands on the server
+```bash
+# The pattern — always use `uv run`:
+docker compose --env-file .env.production exec backend uv run python manage.py <command>
+
+# Examples:
+docker compose --env-file .env.production exec backend uv run python manage.py migrate
+docker compose --env-file .env.production exec backend uv run python manage.py init_db
+docker compose --env-file .env.production exec backend uv run python manage.py createsuperuser
+```
+
+**NEVER** suggest bare `python manage.py` for the production container — Django is only available inside the uv virtualenv.
+
+#### Fresh database initialization
+```bash
+# 1. Drop and recreate the schema
+docker compose --env-file .env.production exec db psql -U languai -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
+# 2. Run migrations + seed base data (levels, goals, LLM models, superuser)
+docker compose --env-file .env.production exec backend uv run python manage.py init_db
+# 3. Import content packs via Django admin (Content > Content imports)
+```
+
 ### Environment Variables
 - Frontend `.env.local`: `NEXT_PUBLIC_API_URL`
 - Backend `.env`: `SECRET_KEY`, `DEBUG`, `ALLOWED_HOSTS`, `DATABASE_URL`
