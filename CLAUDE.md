@@ -10,7 +10,7 @@ A full-stack German language learning application built as a monorepo:
 ## Monorepo Structure
 
 ```
-Langu-AI/
+languai/
 ├── frontend/          # Next.js application
 ├── backend/           # Django application (uv-managed)
 ├── docs/              # Architecture decisions, design docs, brainstorming records

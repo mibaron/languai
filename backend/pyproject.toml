@@ -1,5 +1,5 @@
 [project]
-name = "Langu-AI-backend"
+name = "languai-backend"
 version = "0.1.0"
 description = "Langu-AI - German language learning platform backend"
 requires-python = ">=3.12"

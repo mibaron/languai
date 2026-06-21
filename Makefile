@@ -2,8 +2,8 @@
 # Langu-AI — Development Commands
 # ──────────────────────────────────────────────
 
-SSH := ssh Langu-AI-prod
-REMOTE_DIR := /home/aron/langu-ai-website/Langu-AI
+SSH := ssh languai-prod
+REMOTE_DIR := /home/aron/langu-ai-website/languai
 DC := docker compose --env-file .env.production
 
 .PHONY: help install frontend-install backend-install \

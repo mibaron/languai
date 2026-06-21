@@ -33,7 +33,7 @@ langu-ai.de (Hetzner Cloud VPS — CX22, 2 vCPU, 4GB RAM, ~€4.50/mo)
 
 - **`Dockerfile.backend`** — Python 3.12 slim, installs deps via `uv` with `--extra prod`, runs `collectstatic` at build time (using base settings to avoid needing DB), serves via gunicorn
 - **`Dockerfile.frontend`** — Multi-stage build (node:22-alpine), accepts `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_GOOGLE_CLIENT_ID` as build args, copies standalone output to minimal runtime image
-- **`docker-compose.yml`** — Four services (db, backend, frontend, caddy) on a shared `Langu-AI` bridge network. PostgreSQL data persisted via `pgdata` volume. Caddy certs persisted via `caddy_data` volume
+- **`docker-compose.yml`** — Four services (db, backend, frontend, caddy) on a shared `languai` bridge network. PostgreSQL data persisted via `pgdata` volume. Caddy certs persisted via `caddy_data` volume
 - **`Caddyfile`** — Routes `/api/*`, `/swagger/*`, `/redoc/*`, `/static/*` to backend, everything else to frontend. `admin.langu-ai.de` proxies entirely to Django. Handles `langu-ai.de`, `www.langu-ai.de`, and `admin.langu-ai.de`
 - **`.dockerignore`** — Excludes `.git`, `.env`, `node_modules`, `__pycache__`, `.next`, `db.sqlite3`, etc.
 - **`.env.production.example`** — Template with all required env vars (committed to repo, actual `.env.production` is gitignored)
@@ -57,7 +57,7 @@ langu-ai.de (Hetzner Cloud VPS — CX22, 2 vCPU, 4GB RAM, ~€4.50/mo)
 apt update && apt install -y docker.io docker-compose-plugin
 
 # 2. Clone repo
-git clone <repo-url> ~/langu-ai-website/Langu-AI && cd ~/langu-ai-website/Langu-AI
+git clone <repo-url> ~/langu-ai-website/languai && cd ~/langu-ai-website/languai
 
 # 3. Create env file from template
 cp .env.production.example .env.production
@@ -98,8 +98,8 @@ make prod-shell          # Open bash in backend container
 | Variable | Where | Description |
 |---|---|---|
 | `SECRET_KEY` | Backend | Django secret key (generate a long random string) |
-| `POSTGRES_DB` | Backend + DB | Database name (default: `Langu-AI`) |
-| `POSTGRES_USER` | Backend + DB | Database user (default: `Langu-AI`) |
+| `POSTGRES_DB` | Backend + DB | Database name (default: `languai`) |
+| `POSTGRES_USER` | Backend + DB | Database user (default: `languai`) |
 | `POSTGRES_PASSWORD` | Backend + DB | Database password |
 | `OPENROUTER_API_KEY` | Backend | API key for AI content generation |
 | `GOOGLE_CLIENT_ID` | Backend + Frontend | Google OAuth client ID |
