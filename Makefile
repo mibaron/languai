@@ -12,7 +12,7 @@ DC := docker compose --env-file .env.production
         lint frontend-lint backend-lint \
         format frontend-format backend-format \
         test frontend-test backend-test \
-        migrate makemigrations seed createsuperuser \
+        migrate makemigrations init-db createsuperuser \
         generate-api schema \
         clean \
         deploy deploy-backend deploy-frontend deploy-caddy \
@@ -91,8 +91,9 @@ migrate: ## Apply Django migrations
 makemigrations: ## Create new Django migrations
 	cd backend && uv run python manage.py makemigrations
 
-seed: ## Seed database with German learning content
-	cd backend && uv run python manage.py seed_content --clear
+init-db: ## Initialize database with base data (levels, goals, LLM models, superuser)
+	cd backend && uv run python manage.py migrate
+	cd backend && uv run python manage.py init_db
 
 createsuperuser: ## Create Django admin superuser
 	cd backend && uv run python manage.py createsuperuser
