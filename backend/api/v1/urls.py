@@ -20,7 +20,7 @@ from apps.content.views import (
     SectionItemViewSet,
     SectionViewSet,
 )
-from apps.exercise_engine.views import ExerciseSessionView
+from apps.exercise_engine.views import AvailableExerciseTypesView, ExerciseSessionView
 from apps.knowledge.views import LearningGoalListView
 from apps.memory_engine.views import ReviewView, SessionView
 from apps.packs.views import (
@@ -31,7 +31,7 @@ from apps.packs.views import (
     PackUnsubscribeView,
     UserPackSubscriptionListView,
 )
-from apps.progress.views import MarkPageStudiedView, SectionProgressViewSet
+from apps.progress.views import MarkPageStudiedView, ResetPackProgressView, SectionProgressViewSet
 from apps.users.views import (
     ChangePasswordView,
     ForgotPasswordView,
@@ -95,6 +95,7 @@ urlpatterns = [
     path("goals/", LearningGoalListView.as_view(), name="goal-list"),
     # Exercises
     path("exercises/session/", ExerciseSessionView.as_view(), name="exercise-session"),
+    path("exercises/available-types/", AvailableExerciseTypesView.as_view(), name="exercise-available-types"),
     # Memory Engine
     path("memory/session/", SessionView.as_view(), name="memory-session"),
     path("memory/review/", ReviewView.as_view(), name="memory-review"),
@@ -103,6 +104,11 @@ urlpatterns = [
         "progress/pages/<uuid:page_id>/mark-studied/",
         MarkPageStudiedView.as_view(),
         name="page-mark-studied",
+    ),
+    path(
+        "progress/packs/<uuid:pack_id>/reset/",
+        ResetPackProgressView.as_view(),
+        name="pack-progress-reset",
     ),
     # Nested routes
     path("sections/<uuid:section_pk>/items/", include(items_router.urls)),

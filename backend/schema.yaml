@@ -501,29 +501,12 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/v1/exercises/session/:
+  /api/v1/exercises/available-types/:
     get:
-      operationId: exercises_session_list
-      summary: Get an exercise session
-      parameters:
-      - in: query
-        name: exercise_type
-        schema:
-          type: string
-          enum:
-          - error_correction
-          - fill_blank
-          - flashcard
-          - matching
-          - mcq_recognition
-          - sentence_order
-        description: Type of exercises to generate
-        required: true
-      - in: query
-        name: max_items
-        schema:
-          type: integer
-        description: Maximum exercises in session (default 20)
+      operationId: exercises_available_types_retrieve
+      description: Returns exercise types that have exercises on pages the user has
+        studied.
+      summary: Get available exercise types
       tags:
       - exercises
       security:
@@ -534,14 +517,14 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/FlashcardExercise'
+                $ref: '#/components/schemas/AvailableExerciseTypes'
           description: ''
-  /api/v1/exercises/stored-session/:
+  /api/v1/exercises/session/:
     get:
-      operationId: exercises_stored_session_list
-      summary: Get stored exercises from the database
+      operationId: exercises_session_list
+      description: Returns stored exercises from the user's subscribed packs, filtered
+        to only include exercises from pages the user has studied.
+      summary: Get an exercise session
       parameters:
       - in: query
         name: exercise_type
@@ -559,7 +542,7 @@ paths:
         name: max_items
         schema:
           type: integer
-        description: Maximum exercises to return (default 20)
+        description: Maximum exercises in session (default 20)
       tags:
       - exercises
       security:
@@ -572,7 +555,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/StoredExercise'
+                  $ref: '#/components/schemas/ExerciseSessionItem'
           description: ''
   /api/v1/goals/:
     get:
@@ -1864,6 +1847,15 @@ components:
       required:
       - token
       - user
+    AvailableExerciseTypes:
+      type: object
+      properties:
+        available_types:
+          type: array
+          items:
+            type: string
+      required:
+      - available_types
     CategoryEnum:
       enum:
       - grammar
@@ -1943,6 +1935,66 @@ components:
       - id
       - speaker
       - text
+    ErrorCorrectionExercise:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        exercise_type:
+          $ref: '#/components/schemas/ExerciseTypeEnum'
+        item_id:
+          type: string
+          format: uuid
+          readOnly: true
+        item_text:
+          type: string
+          readOnly: true
+        item_translation:
+          type: string
+          readOnly: true
+        sentence:
+          type: string
+        error_start:
+          type: integer
+        error_end:
+          type: integer
+        correct_replacement:
+          type: string
+        corrected_sentence:
+          type: string
+        explanation:
+          type: string
+          default: ''
+      required:
+      - correct_replacement
+      - corrected_sentence
+      - error_end
+      - error_start
+      - exercise_type
+      - id
+      - item_id
+      - item_text
+      - item_translation
+      - sentence
+    ExerciseSessionItem:
+      oneOf:
+      - $ref: '#/components/schemas/FlashcardExercise'
+      - $ref: '#/components/schemas/MCQExercise'
+      - $ref: '#/components/schemas/FillBlankExercise'
+      - $ref: '#/components/schemas/SentenceOrderExercise'
+      - $ref: '#/components/schemas/ErrorCorrectionExercise'
+      - $ref: '#/components/schemas/MatchingExercise'
+      discriminator:
+        propertyName: exercise_type
+        mapping:
+          flashcard: '#/components/schemas/FlashcardExercise'
+          mcq_recognition: '#/components/schemas/MCQExercise'
+          fill_blank: '#/components/schemas/FillBlankExercise'
+          sentence_order: '#/components/schemas/SentenceOrderExercise'
+          error_correction: '#/components/schemas/ErrorCorrectionExercise'
+          matching: '#/components/schemas/MatchingExercise'
     ExerciseTypeEnum:
       enum:
       - flashcard
@@ -1983,34 +2035,88 @@ components:
       - item_id
       - text_after
       - text_before
+    FillBlankExercise:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        exercise_type:
+          $ref: '#/components/schemas/ExerciseTypeEnum'
+        item_id:
+          type: string
+          format: uuid
+          readOnly: true
+        item_text:
+          type: string
+          readOnly: true
+        item_translation:
+          type: string
+          readOnly: true
+        text_before:
+          type: string
+        text_after:
+          type: string
+        answer:
+          type: string
+        accept_alternatives:
+          type: array
+          items:
+            type: string
+        hint:
+          type: string
+          default: ''
+        explanation:
+          type: string
+          default: ''
+      required:
+      - accept_alternatives
+      - answer
+      - exercise_type
+      - id
+      - item_id
+      - item_text
+      - item_translation
+      - text_after
+      - text_before
     FlashcardExercise:
       type: object
       properties:
-        exercise_type:
+        id:
           type: string
+          format: uuid
+          readOnly: true
+        exercise_type:
+          $ref: '#/components/schemas/ExerciseTypeEnum'
         item_id:
           type: string
-        skill_type:
+          format: uuid
+          readOnly: true
+        item_text:
           type: string
-        is_new:
-          type: boolean
+          readOnly: true
+        item_translation:
+          type: string
+          readOnly: true
         front_text:
-          type: string
-        front_hint:
           type: string
         back_text:
           type: string
-        back_extra:
+        front_context:
           type: string
+          default: ''
+        back_context:
+          type: string
+          default: ''
       required:
-      - back_extra
       - back_text
       - exercise_type
-      - front_hint
       - front_text
-      - is_new
+      - id
       - item_id
-      - skill_type
+      - item_text
+      - item_translation
     ForgotPasswordRequest:
       type: object
       properties:
@@ -2163,6 +2269,118 @@ components:
       required:
       - password
       - username
+    MCQChoice:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        text:
+          type: string
+          maxLength: 255
+        is_correct:
+          type: boolean
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+      required:
+      - id
+      - text
+    MCQExercise:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        exercise_type:
+          $ref: '#/components/schemas/ExerciseTypeEnum'
+        item_id:
+          type: string
+          format: uuid
+          readOnly: true
+        item_text:
+          type: string
+          readOnly: true
+        item_translation:
+          type: string
+          readOnly: true
+        question:
+          type: string
+        explanation:
+          type: string
+          default: ''
+        choices:
+          type: array
+          items:
+            $ref: '#/components/schemas/MCQChoice'
+          readOnly: true
+        correct_choice_id:
+          type: string
+          readOnly: true
+      required:
+      - choices
+      - correct_choice_id
+      - exercise_type
+      - id
+      - item_id
+      - item_text
+      - item_translation
+      - question
+    MatchingExercise:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        exercise_type:
+          $ref: '#/components/schemas/ExerciseTypeEnum'
+        item_id:
+          type: string
+          format: uuid
+          readOnly: true
+        item_text:
+          type: string
+          readOnly: true
+        item_translation:
+          type: string
+          readOnly: true
+        instruction:
+          type: string
+          default: ''
+        pairs:
+          type: array
+          items:
+            $ref: '#/components/schemas/MatchingPair'
+          readOnly: true
+      required:
+      - exercise_type
+      - id
+      - item_id
+      - item_text
+      - item_translation
+      - pairs
+    MatchingPair:
+      type: object
+      properties:
+        left:
+          type: string
+          maxLength: 255
+        right:
+          type: string
+          maxLength: 255
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+      required:
+      - left
+      - right
     OnboardingCompleteRequest:
       type: object
       properties:
@@ -2980,6 +3198,46 @@ components:
       - content_type
       - level
       - title
+    SentenceOrderExercise:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        exercise_type:
+          $ref: '#/components/schemas/ExerciseTypeEnum'
+        item_id:
+          type: string
+          format: uuid
+          readOnly: true
+        item_text:
+          type: string
+          readOnly: true
+        item_translation:
+          type: string
+          readOnly: true
+        jumbled_words:
+          type: array
+          items:
+            type: string
+        correct_answers:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+        hint:
+          type: string
+          default: ''
+      required:
+      - correct_answers
+      - exercise_type
+      - id
+      - item_id
+      - item_text
+      - item_translation
+      - jumbled_words
     SessionItem:
       type: object
       properties:
@@ -3068,213 +3326,6 @@ components:
       - response_text
       - section_headers
       - section_title
-    SourceEnum:
-      enum:
-      - creator
-      - engine
-      - ai
-      type: string
-      description: |-
-        * `creator` - Pack Creator
-        * `engine` - Auto-generated
-        * `ai` - AI-generated
-    StoredErrorCorrectionDetail:
-      type: object
-      properties:
-        sentence:
-          type: string
-          maxLength: 500
-        error_start:
-          type: integer
-          maximum: 9223372036854775807
-          minimum: 0
-          format: int64
-        error_end:
-          type: integer
-          maximum: 9223372036854775807
-          minimum: 0
-          format: int64
-        correct_replacement:
-          type: string
-          maxLength: 100
-        corrected_sentence:
-          type: string
-          maxLength: 500
-        explanation:
-          type: string
-      required:
-      - correct_replacement
-      - corrected_sentence
-      - error_end
-      - error_start
-      - sentence
-    StoredExercise:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        exercise_type:
-          $ref: '#/components/schemas/ExerciseTypeEnum'
-        source:
-          $ref: '#/components/schemas/SourceEnum'
-        item_id:
-          type: string
-          format: uuid
-          readOnly: true
-        item_text:
-          type: string
-          readOnly: true
-        item_translation:
-          type: string
-          readOnly: true
-        detail:
-          allOf:
-          - $ref: '#/components/schemas/StoredExerciseDetail'
-          readOnly: true
-      required:
-      - detail
-      - exercise_type
-      - id
-      - item_id
-      - item_text
-      - item_translation
-      - source
-    StoredExerciseDetail:
-      oneOf:
-      - $ref: '#/components/schemas/StoredFlashcardDetail'
-      - $ref: '#/components/schemas/StoredMCQDetail'
-      - $ref: '#/components/schemas/StoredFillBlankDetail'
-      - $ref: '#/components/schemas/StoredSentenceOrderDetail'
-      - $ref: '#/components/schemas/StoredErrorCorrectionDetail'
-      - $ref: '#/components/schemas/StoredMatchingDetail'
-      discriminator:
-        propertyName: exercise_type
-        mapping:
-          flashcard: '#/components/schemas/StoredFlashcardDetail'
-          mcq_recognition: '#/components/schemas/StoredMCQDetail'
-          fill_blank: '#/components/schemas/StoredFillBlankDetail'
-          sentence_order: '#/components/schemas/StoredSentenceOrderDetail'
-          error_correction: '#/components/schemas/StoredErrorCorrectionDetail'
-          matching: '#/components/schemas/StoredMatchingDetail'
-    StoredFillBlankDetail:
-      type: object
-      properties:
-        text_before:
-          type: string
-          maxLength: 500
-        text_after:
-          type: string
-          maxLength: 500
-        answer:
-          type: string
-          maxLength: 100
-        accept_alternatives: {}
-        hint:
-          type: string
-          maxLength: 255
-        explanation:
-          type: string
-      required:
-      - answer
-      - text_after
-      - text_before
-    StoredFlashcardDetail:
-      type: object
-      properties:
-        front_text:
-          type: string
-          maxLength: 255
-        back_text:
-          type: string
-          maxLength: 255
-        front_context:
-          type: string
-          maxLength: 255
-        back_context:
-          type: string
-          maxLength: 255
-      required:
-      - back_text
-      - front_text
-    StoredMCQChoice:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        text:
-          type: string
-          maxLength: 255
-        is_correct:
-          type: boolean
-        order:
-          type: integer
-          maximum: 9223372036854775807
-          minimum: 0
-          format: int64
-      required:
-      - id
-      - text
-    StoredMCQDetail:
-      type: object
-      properties:
-        question:
-          type: string
-          maxLength: 500
-        explanation:
-          type: string
-        choices:
-          type: array
-          items:
-            $ref: '#/components/schemas/StoredMCQChoice'
-          readOnly: true
-      required:
-      - choices
-      - question
-    StoredMatchingDetail:
-      type: object
-      properties:
-        instruction:
-          type: string
-          maxLength: 255
-        pairs:
-          type: array
-          items:
-            $ref: '#/components/schemas/StoredMatchingPair'
-          readOnly: true
-      required:
-      - pairs
-    StoredMatchingPair:
-      type: object
-      properties:
-        left:
-          type: string
-          maxLength: 255
-        right:
-          type: string
-          maxLength: 255
-        order:
-          type: integer
-          maximum: 9223372036854775807
-          minimum: 0
-          format: int64
-      required:
-      - left
-      - right
-    StoredSentenceOrderDetail:
-      type: object
-      properties:
-        jumbled_words: {}
-        correct_answers: {}
-        hint:
-          type: string
-          maxLength: 255
-      required:
-      - correct_answers
-      - jumbled_words
     SubscribeRequestRequest:
       type: object
       properties:

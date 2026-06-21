@@ -20,6 +20,7 @@ import type {
   PaginatedSectionProgressList,
   PatchedSectionProgressRequest,
   ProgressListParams,
+  ResetPackProgressResponse,
   SectionProgress,
   SectionProgressRequest,
   UserPageProgress,
@@ -425,6 +426,78 @@ export const useProgressDestroy = <TError = unknown, TContext = unknown>(options
   TContext
 > => {
   const mutationOptions = getProgressDestroyMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+/**
+ * @summary Reset all page progress for a pack
+ */
+export const progressPacksResetCreate = (packId: string, signal?: AbortSignal) => {
+  return axiosInstance<ResetPackProgressResponse>({
+    url: `/api/v1/progress/packs/${packId}/reset/`,
+    method: "POST",
+    signal,
+  });
+};
+
+export const getProgressPacksResetCreateMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof progressPacksResetCreate>>,
+    TError,
+    { packId: string },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof progressPacksResetCreate>>,
+  TError,
+  { packId: string },
+  TContext
+> => {
+  const mutationKey = ["progressPacksResetCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof progressPacksResetCreate>>,
+    { packId: string }
+  > = (props) => {
+    const { packId } = props ?? {};
+
+    return progressPacksResetCreate(packId);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ProgressPacksResetCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof progressPacksResetCreate>>
+>;
+
+export type ProgressPacksResetCreateMutationError = unknown;
+
+/**
+ * @summary Reset all page progress for a pack
+ */
+export const useProgressPacksResetCreate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof progressPacksResetCreate>>,
+    TError,
+    { packId: string },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof progressPacksResetCreate>>,
+  TError,
+  { packId: string },
+  TContext
+> => {
+  const mutationOptions = getProgressPacksResetCreateMutationOptions(options);
 
   return useMutation(mutationOptions);
 };

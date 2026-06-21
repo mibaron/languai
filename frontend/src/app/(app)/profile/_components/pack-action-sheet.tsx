@@ -1,8 +1,10 @@
 "use client";
 
-import { CircleCheck, Archive, X } from "lucide-react";
+import { useState } from "react";
+import { CircleCheck, Archive, X, RotateCcw } from "lucide-react";
 
 import { BottomDrawer } from "@/components/composites/bottom-drawer";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 import type { PackActionSheetProps } from "./types";
 
@@ -11,7 +13,10 @@ export function PackActionSheet({
   onClose,
   onArchive,
   onUnsubscribe,
+  onResetProgress,
 }: PackActionSheetProps) {
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+
   if (!subscription) return null;
 
   const actions = [
@@ -20,6 +25,12 @@ export function PackActionSheet({
       label: "Mark as Complete",
       color: "text-foreground",
       onClick: onClose,
+    },
+    {
+      icon: RotateCcw,
+      label: "Reset Progress",
+      color: "text-foreground",
+      onClick: () => setShowResetConfirm(true),
     },
     {
       icon: Archive,
@@ -42,28 +53,43 @@ export function PackActionSheet({
   ];
 
   return (
-    <BottomDrawer open={true} onClose={onClose}>
-      <div className="border-b border-border/50 px-5 pb-3 pt-1.5">
-        <div className="text-base font-semibold text-foreground">
-          {subscription.pack.title}
+    <>
+      <BottomDrawer open={true} onClose={onClose}>
+        <div className="border-b border-border/50 px-5 pb-3 pt-1.5">
+          <div className="text-base font-semibold text-foreground">
+            {subscription.pack.title}
+          </div>
+          <div className="text-[13px] text-muted-foreground">
+            in {subscription.pack.base_language}
+          </div>
         </div>
-        <div className="text-[13px] text-muted-foreground">
-          in {subscription.pack.base_language}
-        </div>
-      </div>
-      {actions.map((action) => {
-        const Icon = action.icon;
-        return (
-          <button
-            key={action.label}
-            onClick={action.onClick}
-            className={`flex w-full items-center gap-3.5 border-t border-border/50 px-5 py-[15px] text-[15px] ${action.color}`}
-          >
-            <Icon size={20} />
-            {action.label}
-          </button>
-        );
-      })}
-    </BottomDrawer>
+        {actions.map((action) => {
+          const Icon = action.icon;
+          return (
+            <button
+              key={action.label}
+              onClick={action.onClick}
+              className={`flex w-full items-center gap-3.5 border-t border-border/50 px-5 py-[15px] text-[15px] ${action.color}`}
+            >
+              <Icon size={20} />
+              {action.label}
+            </button>
+          );
+        })}
+      </BottomDrawer>
+      <ConfirmDialog
+        open={showResetConfirm}
+        onOpenChange={setShowResetConfirm}
+        title="Reset Progress"
+        description={`This will mark all pages in "${subscription.pack.title}" as unstudied. Your practice history will not be affected.`}
+        confirmLabel="Reset"
+        variant="destructive"
+        onConfirm={() => {
+          onResetProgress(subscription.pack.id);
+          setShowResetConfirm(false);
+          onClose();
+        }}
+      />
+    </>
   );
 }

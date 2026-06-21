@@ -9,7 +9,15 @@ import zod from 'zod';
 
 
 /**
- * Returns stored exercises from the user's subscribed packs. Each exercise is a flat object whose fields depend on exercise_type.
+ * Returns exercise types that have exercises on pages the user has studied.
+ * @summary Get available exercise types
+ */
+export const exercisesAvailableTypesRetrieveResponse = zod.object({
+  "available_types": zod.array(zod.string())
+})
+
+/**
+ * Returns stored exercises from the user's subscribed packs, filtered to only include exercises from pages the user has studied.
  * @summary Get an exercise session
  */
 export const exercisesSessionListQueryParams = zod.object({

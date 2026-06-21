@@ -1,12 +1,14 @@
 from django.utils import timezone
 from drf_spectacular.utils import extend_schema, extend_schema_view
-from rest_framework import permissions, status, viewsets
+from rest_framework import permissions, serializers, status, viewsets
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.progress.models import SectionProgress, UserPageProgress
 
 from .serializers import SectionProgressSerializer, UserPageProgressSerializer
+from .services import reset_pack_progress
 
 
 @extend_schema_view(
@@ -52,3 +54,21 @@ class MarkPageStudiedView(APIView):
             UserPageProgressSerializer(progress).data,
             status=status.HTTP_200_OK,
         )
+
+
+class ResetPackProgressResponseSerializer(serializers.Serializer):
+    deleted_count = serializers.IntegerField()
+
+
+class ResetPackProgressView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @extend_schema(
+        summary="Reset all page progress for a pack",
+        tags=["progress"],
+        request=None,
+        responses={200: ResetPackProgressResponseSerializer},
+    )
+    def post(self, request: Request, pack_id: str) -> Response:
+        deleted_count = reset_pack_progress(user=request.user, pack_id=pack_id)
+        return Response({"deleted_count": deleted_count}, status=status.HTTP_200_OK)

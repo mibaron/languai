@@ -1,17 +1,27 @@
+from django.conf import settings
 from django.db.models import QuerySet
+
+from apps.progress.models import UserPageProgress
 
 from .models import Exercise
 
 
 def get_exercises_for_pack(
     *,
+    user: settings.AUTH_USER_MODEL,
     pack_ids: list[str],
     exercise_type: str | None = None,
     limit: int = 20,
 ) -> QuerySet[Exercise]:
+    studied_page_ids = UserPageProgress.objects.filter(
+        user=user,
+        completed_at__isnull=False,
+    ).values_list("page_id", flat=True)
+
     qs = Exercise.objects.filter(
         pack_id__in=pack_ids,
         is_active=True,
+        page_id__in=studied_page_ids,
     ).select_related("item")
 
     if exercise_type:
@@ -19,6 +29,27 @@ def get_exercises_for_pack(
 
     qs = _prefetch_details(qs).order_by("?")
     return qs[:limit]
+
+
+def get_available_exercise_types(
+    *,
+    user: settings.AUTH_USER_MODEL,
+    pack_ids: list[str],
+) -> list[str]:
+    studied_page_ids = UserPageProgress.objects.filter(
+        user=user,
+        completed_at__isnull=False,
+    ).values_list("page_id", flat=True)
+
+    return list(
+        Exercise.objects.filter(
+            pack_id__in=pack_ids,
+            is_active=True,
+            page_id__in=studied_page_ids,
+        )
+        .values_list("exercise_type", flat=True)
+        .distinct()
+    )
 
 
 def get_exercises_for_items(

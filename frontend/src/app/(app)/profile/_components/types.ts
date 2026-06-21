@@ -12,6 +12,7 @@ export interface PackActionSheetProps {
   onClose: () => void;
   onArchive: (packId: string) => void;
   onUnsubscribe: (packId: string) => void;
+  onResetProgress: (packId: string) => void;
 }
 
 export interface ProfileSectionProps {

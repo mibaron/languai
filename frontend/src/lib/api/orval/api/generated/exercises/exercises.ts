@@ -13,7 +13,11 @@ import type {
   UseQueryResult,
 } from "@tanstack/react-query";
 
-import type { ExerciseSessionItem, ExercisesSessionListParams } from ".././model";
+import type {
+  AvailableExerciseTypes,
+  ExerciseSessionItem,
+  ExercisesSessionListParams,
+} from ".././model";
 
 import { axiosInstance } from "../../../client";
 
@@ -22,7 +26,76 @@ type AwaitedInput<T> = PromiseLike<T> | T;
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
 /**
- * Returns stored exercises from the user's subscribed packs. Each exercise is a flat object whose fields depend on exercise_type.
+ * Returns exercise types that have exercises on pages the user has studied.
+ * @summary Get available exercise types
+ */
+export const exercisesAvailableTypesRetrieve = (signal?: AbortSignal) => {
+  return axiosInstance<AvailableExerciseTypes>({
+    url: `/api/v1/exercises/available-types/`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getExercisesAvailableTypesRetrieveQueryKey = () => {
+  return [`/api/v1/exercises/available-types/`] as const;
+};
+
+export const getExercisesAvailableTypesRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof exercisesAvailableTypesRetrieve>>,
+  TError = unknown,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof exercisesAvailableTypesRetrieve>>,
+    TError,
+    TData
+  >;
+}) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getExercisesAvailableTypesRetrieveQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof exercisesAvailableTypesRetrieve>>> = ({
+    signal,
+  }) => exercisesAvailableTypesRetrieve(signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof exercisesAvailableTypesRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ExercisesAvailableTypesRetrieveQueryResult = NonNullable<
+  Awaited<ReturnType<typeof exercisesAvailableTypesRetrieve>>
+>;
+export type ExercisesAvailableTypesRetrieveQueryError = unknown;
+
+/**
+ * @summary Get available exercise types
+ */
+
+export function useExercisesAvailableTypesRetrieve<
+  TData = Awaited<ReturnType<typeof exercisesAvailableTypesRetrieve>>,
+  TError = unknown,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof exercisesAvailableTypesRetrieve>>,
+    TError,
+    TData
+  >;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getExercisesAvailableTypesRetrieveQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * Returns stored exercises from the user's subscribed packs, filtered to only include exercises from pages the user has studied.
  * @summary Get an exercise session
  */
 export const exercisesSessionList = (params?: ExercisesSessionListParams, signal?: AbortSignal) => {

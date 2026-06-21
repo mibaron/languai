@@ -1,8 +1,9 @@
 import pytest
+from django.utils import timezone
 from rest_framework.test import APIClient
 
 from apps.content.tests.factories import PageFactory
-from apps.packs.tests.factories import UserFactory
+from apps.packs.tests.factories import PackFactory, UserFactory
 from apps.progress.models import UserPageProgress
 
 
@@ -56,3 +57,51 @@ class TestMarkPageStudiedView:
         client2.post(f"/api/v1/progress/pages/{page.id}/mark-studied/")
 
         assert UserPageProgress.objects.filter(page=page).count() == 2
+
+
+@pytest.mark.django_db
+class TestResetPackProgressView:
+    def test_unauthenticated(self):
+        pack = PackFactory()
+        client = APIClient()
+        response = client.post(f"/api/v1/progress/packs/{pack.id}/reset/")
+        assert response.status_code in (401, 403)
+
+    def test_resets_all_pages_in_pack(self, auth_client, user):
+        pack = PackFactory()
+        page1 = PageFactory(pack=pack)
+        page2 = PageFactory(pack=pack)
+        UserPageProgress.objects.create(user=user, page=page1, completed_at=timezone.now())
+        UserPageProgress.objects.create(user=user, page=page2, completed_at=timezone.now())
+
+        response = auth_client.post(f"/api/v1/progress/packs/{pack.id}/reset/")
+        assert response.status_code == 200
+        assert response.data["deleted_count"] == 2
+        assert UserPageProgress.objects.filter(user=user, page__pack=pack).count() == 0
+
+    def test_does_not_affect_other_packs(self, auth_client, user):
+        pack1 = PackFactory()
+        pack2 = PackFactory()
+        page1 = PageFactory(pack=pack1)
+        page2 = PageFactory(pack=pack2)
+        UserPageProgress.objects.create(user=user, page=page1, completed_at=timezone.now())
+        UserPageProgress.objects.create(user=user, page=page2, completed_at=timezone.now())
+
+        auth_client.post(f"/api/v1/progress/packs/{pack1.id}/reset/")
+        assert UserPageProgress.objects.filter(user=user, page=page2).exists()
+
+    def test_does_not_affect_other_users(self, auth_client, user):
+        pack = PackFactory()
+        page = PageFactory(pack=pack)
+        other_user = UserFactory()
+        UserPageProgress.objects.create(user=user, page=page, completed_at=timezone.now())
+        UserPageProgress.objects.create(user=other_user, page=page, completed_at=timezone.now())
+
+        auth_client.post(f"/api/v1/progress/packs/{pack.id}/reset/")
+        assert UserPageProgress.objects.filter(user=other_user, page=page).exists()
+
+    def test_returns_zero_when_nothing_to_reset(self, auth_client):
+        pack = PackFactory()
+        response = auth_client.post(f"/api/v1/progress/packs/{pack.id}/reset/")
+        assert response.status_code == 200
+        assert response.data["deleted_count"] == 0

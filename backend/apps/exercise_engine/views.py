@@ -1,5 +1,5 @@
 from drf_spectacular.utils import OpenApiParameter, PolymorphicProxySerializer, extend_schema
-from rest_framework import permissions, status
+from rest_framework import permissions, serializers, status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from apps.packs.models import SubscriptionStatus
 
 from .constants import ExerciseType
-from .selectors import get_exercises_for_pack
+from .selectors import get_available_exercise_types, get_exercises_for_pack
 from .serializers import (
     ErrorCorrectionExerciseSerializer,
     ExerciseSessionParamsSerializer,
@@ -25,8 +25,8 @@ class ExerciseSessionView(APIView):
 
     @extend_schema(
         summary="Get an exercise session",
-        description="Returns stored exercises from the user's subscribed packs. "
-        "Each exercise is a flat object whose fields depend on exercise_type.",
+        description="Returns stored exercises from the user's subscribed packs, "
+        "filtered to only include exercises from pages the user has studied.",
         tags=["exercises"],
         parameters=[
             OpenApiParameter(
@@ -72,6 +72,7 @@ class ExerciseSessionView(APIView):
             return Response([])
 
         exercises = get_exercises_for_pack(
+            user=request.user,
             pack_ids=pack_ids,
             exercise_type=params.validated_data.get("exercise_type"),
             limit=params.validated_data["max_items"],
@@ -79,3 +80,29 @@ class ExerciseSessionView(APIView):
 
         data = [serialize_exercise(ex) for ex in exercises]
         return Response(data, status=status.HTTP_200_OK)
+
+
+class AvailableExerciseTypesSerializer(serializers.Serializer):
+    available_types = serializers.ListField(child=serializers.CharField())
+
+
+class AvailableExerciseTypesView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @extend_schema(
+        summary="Get available exercise types",
+        description="Returns exercise types that have exercises on pages the user has studied.",
+        tags=["exercises"],
+        responses={200: AvailableExerciseTypesSerializer},
+    )
+    def get(self, request: Request) -> Response:
+        active_subs = request.user.pack_subscriptions.filter(
+            status=SubscriptionStatus.ACTIVE,
+        )
+        pack_ids = list(active_subs.values_list("pack_id", flat=True))
+
+        if not pack_ids:
+            return Response({"available_types": []})
+
+        types = get_available_exercise_types(user=request.user, pack_ids=pack_ids)
+        return Response({"available_types": types})

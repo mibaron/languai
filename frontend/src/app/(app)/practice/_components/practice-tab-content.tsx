@@ -1,8 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Zap, FileText, Award, ArrowUpDown, AlertTriangle, Link2, ChevronRight } from "lucide-react";
+import { Zap, FileText, Award, ArrowUpDown, AlertTriangle, Link2, ChevronRight, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAvailableExerciseTypes } from "../_hooks/use-available-exercise-types";
 
 const modes = [
   {
@@ -57,6 +58,7 @@ const modes = [
 
 export function PracticeTabContent() {
   const router = useRouter();
+  const { availableTypes, isLoading } = useAvailableExerciseTypes();
 
   return (
     <div className="flex-1 overflow-y-auto">
@@ -71,11 +73,16 @@ export function PracticeTabContent() {
       <div className="flex flex-col gap-2.5 px-4 pb-4 pt-2">
         {modes.map((mode) => {
           const Icon = mode.icon;
+          const isAvailable = isLoading || availableTypes.includes(mode.id);
           return (
             <button
               key={mode.id}
-              onClick={() => router.push(`/practice/session?mode=${mode.id}`)}
-              className="flex w-full items-center gap-3.5 rounded-[14px] border border-border bg-card p-4 text-left"
+              onClick={() => isAvailable && router.push(`/practice/session?mode=${mode.id}`)}
+              disabled={!isAvailable}
+              className={cn(
+                "flex w-full items-center gap-3.5 rounded-[14px] border border-border bg-card p-4 text-left",
+                !isAvailable && "opacity-50 cursor-not-allowed",
+              )}
             >
               <div
                 className={cn(
@@ -90,10 +97,14 @@ export function PracticeTabContent() {
                   {mode.title}
                 </div>
                 <div className="text-[13px] text-muted-foreground">
-                  {mode.desc}
+                  {isAvailable ? mode.desc : "Study related pages first to unlock"}
                 </div>
               </div>
-              <ChevronRight size={18} className="text-muted-foreground/40" />
+              {isAvailable ? (
+                <ChevronRight size={18} className="text-muted-foreground/40" />
+              ) : (
+                <Lock size={16} className="text-muted-foreground/40" />
+              )}
             </button>
           );
         })}

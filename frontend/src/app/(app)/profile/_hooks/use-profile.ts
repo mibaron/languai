@@ -18,6 +18,7 @@ import {
   usePacksUnsubscribeDestroy,
   getPacksSubscriptionsListQueryKey,
 } from "@/lib/api/orval/api/generated/packs/packs";
+import { useProgressPacksResetCreate } from "@/lib/api/orval/api/generated/progress/progress";
 import { setUserToken } from "@/lib/utils/auth/cookie-utils";
 import type { UserPackSubscription } from "@/lib/api/orval/api/generated/model";
 
@@ -49,6 +50,7 @@ export function useProfile() {
   const subscribeMutation = usePacksSubscribeCreate();
   const archiveMutation = usePacksArchiveCreate();
   const unsubscribeMutation = usePacksUnsubscribeDestroy();
+  const resetProgressMutation = useProgressPacksResetCreate();
 
   const subscribedPackIds = useMemo(
     () => (subscriptions ?? []).map((s) => s.pack.id),
@@ -96,6 +98,16 @@ export function useProfile() {
       );
     },
     [unsubscribeMutation, invalidateSubscriptions],
+  );
+
+  const handleResetProgress = useCallback(
+    (packId: string) => {
+      resetProgressMutation.mutate(
+        { packId },
+        { onSuccess: invalidateSubscriptions },
+      );
+    },
+    [resetProgressMutation, invalidateSubscriptions],
   );
 
   const handleSignOut = useCallback(async () => {
@@ -181,6 +193,7 @@ export function useProfile() {
     handleSubscribe,
     handleArchive,
     handleUnsubscribe,
+    handleResetProgress,
     handleSignOut,
     handleSaveName,
     handleSaveLanguage,

@@ -31,6 +31,7 @@ describe("PackActionSheet", () => {
         onClose={vi.fn()}
         onArchive={vi.fn()}
         onUnsubscribe={vi.fn()}
+        onResetProgress={vi.fn()}
       />,
     );
     expect(container.innerHTML).toBe("");
@@ -43,10 +44,12 @@ describe("PackActionSheet", () => {
         onClose={vi.fn()}
         onArchive={vi.fn()}
         onUnsubscribe={vi.fn()}
+        onResetProgress={vi.fn()}
       />,
     );
     expect(screen.getByText("German A1.1")).toBeInTheDocument();
     expect(screen.getByText("Mark as Complete")).toBeInTheDocument();
+    expect(screen.getByText("Reset Progress")).toBeInTheDocument();
     expect(screen.getByText("Archive Pack")).toBeInTheDocument();
     expect(screen.getByText("Unsubscribe")).toBeInTheDocument();
   });
@@ -61,6 +64,7 @@ describe("PackActionSheet", () => {
         onClose={onClose}
         onArchive={onArchive}
         onUnsubscribe={vi.fn()}
+        onResetProgress={vi.fn()}
       />,
     );
     await user.click(screen.getByText("Archive Pack"));
@@ -78,10 +82,31 @@ describe("PackActionSheet", () => {
         onClose={onClose}
         onArchive={vi.fn()}
         onUnsubscribe={onUnsubscribe}
+        onResetProgress={vi.fn()}
       />,
     );
     await user.click(screen.getByText("Unsubscribe"));
     expect(onUnsubscribe).toHaveBeenCalledWith("pack-1");
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it("shows confirm dialog and calls onResetProgress when confirmed", async () => {
+    const user = userEvent.setup();
+    const onResetProgress = vi.fn();
+    const onClose = vi.fn();
+    render(
+      <PackActionSheet
+        subscription={mockSubscription}
+        onClose={onClose}
+        onArchive={vi.fn()}
+        onUnsubscribe={vi.fn()}
+        onResetProgress={onResetProgress}
+      />,
+    );
+    await user.click(screen.getByText("Reset Progress"));
+    expect(screen.getByText("Reset")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Reset" }));
+    expect(onResetProgress).toHaveBeenCalledWith("pack-1");
     expect(onClose).toHaveBeenCalled();
   });
 });

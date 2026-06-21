@@ -44,6 +44,7 @@ export function ProfileTabContent() {
     handleSubscribe,
     handleArchive,
     handleUnsubscribe,
+    handleResetProgress,
     handleSignOut,
     handleSaveName,
     handleSaveLanguage,
@@ -213,6 +214,7 @@ export function ProfileTabContent() {
         onClose={() => setActionSheetPack(null)}
         onArchive={handleArchive}
         onUnsubscribe={handleUnsubscribe}
+        onResetProgress={handleResetProgress}
       />
 
       <EditNameDrawer

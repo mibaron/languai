@@ -105,6 +105,17 @@ export const progressDestroyParams = zod.object({
 })
 
 /**
+ * @summary Reset all page progress for a pack
+ */
+export const progressPacksResetCreateParams = zod.object({
+  "pack_id": zod.string().uuid()
+})
+
+export const progressPacksResetCreateResponse = zod.object({
+  "deleted_count": zod.number()
+})
+
+/**
  * @summary Mark a page as studied
  */
 export const progressPagesMarkStudiedCreateParams = zod.object({
