@@ -3,13 +3,14 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 import { MatchingExercise } from "./matching-exercise";
-import type { MatchingExercise as MatchingExerciseType } from "./types";
+import type { MatchingExercise as MatchingExerciseType } from "@/lib/api/orval/api/generated/model";
 
 const mockExercise: MatchingExerciseType = {
+  id: "ex-1",
   exercise_type: "matching",
   item_id: "abc-123",
-  skill_type: "recognition",
-  is_new: false,
+  item_text: "Hund",
+  item_translation: "Dog",
   instruction: "Match German to English",
   pairs: [
     { left: "Hund", right: "Dog" },

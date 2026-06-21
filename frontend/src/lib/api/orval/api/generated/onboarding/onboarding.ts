@@ -5,10 +5,7 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
   MutationFunction,
   QueryFunction,
@@ -16,152 +13,143 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query";
 
-import type {
-  OnboardingCompleteRequest,
-  OnboardingStatus
-} from '.././model';
+import type { OnboardingCompleteRequest, OnboardingStatus } from ".././model";
 
-import { axiosInstance } from '../../../client';
+import { axiosInstance } from "../../../client";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
-      type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
-
-
-
+type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
 /**
  * @summary Get onboarding status
  */
-export const onboardingRetrieve = (
-    
- signal?: AbortSignal
-) => {
-      
-      
-      return axiosInstance<OnboardingStatus>(
-      {url: `/api/v1/onboarding/`, method: 'GET', signal
-    },
-      );
-    }
-  
-
-
+export const onboardingRetrieve = (signal?: AbortSignal) => {
+  return axiosInstance<OnboardingStatus>({ url: `/api/v1/onboarding/`, method: "GET", signal });
+};
 
 export const getOnboardingRetrieveQueryKey = () => {
-    return [
-    `/api/v1/onboarding/`
-    ] as const;
-    }
+  return [`/api/v1/onboarding/`] as const;
+};
 
-    
-export const getOnboardingRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof onboardingRetrieve>>, TError = unknown>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof onboardingRetrieve>>, TError, TData>, }
-) => {
+export const getOnboardingRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof onboardingRetrieve>>,
+  TError = unknown,
+>(options?: {
+  query?: UseQueryOptions<Awaited<ReturnType<typeof onboardingRetrieve>>, TError, TData>;
+}) => {
+  const { query: queryOptions } = options ?? {};
 
-const {query: queryOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getOnboardingRetrieveQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getOnboardingRetrieveQueryKey();
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof onboardingRetrieve>>> = ({ signal }) =>
+    onboardingRetrieve(signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof onboardingRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof onboardingRetrieve>>> = ({ signal }) => onboardingRetrieve(signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof onboardingRetrieve>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type OnboardingRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof onboardingRetrieve>>>
-export type OnboardingRetrieveQueryError = unknown
-
+export type OnboardingRetrieveQueryResult = NonNullable<
+  Awaited<ReturnType<typeof onboardingRetrieve>>
+>;
+export type OnboardingRetrieveQueryError = unknown;
 
 /**
  * @summary Get onboarding status
  */
 
-export function useOnboardingRetrieve<TData = Awaited<ReturnType<typeof onboardingRetrieve>>, TError = unknown>(
-  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof onboardingRetrieve>>, TError, TData>, }
-  
- ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+export function useOnboardingRetrieve<
+  TData = Awaited<ReturnType<typeof onboardingRetrieve>>,
+  TError = unknown,
+>(options?: {
+  query?: UseQueryOptions<Awaited<ReturnType<typeof onboardingRetrieve>>, TError, TData>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getOnboardingRetrieveQueryOptions(options);
 
-  const queryOptions = getOnboardingRetrieveQueryOptions(options)
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
 
 /**
  * @summary Complete onboarding
  */
 export const onboardingCreate = (
-    onboardingCompleteRequest: OnboardingCompleteRequest,
- signal?: AbortSignal
+  onboardingCompleteRequest: OnboardingCompleteRequest,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return axiosInstance<OnboardingStatus>(
-      {url: `/api/v1/onboarding/`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: onboardingCompleteRequest, signal
-    },
-      );
-    }
-  
+  return axiosInstance<OnboardingStatus>({
+    url: `/api/v1/onboarding/`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: onboardingCompleteRequest,
+    signal,
+  });
+};
 
+export const getOnboardingCreateMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof onboardingCreate>>,
+    TError,
+    { data: OnboardingCompleteRequest },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof onboardingCreate>>,
+  TError,
+  { data: OnboardingCompleteRequest },
+  TContext
+> => {
+  const mutationKey = ["onboardingCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getOnboardingCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof onboardingCreate>>, TError,{data: OnboardingCompleteRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof onboardingCreate>>, TError,{data: OnboardingCompleteRequest}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof onboardingCreate>>,
+    { data: OnboardingCompleteRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-const mutationKey = ['onboardingCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return onboardingCreate(data);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type OnboardingCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof onboardingCreate>>
+>;
+export type OnboardingCreateMutationBody = OnboardingCompleteRequest;
+export type OnboardingCreateMutationError = unknown;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof onboardingCreate>>, {data: OnboardingCompleteRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  onboardingCreate(data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type OnboardingCreateMutationResult = NonNullable<Awaited<ReturnType<typeof onboardingCreate>>>
-    export type OnboardingCreateMutationBody = OnboardingCompleteRequest
-    export type OnboardingCreateMutationError = unknown
-
-    /**
+/**
  * @summary Complete onboarding
  */
-export const useOnboardingCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof onboardingCreate>>, TError,{data: OnboardingCompleteRequest}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof onboardingCreate>>,
-        TError,
-        {data: OnboardingCompleteRequest},
-        TContext
-      > => {
+export const useOnboardingCreate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof onboardingCreate>>,
+    TError,
+    { data: OnboardingCompleteRequest },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof onboardingCreate>>,
+  TError,
+  { data: OnboardingCompleteRequest },
+  TContext
+> => {
+  const mutationOptions = getOnboardingCreateMutationOptions(options);
 
-      const mutationOptions = getOnboardingCreateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
+  return useMutation(mutationOptions);
+};

@@ -9,7 +9,6 @@ const mockResult: SessionResult = {
   total: 10,
   correct: 7,
   incorrect: 3,
-  newItems: 4,
 };
 
 describe("SessionResults", () => {
@@ -22,18 +21,6 @@ describe("SessionResults", () => {
     render(<SessionResults result={mockResult} onExit={vi.fn()} />);
     expect(screen.getByText("7")).toBeInTheDocument();
     expect(screen.getByText("3")).toBeInTheDocument();
-  });
-
-  it("renders new items count when present", () => {
-    render(<SessionResults result={mockResult} onExit={vi.fn()} />);
-    expect(screen.getByText("4")).toBeInTheDocument();
-    expect(screen.getByText("New")).toBeInTheDocument();
-  });
-
-  it("hides new items section when zero", () => {
-    const noNewResult: SessionResult = { ...mockResult, newItems: 0 };
-    render(<SessionResults result={noNewResult} onExit={vi.fn()} />);
-    expect(screen.queryByText("New")).not.toBeInTheDocument();
   });
 
   it("renders session complete text", () => {

@@ -5,16 +5,15 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import type { FlashcardExerciseExerciseType } from "./flashcardExerciseExerciseType";
+import type { MatchingExerciseExerciseType } from "./matchingExerciseExerciseType";
+import type { MatchingPair } from "./matchingPair";
 
-export interface FlashcardExercise {
+export interface MatchingExercise {
   readonly id: string;
-  exercise_type: FlashcardExerciseExerciseType;
+  exercise_type: MatchingExerciseExerciseType;
   readonly item_id: string;
   readonly item_text: string;
   readonly item_translation: string;
-  front_text: string;
-  back_text: string;
-  front_context?: string;
-  back_context?: string;
+  instruction?: string;
+  readonly pairs: readonly MatchingPair[];
 }

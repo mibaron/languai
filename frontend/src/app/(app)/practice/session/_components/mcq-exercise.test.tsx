@@ -3,15 +3,16 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 import { MCQExercise } from "./mcq-exercise";
-import type { MCQExercise as MCQExerciseType } from "./types";
+import type { MCQExercise as MCQExerciseType } from "@/lib/api/orval/api/generated/model";
 
 const mockExercise: MCQExerciseType = {
+  id: "ex-1",
   exercise_type: "mcq_recognition",
   item_id: "abc-123",
-  skill_type: "recognition",
-  is_new: false,
-  prompt_text: "the table",
-  prompt_hint: "Pick the correct German",
+  item_text: "der Tisch",
+  item_translation: "the table",
+  question: "the table",
+  explanation: "",
   choices: [
     { id: "c1", text: "der Stuhl" },
     { id: "abc-123", text: "der Tisch" },
@@ -31,7 +32,7 @@ describe("MCQExercise", () => {
       />,
     );
     expect(screen.getByText("the table")).toBeInTheDocument();
-    expect(screen.getByText("Pick the correct German")).toBeInTheDocument();
+    expect(screen.getByText("Pick the correct answer")).toBeInTheDocument();
   });
 
   it("renders all four choices", () => {

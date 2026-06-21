@@ -5,7 +5,7 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import type { AIContent } from './aIContent';
+import type { AIContent } from "./aIContent";
 
 export interface UserAIContent {
   readonly id: string;

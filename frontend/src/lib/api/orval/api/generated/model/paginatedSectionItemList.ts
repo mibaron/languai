@@ -5,7 +5,7 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import type { SectionItem } from './sectionItem';
+import type { SectionItem } from "./sectionItem";
 
 export interface PaginatedSectionItemList {
   count: number;

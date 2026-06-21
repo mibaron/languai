@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
 
-import type { SentenceOrderExercise as SentenceOrderExerciseType } from "./types";
+import type { SentenceOrderExercise as SentenceOrderExerciseType } from "@/lib/api/orval/api/generated/model";
 
 interface SentenceOrderExerciseProps {
   exercise: SentenceOrderExerciseType;

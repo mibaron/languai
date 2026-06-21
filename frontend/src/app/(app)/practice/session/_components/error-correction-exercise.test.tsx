@@ -3,13 +3,14 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 import { ErrorCorrectionExercise } from "./error-correction-exercise";
-import type { ErrorCorrectionExercise as ErrorCorrectionExerciseType } from "./types";
+import type { ErrorCorrectionExercise as ErrorCorrectionExerciseType } from "@/lib/api/orval/api/generated/model";
 
 const mockExercise: ErrorCorrectionExerciseType = {
+  id: "ex-1",
   exercise_type: "error_correction",
   item_id: "abc-123",
-  skill_type: "recognition",
-  is_new: false,
+  item_text: "Ich bin Student.",
+  item_translation: "I am a student.",
   sentence: "Ich bist Student.",
   error_start: 4,
   error_end: 8,

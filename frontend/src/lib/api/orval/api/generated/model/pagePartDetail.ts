@@ -5,9 +5,13 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import type { TeachingNoteDetail } from './teachingNoteDetail';
-import type { FillBlankDetail } from './fillBlankDetail';
-import type { ConversationDetail } from './conversationDetail';
-import type { TableDetail } from './tableDetail';
+import type { TeachingNoteDetail } from "./teachingNoteDetail";
+import type { FillBlankDetail } from "./fillBlankDetail";
+import type { ConversationDetail } from "./conversationDetail";
+import type { TableDetail } from "./tableDetail";
 
-export type PagePartDetail = TeachingNoteDetail | FillBlankDetail | ConversationDetail | TableDetail;
+export type PagePartDetail =
+  | TeachingNoteDetail
+  | FillBlankDetail
+  | ConversationDetail
+  | TableDetail;

@@ -5,8 +5,8 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import type { CategoryEnum } from './categoryEnum';
-import type { ActionTypeEnum } from './actionTypeEnum';
+import type { CategoryEnum } from "./categoryEnum";
+import type { ActionTypeEnum } from "./actionTypeEnum";
 
 export interface AIGenerateRequestRequest {
   /**

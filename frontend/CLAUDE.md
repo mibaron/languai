@@ -87,6 +87,44 @@ frontend/
 - Prefer `as const` assertions over enums
 - Zod schemas for runtime validation of API responses
 
+#### NEVER manually cast or transform API responses (RED FLAG)
+
+This is a hard rule. If the backend returns a shape that doesn't match what the frontend needs, **fix the backend serializer** — never write a frontend transform function with `as` casts to paper over the mismatch. This produces unreadable, unmaintainable spaghetti that no one can understand or trust.
+
+**Bad — this is a disaster, never do this:**
+```tsx
+// Manually casting nested API response into flat frontend types.
+// No one can read this. No one can maintain this. It WILL break silently.
+function storedToExercise(raw: StoredExerciseResponse): Exercise {
+  const base = {
+    exercise_type: raw.exercise_type,
+    item_id: raw.item_id,
+    skill_type: "recognition" as const,
+    is_new: false,
+  };
+  if (raw.exercise_type === "flashcard") {
+    return {
+      ...base,
+      front_text: raw.detail.front_text,
+      front_hint: raw.detail.front_context ?? "",
+      back_text: raw.detail.back_text,
+      back_extra: raw.detail.back_context ?? "",
+    } as FlashcardExercise;          // ← RED FLAG: `as` cast
+  }
+  // ... 50 more lines of manual field mapping per type ...
+}
+```
+
+**Good — fix the backend, let Orval generate the types:**
+```tsx
+// Backend returns flat objects. Orval generates a discriminated union.
+// Zero transforms, zero casts, zero maintenance burden.
+const { data: exercises } = useExercisesSessionList<ExerciseSessionItem[]>(params);
+// exercises is already the correct type — use it directly in components.
+```
+
+The principle: **the backend serializer defines the contract, Orval generates the types, the frontend consumes them directly.** If there is a mismatch, the fix belongs in the backend serializer and `make generate-api` — never in a frontend transform layer. Any `as` cast on API data is a code smell that means the API contract is wrong.
+
 ### Performance
 - Use Next.js `<Image>` for all images
 - Dynamic imports (`next/dynamic`) for heavy components not needed on initial load

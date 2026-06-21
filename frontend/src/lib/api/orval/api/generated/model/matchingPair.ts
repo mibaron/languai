@@ -6,7 +6,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface StoredMatchingPair {
+export interface MatchingPair {
   /** @maxLength 255 */
   left: string;
   /** @maxLength 255 */

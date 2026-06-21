@@ -8,21 +8,20 @@
 
 /**
  * * `flashcard` - Flashcard
-* `mcq_recognition` - MCQ Recognition
-* `fill_blank` - Fill in the Blank
-* `sentence_order` - Sentence Order
-* `error_correction` - Error Correction
-* `matching` - Matching
+ * `mcq_recognition` - MCQ Recognition
+ * `fill_blank` - Fill in the Blank
+ * `sentence_order` - Sentence Order
+ * `error_correction` - Error Correction
+ * `matching` - Matching
  */
-export type ExerciseTypeEnum = typeof ExerciseTypeEnum[keyof typeof ExerciseTypeEnum];
-
+export type ExerciseTypeEnum = (typeof ExerciseTypeEnum)[keyof typeof ExerciseTypeEnum];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ExerciseTypeEnum = {
-  flashcard: 'flashcard',
-  mcq_recognition: 'mcq_recognition',
-  fill_blank: 'fill_blank',
-  sentence_order: 'sentence_order',
-  error_correction: 'error_correction',
-  matching: 'matching',
+  flashcard: "flashcard",
+  mcq_recognition: "mcq_recognition",
+  fill_blank: "fill_blank",
+  sentence_order: "sentence_order",
+  error_correction: "error_correction",
+  matching: "matching",
 } as const;

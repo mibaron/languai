@@ -3,13 +3,14 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 import { SentenceOrderExercise } from "./sentence-order-exercise";
-import type { SentenceOrderExercise as SentenceOrderExerciseType } from "./types";
+import type { SentenceOrderExercise as SentenceOrderExerciseType } from "@/lib/api/orval/api/generated/model";
 
 const mockExercise: SentenceOrderExerciseType = {
+  id: "ex-1",
   exercise_type: "sentence_order",
   item_id: "abc-123",
-  skill_type: "recognition",
-  is_new: false,
+  item_text: "Ich bin Student",
+  item_translation: "I am a student",
   jumbled_words: ["bin", "Ich", "Student"],
   correct_answers: [["Ich", "bin", "Student"]],
   hint: "Subject comes first",

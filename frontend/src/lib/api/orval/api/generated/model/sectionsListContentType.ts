@@ -6,12 +6,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type SectionsListContentType = typeof SectionsListContentType[keyof typeof SectionsListContentType];
-
+export type SectionsListContentType =
+  (typeof SectionsListContentType)[keyof typeof SectionsListContentType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SectionsListContentType = {
-  grid: 'grid',
-  notes: 'notes',
-  table: 'table',
+  grid: "grid",
+  notes: "notes",
+  table: "table",
 } as const;

@@ -5,8 +5,8 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import type { ConversationLine } from './conversationLine';
-import type { ConversationDetailPartType } from './conversationDetailPartType';
+import type { ConversationLine } from "./conversationLine";
+import type { ConversationDetailPartType } from "./conversationDetailPartType";
 
 export interface ConversationDetail {
   /** @maxLength 255 */

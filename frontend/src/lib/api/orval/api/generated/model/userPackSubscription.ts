@@ -5,8 +5,8 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import type { Pack } from './pack';
-import type { SubscriptionStatusEnum } from './subscriptionStatusEnum';
+import type { Pack } from "./pack";
+import type { SubscriptionStatusEnum } from "./subscriptionStatusEnum";
 
 export interface UserPackSubscription {
   readonly id: string;

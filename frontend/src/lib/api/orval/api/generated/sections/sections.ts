@@ -5,10 +5,7 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
   MutationFunction,
   QueryFunction,
@@ -16,8 +13,8 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query";
 
 import type {
   PaginatedSectionListList,
@@ -25,405 +22,407 @@ import type {
   SectionDetail,
   SectionWrite,
   SectionWriteRequest,
-  SectionsListParams
-} from '.././model';
+  SectionsListParams,
+} from ".././model";
 
-import { axiosInstance } from '../../../client';
+import { axiosInstance } from "../../../client";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
-      type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
-
-
-
+type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
 /**
  * Filter by level, category, or content type. Supports search by title.
  * @summary List sections
  */
-export const sectionsList = (
-    params?: SectionsListParams,
- signal?: AbortSignal
+export const sectionsList = (params?: SectionsListParams, signal?: AbortSignal) => {
+  return axiosInstance<PaginatedSectionListList>({
+    url: `/api/v1/sections/`,
+    method: "GET",
+    params,
+    signal,
+  });
+};
+
+export const getSectionsListQueryKey = (params?: SectionsListParams) => {
+  return [`/api/v1/sections/`, ...(params ? [params] : [])] as const;
+};
+
+export const getSectionsListQueryOptions = <
+  TData = Awaited<ReturnType<typeof sectionsList>>,
+  TError = unknown,
+>(
+  params?: SectionsListParams,
+  options?: { query?: UseQueryOptions<Awaited<ReturnType<typeof sectionsList>>, TError, TData> },
 ) => {
-      
-      
-      return axiosInstance<PaginatedSectionListList>(
-      {url: `/api/v1/sections/`, method: 'GET',
-        params, signal
-    },
-      );
-    }
-  
+  const { query: queryOptions } = options ?? {};
 
+  const queryKey = queryOptions?.queryKey ?? getSectionsListQueryKey(params);
 
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof sectionsList>>> = ({ signal }) =>
+    sectionsList(params, signal);
 
-export const getSectionsListQueryKey = (params?: SectionsListParams,) => {
-    return [
-    `/api/v1/sections/`, ...(params ? [params]: [])
-    ] as const;
-    }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof sectionsList>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    
-export const getSectionsListQueryOptions = <TData = Awaited<ReturnType<typeof sectionsList>>, TError = unknown>(params?: SectionsListParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof sectionsList>>, TError, TData>, }
-) => {
-
-const {query: queryOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getSectionsListQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof sectionsList>>> = ({ signal }) => sectionsList(params, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof sectionsList>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type SectionsListQueryResult = NonNullable<Awaited<ReturnType<typeof sectionsList>>>
-export type SectionsListQueryError = unknown
-
+export type SectionsListQueryResult = NonNullable<Awaited<ReturnType<typeof sectionsList>>>;
+export type SectionsListQueryError = unknown;
 
 /**
  * @summary List sections
  */
 
 export function useSectionsList<TData = Awaited<ReturnType<typeof sectionsList>>, TError = unknown>(
- params?: SectionsListParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof sectionsList>>, TError, TData>, }
-  
- ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  params?: SectionsListParams,
+  options?: { query?: UseQueryOptions<Awaited<ReturnType<typeof sectionsList>>, TError, TData> },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getSectionsListQueryOptions(params, options);
 
-  const queryOptions = getSectionsListQueryOptions(params,options)
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
+/**
+ * @summary Create a section
+ */
+export const sectionsCreate = (sectionWriteRequest: SectionWriteRequest, signal?: AbortSignal) => {
+  return axiosInstance<SectionWrite>({
+    url: `/api/v1/sections/`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: sectionWriteRequest,
+    signal,
+  });
+};
 
+export const getSectionsCreateMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof sectionsCreate>>,
+    TError,
+    { data: SectionWriteRequest },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof sectionsCreate>>,
+  TError,
+  { data: SectionWriteRequest },
+  TContext
+> => {
+  const mutationKey = ["sectionsCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof sectionsCreate>>,
+    { data: SectionWriteRequest }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return sectionsCreate(data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SectionsCreateMutationResult = NonNullable<Awaited<ReturnType<typeof sectionsCreate>>>;
+export type SectionsCreateMutationBody = SectionWriteRequest;
+export type SectionsCreateMutationError = unknown;
 
 /**
  * @summary Create a section
  */
-export const sectionsCreate = (
-    sectionWriteRequest: SectionWriteRequest,
- signal?: AbortSignal
-) => {
-      
-      
-      return axiosInstance<SectionWrite>(
-      {url: `/api/v1/sections/`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: sectionWriteRequest, signal
-    },
-      );
-    }
-  
+export const useSectionsCreate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof sectionsCreate>>,
+    TError,
+    { data: SectionWriteRequest },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof sectionsCreate>>,
+  TError,
+  { data: SectionWriteRequest },
+  TContext
+> => {
+  const mutationOptions = getSectionsCreateMutationOptions(options);
 
-
-export const getSectionsCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sectionsCreate>>, TError,{data: SectionWriteRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof sectionsCreate>>, TError,{data: SectionWriteRequest}, TContext> => {
-
-const mutationKey = ['sectionsCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof sectionsCreate>>, {data: SectionWriteRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  sectionsCreate(data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SectionsCreateMutationResult = NonNullable<Awaited<ReturnType<typeof sectionsCreate>>>
-    export type SectionsCreateMutationBody = SectionWriteRequest
-    export type SectionsCreateMutationError = unknown
-
-    /**
- * @summary Create a section
- */
-export const useSectionsCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sectionsCreate>>, TError,{data: SectionWriteRequest}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof sectionsCreate>>,
-        TError,
-        {data: SectionWriteRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getSectionsCreateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Get section detail with items
  */
-export const sectionsRetrieve = (
-    id: string,
- signal?: AbortSignal
+export const sectionsRetrieve = (id: string, signal?: AbortSignal) => {
+  return axiosInstance<SectionDetail>({ url: `/api/v1/sections/${id}/`, method: "GET", signal });
+};
+
+export const getSectionsRetrieveQueryKey = (id?: string) => {
+  return [`/api/v1/sections/${id}/`] as const;
+};
+
+export const getSectionsRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof sectionsRetrieve>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<Awaited<ReturnType<typeof sectionsRetrieve>>, TError, TData>;
+  },
 ) => {
-      
-      
-      return axiosInstance<SectionDetail>(
-      {url: `/api/v1/sections/${id}/`, method: 'GET', signal
-    },
-      );
-    }
-  
+  const { query: queryOptions } = options ?? {};
 
+  const queryKey = queryOptions?.queryKey ?? getSectionsRetrieveQueryKey(id);
 
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof sectionsRetrieve>>> = ({ signal }) =>
+    sectionsRetrieve(id, signal);
 
-export const getSectionsRetrieveQueryKey = (id?: string,) => {
-    return [
-    `/api/v1/sections/${id}/`
-    ] as const;
-    }
+  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof sectionsRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    
-export const getSectionsRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof sectionsRetrieve>>, TError = unknown>(id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof sectionsRetrieve>>, TError, TData>, }
-) => {
-
-const {query: queryOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getSectionsRetrieveQueryKey(id);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof sectionsRetrieve>>> = ({ signal }) => sectionsRetrieve(id, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof sectionsRetrieve>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type SectionsRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof sectionsRetrieve>>>
-export type SectionsRetrieveQueryError = unknown
-
+export type SectionsRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof sectionsRetrieve>>>;
+export type SectionsRetrieveQueryError = unknown;
 
 /**
  * @summary Get section detail with items
  */
 
-export function useSectionsRetrieve<TData = Awaited<ReturnType<typeof sectionsRetrieve>>, TError = unknown>(
- id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof sectionsRetrieve>>, TError, TData>, }
-  
- ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+export function useSectionsRetrieve<
+  TData = Awaited<ReturnType<typeof sectionsRetrieve>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<Awaited<ReturnType<typeof sectionsRetrieve>>, TError, TData>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getSectionsRetrieveQueryOptions(id, options);
 
-  const queryOptions = getSectionsRetrieveQueryOptions(id,options)
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
+/**
+ * @summary Update a section
+ */
+export const sectionsUpdate = (id: string, sectionWriteRequest: SectionWriteRequest) => {
+  return axiosInstance<SectionWrite>({
+    url: `/api/v1/sections/${id}/`,
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    data: sectionWriteRequest,
+  });
+};
 
+export const getSectionsUpdateMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof sectionsUpdate>>,
+    TError,
+    { id: string; data: SectionWriteRequest },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof sectionsUpdate>>,
+  TError,
+  { id: string; data: SectionWriteRequest },
+  TContext
+> => {
+  const mutationKey = ["sectionsUpdate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof sectionsUpdate>>,
+    { id: string; data: SectionWriteRequest }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return sectionsUpdate(id, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SectionsUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof sectionsUpdate>>>;
+export type SectionsUpdateMutationBody = SectionWriteRequest;
+export type SectionsUpdateMutationError = unknown;
 
 /**
  * @summary Update a section
  */
-export const sectionsUpdate = (
-    id: string,
-    sectionWriteRequest: SectionWriteRequest,
- ) => {
-      
-      
-      return axiosInstance<SectionWrite>(
-      {url: `/api/v1/sections/${id}/`, method: 'PUT',
-      headers: {'Content-Type': 'application/json', },
-      data: sectionWriteRequest
-    },
-      );
-    }
-  
+export const useSectionsUpdate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof sectionsUpdate>>,
+    TError,
+    { id: string; data: SectionWriteRequest },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof sectionsUpdate>>,
+  TError,
+  { id: string; data: SectionWriteRequest },
+  TContext
+> => {
+  const mutationOptions = getSectionsUpdateMutationOptions(options);
 
-
-export const getSectionsUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sectionsUpdate>>, TError,{id: string;data: SectionWriteRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof sectionsUpdate>>, TError,{id: string;data: SectionWriteRequest}, TContext> => {
-
-const mutationKey = ['sectionsUpdate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof sectionsUpdate>>, {id: string;data: SectionWriteRequest}> = (props) => {
-          const {id,data} = props ?? {};
-
-          return  sectionsUpdate(id,data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SectionsUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof sectionsUpdate>>>
-    export type SectionsUpdateMutationBody = SectionWriteRequest
-    export type SectionsUpdateMutationError = unknown
-
-    /**
- * @summary Update a section
- */
-export const useSectionsUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sectionsUpdate>>, TError,{id: string;data: SectionWriteRequest}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof sectionsUpdate>>,
-        TError,
-        {id: string;data: SectionWriteRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getSectionsUpdateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Partially update a section
  */
 export const sectionsPartialUpdate = (
-    id: string,
-    patchedSectionWriteRequest: PatchedSectionWriteRequest,
- ) => {
-      
-      
-      return axiosInstance<SectionWrite>(
-      {url: `/api/v1/sections/${id}/`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: patchedSectionWriteRequest
-    },
-      );
-    }
-  
+  id: string,
+  patchedSectionWriteRequest: PatchedSectionWriteRequest,
+) => {
+  return axiosInstance<SectionWrite>({
+    url: `/api/v1/sections/${id}/`,
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    data: patchedSectionWriteRequest,
+  });
+};
 
+export const getSectionsPartialUpdateMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof sectionsPartialUpdate>>,
+    TError,
+    { id: string; data: PatchedSectionWriteRequest },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof sectionsPartialUpdate>>,
+  TError,
+  { id: string; data: PatchedSectionWriteRequest },
+  TContext
+> => {
+  const mutationKey = ["sectionsPartialUpdate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getSectionsPartialUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sectionsPartialUpdate>>, TError,{id: string;data: PatchedSectionWriteRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof sectionsPartialUpdate>>, TError,{id: string;data: PatchedSectionWriteRequest}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof sectionsPartialUpdate>>,
+    { id: string; data: PatchedSectionWriteRequest }
+  > = (props) => {
+    const { id, data } = props ?? {};
 
-const mutationKey = ['sectionsPartialUpdate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return sectionsPartialUpdate(id, data);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type SectionsPartialUpdateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof sectionsPartialUpdate>>
+>;
+export type SectionsPartialUpdateMutationBody = PatchedSectionWriteRequest;
+export type SectionsPartialUpdateMutationError = unknown;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof sectionsPartialUpdate>>, {id: string;data: PatchedSectionWriteRequest}> = (props) => {
-          const {id,data} = props ?? {};
-
-          return  sectionsPartialUpdate(id,data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SectionsPartialUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof sectionsPartialUpdate>>>
-    export type SectionsPartialUpdateMutationBody = PatchedSectionWriteRequest
-    export type SectionsPartialUpdateMutationError = unknown
-
-    /**
+/**
  * @summary Partially update a section
  */
-export const useSectionsPartialUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sectionsPartialUpdate>>, TError,{id: string;data: PatchedSectionWriteRequest}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof sectionsPartialUpdate>>,
-        TError,
-        {id: string;data: PatchedSectionWriteRequest},
-        TContext
-      > => {
+export const useSectionsPartialUpdate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof sectionsPartialUpdate>>,
+    TError,
+    { id: string; data: PatchedSectionWriteRequest },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof sectionsPartialUpdate>>,
+  TError,
+  { id: string; data: PatchedSectionWriteRequest },
+  TContext
+> => {
+  const mutationOptions = getSectionsPartialUpdateMutationOptions(options);
 
-      const mutationOptions = getSectionsPartialUpdateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Delete a section
  */
-export const sectionsDestroy = (
-    id: string,
- ) => {
-      
-      
-      return axiosInstance<void>(
-      {url: `/api/v1/sections/${id}/`, method: 'DELETE'
-    },
-      );
-    }
-  
+export const sectionsDestroy = (id: string) => {
+  return axiosInstance<void>({ url: `/api/v1/sections/${id}/`, method: "DELETE" });
+};
 
+export const getSectionsDestroyMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof sectionsDestroy>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof sectionsDestroy>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationKey = ["sectionsDestroy"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getSectionsDestroyMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sectionsDestroy>>, TError,{id: string}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof sectionsDestroy>>, TError,{id: string}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof sectionsDestroy>>,
+    { id: string }
+  > = (props) => {
+    const { id } = props ?? {};
 
-const mutationKey = ['sectionsDestroy'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return sectionsDestroy(id);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type SectionsDestroyMutationResult = NonNullable<
+  Awaited<ReturnType<typeof sectionsDestroy>>
+>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof sectionsDestroy>>, {id: string}> = (props) => {
-          const {id} = props ?? {};
+export type SectionsDestroyMutationError = unknown;
 
-          return  sectionsDestroy(id,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SectionsDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof sectionsDestroy>>>
-    
-    export type SectionsDestroyMutationError = unknown
-
-    /**
+/**
  * @summary Delete a section
  */
-export const useSectionsDestroy = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sectionsDestroy>>, TError,{id: string}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof sectionsDestroy>>,
-        TError,
-        {id: string},
-        TContext
-      > => {
+export const useSectionsDestroy = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof sectionsDestroy>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof sectionsDestroy>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationOptions = getSectionsDestroyMutationOptions(options);
 
-      const mutationOptions = getSectionsDestroyMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
+  return useMutation(mutationOptions);
+};

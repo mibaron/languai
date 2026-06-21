@@ -5,7 +5,7 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import type { PageList } from './pageList';
+import type { PageList } from "./pageList";
 
 export interface PaginatedPageListList {
   count: number;

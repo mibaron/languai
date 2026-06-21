@@ -5,95 +5,70 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import {
-  useQuery
-} from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 import type {
   QueryFunction,
   QueryKey,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query";
 
-import type {
-  GoalsListParams,
-  LearningGoal
-} from '.././model';
+import type { GoalsListParams, LearningGoal } from ".././model";
 
-import { axiosInstance } from '../../../client';
+import { axiosInstance } from "../../../client";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
-      type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
-
-
-
+type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
 /**
  * @summary List all learning goals
  */
-export const goalsList = (
-    params?: GoalsListParams,
- signal?: AbortSignal
+export const goalsList = (params?: GoalsListParams, signal?: AbortSignal) => {
+  return axiosInstance<LearningGoal[]>({ url: `/api/v1/goals/`, method: "GET", params, signal });
+};
+
+export const getGoalsListQueryKey = (params?: GoalsListParams) => {
+  return [`/api/v1/goals/`, ...(params ? [params] : [])] as const;
+};
+
+export const getGoalsListQueryOptions = <
+  TData = Awaited<ReturnType<typeof goalsList>>,
+  TError = unknown,
+>(
+  params?: GoalsListParams,
+  options?: { query?: UseQueryOptions<Awaited<ReturnType<typeof goalsList>>, TError, TData> },
 ) => {
-      
-      
-      return axiosInstance<LearningGoal[]>(
-      {url: `/api/v1/goals/`, method: 'GET',
-        params, signal
-    },
-      );
-    }
-  
+  const { query: queryOptions } = options ?? {};
 
+  const queryKey = queryOptions?.queryKey ?? getGoalsListQueryKey(params);
 
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof goalsList>>> = ({ signal }) =>
+    goalsList(params, signal);
 
-export const getGoalsListQueryKey = (params?: GoalsListParams,) => {
-    return [
-    `/api/v1/goals/`, ...(params ? [params]: [])
-    ] as const;
-    }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof goalsList>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    
-export const getGoalsListQueryOptions = <TData = Awaited<ReturnType<typeof goalsList>>, TError = unknown>(params?: GoalsListParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof goalsList>>, TError, TData>, }
-) => {
-
-const {query: queryOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGoalsListQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof goalsList>>> = ({ signal }) => goalsList(params, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof goalsList>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GoalsListQueryResult = NonNullable<Awaited<ReturnType<typeof goalsList>>>
-export type GoalsListQueryError = unknown
-
+export type GoalsListQueryResult = NonNullable<Awaited<ReturnType<typeof goalsList>>>;
+export type GoalsListQueryError = unknown;
 
 /**
  * @summary List all learning goals
  */
 
 export function useGoalsList<TData = Awaited<ReturnType<typeof goalsList>>, TError = unknown>(
- params?: GoalsListParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof goalsList>>, TError, TData>, }
-  
- ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  params?: GoalsListParams,
+  options?: { query?: UseQueryOptions<Awaited<ReturnType<typeof goalsList>>, TError, TData> },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGoalsListQueryOptions(params, options);
 
-  const queryOptions = getGoalsListQueryOptions(params,options)
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-

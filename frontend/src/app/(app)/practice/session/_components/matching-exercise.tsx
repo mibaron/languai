@@ -3,7 +3,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { cn } from "@/lib/utils";
 
-import type { MatchingExercise as MatchingExerciseType } from "./types";
+import type { MatchingExercise as MatchingExerciseType } from "@/lib/api/orval/api/generated/model";
 
 interface MatchingExerciseProps {
   exercise: MatchingExerciseType;

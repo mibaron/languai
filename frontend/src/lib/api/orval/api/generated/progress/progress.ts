@@ -5,10 +5,7 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
   MutationFunction,
   QueryFunction,
@@ -16,8 +13,8 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query";
 
 import type {
   PaginatedSectionProgressList,
@@ -25,466 +22,481 @@ import type {
   ProgressListParams,
   SectionProgress,
   SectionProgressRequest,
-  UserPageProgress
-} from '.././model';
+  UserPageProgress,
+} from ".././model";
 
-import { axiosInstance } from '../../../client';
+import { axiosInstance } from "../../../client";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
-      type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
-
-
-
+type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
 /**
  * @summary List user progress
  */
-export const progressList = (
-    params?: ProgressListParams,
- signal?: AbortSignal
+export const progressList = (params?: ProgressListParams, signal?: AbortSignal) => {
+  return axiosInstance<PaginatedSectionProgressList>({
+    url: `/api/v1/progress/`,
+    method: "GET",
+    params,
+    signal,
+  });
+};
+
+export const getProgressListQueryKey = (params?: ProgressListParams) => {
+  return [`/api/v1/progress/`, ...(params ? [params] : [])] as const;
+};
+
+export const getProgressListQueryOptions = <
+  TData = Awaited<ReturnType<typeof progressList>>,
+  TError = unknown,
+>(
+  params?: ProgressListParams,
+  options?: { query?: UseQueryOptions<Awaited<ReturnType<typeof progressList>>, TError, TData> },
 ) => {
-      
-      
-      return axiosInstance<PaginatedSectionProgressList>(
-      {url: `/api/v1/progress/`, method: 'GET',
-        params, signal
-    },
-      );
-    }
-  
+  const { query: queryOptions } = options ?? {};
 
+  const queryKey = queryOptions?.queryKey ?? getProgressListQueryKey(params);
 
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof progressList>>> = ({ signal }) =>
+    progressList(params, signal);
 
-export const getProgressListQueryKey = (params?: ProgressListParams,) => {
-    return [
-    `/api/v1/progress/`, ...(params ? [params]: [])
-    ] as const;
-    }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof progressList>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    
-export const getProgressListQueryOptions = <TData = Awaited<ReturnType<typeof progressList>>, TError = unknown>(params?: ProgressListParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof progressList>>, TError, TData>, }
-) => {
-
-const {query: queryOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getProgressListQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof progressList>>> = ({ signal }) => progressList(params, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof progressList>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type ProgressListQueryResult = NonNullable<Awaited<ReturnType<typeof progressList>>>
-export type ProgressListQueryError = unknown
-
+export type ProgressListQueryResult = NonNullable<Awaited<ReturnType<typeof progressList>>>;
+export type ProgressListQueryError = unknown;
 
 /**
  * @summary List user progress
  */
 
 export function useProgressList<TData = Awaited<ReturnType<typeof progressList>>, TError = unknown>(
- params?: ProgressListParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof progressList>>, TError, TData>, }
-  
- ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  params?: ProgressListParams,
+  options?: { query?: UseQueryOptions<Awaited<ReturnType<typeof progressList>>, TError, TData> },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getProgressListQueryOptions(params, options);
 
-  const queryOptions = getProgressListQueryOptions(params,options)
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
 
 /**
  * @summary Create/update section progress
  */
 export const progressCreate = (
-    sectionProgressRequest: SectionProgressRequest,
- signal?: AbortSignal
+  sectionProgressRequest: SectionProgressRequest,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return axiosInstance<SectionProgress>(
-      {url: `/api/v1/progress/`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: sectionProgressRequest, signal
-    },
-      );
-    }
-  
+  return axiosInstance<SectionProgress>({
+    url: `/api/v1/progress/`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: sectionProgressRequest,
+    signal,
+  });
+};
 
+export const getProgressCreateMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof progressCreate>>,
+    TError,
+    { data: SectionProgressRequest },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof progressCreate>>,
+  TError,
+  { data: SectionProgressRequest },
+  TContext
+> => {
+  const mutationKey = ["progressCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getProgressCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof progressCreate>>, TError,{data: SectionProgressRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof progressCreate>>, TError,{data: SectionProgressRequest}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof progressCreate>>,
+    { data: SectionProgressRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-const mutationKey = ['progressCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return progressCreate(data);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type ProgressCreateMutationResult = NonNullable<Awaited<ReturnType<typeof progressCreate>>>;
+export type ProgressCreateMutationBody = SectionProgressRequest;
+export type ProgressCreateMutationError = unknown;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof progressCreate>>, {data: SectionProgressRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  progressCreate(data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ProgressCreateMutationResult = NonNullable<Awaited<ReturnType<typeof progressCreate>>>
-    export type ProgressCreateMutationBody = SectionProgressRequest
-    export type ProgressCreateMutationError = unknown
-
-    /**
+/**
  * @summary Create/update section progress
  */
-export const useProgressCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof progressCreate>>, TError,{data: SectionProgressRequest}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof progressCreate>>,
-        TError,
-        {data: SectionProgressRequest},
-        TContext
-      > => {
+export const useProgressCreate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof progressCreate>>,
+    TError,
+    { data: SectionProgressRequest },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof progressCreate>>,
+  TError,
+  { data: SectionProgressRequest },
+  TContext
+> => {
+  const mutationOptions = getProgressCreateMutationOptions(options);
 
-      const mutationOptions = getProgressCreateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Get progress for a section
  */
-export const progressRetrieve = (
-    id: string,
- signal?: AbortSignal
+export const progressRetrieve = (id: string, signal?: AbortSignal) => {
+  return axiosInstance<SectionProgress>({ url: `/api/v1/progress/${id}/`, method: "GET", signal });
+};
+
+export const getProgressRetrieveQueryKey = (id?: string) => {
+  return [`/api/v1/progress/${id}/`] as const;
+};
+
+export const getProgressRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof progressRetrieve>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<Awaited<ReturnType<typeof progressRetrieve>>, TError, TData>;
+  },
 ) => {
-      
-      
-      return axiosInstance<SectionProgress>(
-      {url: `/api/v1/progress/${id}/`, method: 'GET', signal
-    },
-      );
-    }
-  
+  const { query: queryOptions } = options ?? {};
 
+  const queryKey = queryOptions?.queryKey ?? getProgressRetrieveQueryKey(id);
 
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof progressRetrieve>>> = ({ signal }) =>
+    progressRetrieve(id, signal);
 
-export const getProgressRetrieveQueryKey = (id?: string,) => {
-    return [
-    `/api/v1/progress/${id}/`
-    ] as const;
-    }
+  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof progressRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    
-export const getProgressRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof progressRetrieve>>, TError = unknown>(id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof progressRetrieve>>, TError, TData>, }
-) => {
-
-const {query: queryOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getProgressRetrieveQueryKey(id);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof progressRetrieve>>> = ({ signal }) => progressRetrieve(id, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof progressRetrieve>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type ProgressRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof progressRetrieve>>>
-export type ProgressRetrieveQueryError = unknown
-
+export type ProgressRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof progressRetrieve>>>;
+export type ProgressRetrieveQueryError = unknown;
 
 /**
  * @summary Get progress for a section
  */
 
-export function useProgressRetrieve<TData = Awaited<ReturnType<typeof progressRetrieve>>, TError = unknown>(
- id: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof progressRetrieve>>, TError, TData>, }
-  
- ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+export function useProgressRetrieve<
+  TData = Awaited<ReturnType<typeof progressRetrieve>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<Awaited<ReturnType<typeof progressRetrieve>>, TError, TData>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getProgressRetrieveQueryOptions(id, options);
 
-  const queryOptions = getProgressRetrieveQueryOptions(id,options)
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
+/**
+ * @summary Update section progress
+ */
+export const progressUpdate = (id: string, sectionProgressRequest: SectionProgressRequest) => {
+  return axiosInstance<SectionProgress>({
+    url: `/api/v1/progress/${id}/`,
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    data: sectionProgressRequest,
+  });
+};
 
+export const getProgressUpdateMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof progressUpdate>>,
+    TError,
+    { id: string; data: SectionProgressRequest },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof progressUpdate>>,
+  TError,
+  { id: string; data: SectionProgressRequest },
+  TContext
+> => {
+  const mutationKey = ["progressUpdate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof progressUpdate>>,
+    { id: string; data: SectionProgressRequest }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return progressUpdate(id, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ProgressUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof progressUpdate>>>;
+export type ProgressUpdateMutationBody = SectionProgressRequest;
+export type ProgressUpdateMutationError = unknown;
 
 /**
  * @summary Update section progress
  */
-export const progressUpdate = (
-    id: string,
-    sectionProgressRequest: SectionProgressRequest,
- ) => {
-      
-      
-      return axiosInstance<SectionProgress>(
-      {url: `/api/v1/progress/${id}/`, method: 'PUT',
-      headers: {'Content-Type': 'application/json', },
-      data: sectionProgressRequest
-    },
-      );
-    }
-  
+export const useProgressUpdate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof progressUpdate>>,
+    TError,
+    { id: string; data: SectionProgressRequest },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof progressUpdate>>,
+  TError,
+  { id: string; data: SectionProgressRequest },
+  TContext
+> => {
+  const mutationOptions = getProgressUpdateMutationOptions(options);
 
-
-export const getProgressUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof progressUpdate>>, TError,{id: string;data: SectionProgressRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof progressUpdate>>, TError,{id: string;data: SectionProgressRequest}, TContext> => {
-
-const mutationKey = ['progressUpdate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof progressUpdate>>, {id: string;data: SectionProgressRequest}> = (props) => {
-          const {id,data} = props ?? {};
-
-          return  progressUpdate(id,data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ProgressUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof progressUpdate>>>
-    export type ProgressUpdateMutationBody = SectionProgressRequest
-    export type ProgressUpdateMutationError = unknown
-
-    /**
- * @summary Update section progress
- */
-export const useProgressUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof progressUpdate>>, TError,{id: string;data: SectionProgressRequest}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof progressUpdate>>,
-        TError,
-        {id: string;data: SectionProgressRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getProgressUpdateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Partially update section progress
  */
 export const progressPartialUpdate = (
-    id: string,
-    patchedSectionProgressRequest: PatchedSectionProgressRequest,
- ) => {
-      
-      
-      return axiosInstance<SectionProgress>(
-      {url: `/api/v1/progress/${id}/`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: patchedSectionProgressRequest
-    },
-      );
-    }
-  
+  id: string,
+  patchedSectionProgressRequest: PatchedSectionProgressRequest,
+) => {
+  return axiosInstance<SectionProgress>({
+    url: `/api/v1/progress/${id}/`,
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    data: patchedSectionProgressRequest,
+  });
+};
 
+export const getProgressPartialUpdateMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof progressPartialUpdate>>,
+    TError,
+    { id: string; data: PatchedSectionProgressRequest },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof progressPartialUpdate>>,
+  TError,
+  { id: string; data: PatchedSectionProgressRequest },
+  TContext
+> => {
+  const mutationKey = ["progressPartialUpdate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getProgressPartialUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof progressPartialUpdate>>, TError,{id: string;data: PatchedSectionProgressRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof progressPartialUpdate>>, TError,{id: string;data: PatchedSectionProgressRequest}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof progressPartialUpdate>>,
+    { id: string; data: PatchedSectionProgressRequest }
+  > = (props) => {
+    const { id, data } = props ?? {};
 
-const mutationKey = ['progressPartialUpdate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return progressPartialUpdate(id, data);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type ProgressPartialUpdateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof progressPartialUpdate>>
+>;
+export type ProgressPartialUpdateMutationBody = PatchedSectionProgressRequest;
+export type ProgressPartialUpdateMutationError = unknown;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof progressPartialUpdate>>, {id: string;data: PatchedSectionProgressRequest}> = (props) => {
-          const {id,data} = props ?? {};
-
-          return  progressPartialUpdate(id,data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ProgressPartialUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof progressPartialUpdate>>>
-    export type ProgressPartialUpdateMutationBody = PatchedSectionProgressRequest
-    export type ProgressPartialUpdateMutationError = unknown
-
-    /**
+/**
  * @summary Partially update section progress
  */
-export const useProgressPartialUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof progressPartialUpdate>>, TError,{id: string;data: PatchedSectionProgressRequest}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof progressPartialUpdate>>,
-        TError,
-        {id: string;data: PatchedSectionProgressRequest},
-        TContext
-      > => {
+export const useProgressPartialUpdate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof progressPartialUpdate>>,
+    TError,
+    { id: string; data: PatchedSectionProgressRequest },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof progressPartialUpdate>>,
+  TError,
+  { id: string; data: PatchedSectionProgressRequest },
+  TContext
+> => {
+  const mutationOptions = getProgressPartialUpdateMutationOptions(options);
 
-      const mutationOptions = getProgressPartialUpdateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Delete section progress
  */
-export const progressDestroy = (
-    id: string,
- ) => {
-      
-      
-      return axiosInstance<void>(
-      {url: `/api/v1/progress/${id}/`, method: 'DELETE'
-    },
-      );
-    }
-  
+export const progressDestroy = (id: string) => {
+  return axiosInstance<void>({ url: `/api/v1/progress/${id}/`, method: "DELETE" });
+};
 
+export const getProgressDestroyMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof progressDestroy>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof progressDestroy>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationKey = ["progressDestroy"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getProgressDestroyMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof progressDestroy>>, TError,{id: string}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof progressDestroy>>, TError,{id: string}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof progressDestroy>>,
+    { id: string }
+  > = (props) => {
+    const { id } = props ?? {};
 
-const mutationKey = ['progressDestroy'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return progressDestroy(id);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type ProgressDestroyMutationResult = NonNullable<
+  Awaited<ReturnType<typeof progressDestroy>>
+>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof progressDestroy>>, {id: string}> = (props) => {
-          const {id} = props ?? {};
+export type ProgressDestroyMutationError = unknown;
 
-          return  progressDestroy(id,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ProgressDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof progressDestroy>>>
-    
-    export type ProgressDestroyMutationError = unknown
-
-    /**
+/**
  * @summary Delete section progress
  */
-export const useProgressDestroy = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof progressDestroy>>, TError,{id: string}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof progressDestroy>>,
-        TError,
-        {id: string},
-        TContext
-      > => {
+export const useProgressDestroy = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof progressDestroy>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof progressDestroy>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationOptions = getProgressDestroyMutationOptions(options);
 
-      const mutationOptions = getProgressDestroyMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Mark a page as studied
  */
-export const progressPagesMarkStudiedCreate = (
-    pageId: string,
- signal?: AbortSignal
-) => {
-      
-      
-      return axiosInstance<UserPageProgress>(
-      {url: `/api/v1/progress/pages/${pageId}/mark-studied/`, method: 'POST', signal
-    },
-      );
-    }
-  
+export const progressPagesMarkStudiedCreate = (pageId: string, signal?: AbortSignal) => {
+  return axiosInstance<UserPageProgress>({
+    url: `/api/v1/progress/pages/${pageId}/mark-studied/`,
+    method: "POST",
+    signal,
+  });
+};
 
+export const getProgressPagesMarkStudiedCreateMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof progressPagesMarkStudiedCreate>>,
+    TError,
+    { pageId: string },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof progressPagesMarkStudiedCreate>>,
+  TError,
+  { pageId: string },
+  TContext
+> => {
+  const mutationKey = ["progressPagesMarkStudiedCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getProgressPagesMarkStudiedCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof progressPagesMarkStudiedCreate>>, TError,{pageId: string}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof progressPagesMarkStudiedCreate>>, TError,{pageId: string}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof progressPagesMarkStudiedCreate>>,
+    { pageId: string }
+  > = (props) => {
+    const { pageId } = props ?? {};
 
-const mutationKey = ['progressPagesMarkStudiedCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return progressPagesMarkStudiedCreate(pageId);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type ProgressPagesMarkStudiedCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof progressPagesMarkStudiedCreate>>
+>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof progressPagesMarkStudiedCreate>>, {pageId: string}> = (props) => {
-          const {pageId} = props ?? {};
+export type ProgressPagesMarkStudiedCreateMutationError = unknown;
 
-          return  progressPagesMarkStudiedCreate(pageId,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ProgressPagesMarkStudiedCreateMutationResult = NonNullable<Awaited<ReturnType<typeof progressPagesMarkStudiedCreate>>>
-    
-    export type ProgressPagesMarkStudiedCreateMutationError = unknown
-
-    /**
+/**
  * @summary Mark a page as studied
  */
-export const useProgressPagesMarkStudiedCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof progressPagesMarkStudiedCreate>>, TError,{pageId: string}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof progressPagesMarkStudiedCreate>>,
-        TError,
-        {pageId: string},
-        TContext
-      > => {
+export const useProgressPagesMarkStudiedCreate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof progressPagesMarkStudiedCreate>>,
+    TError,
+    { pageId: string },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof progressPagesMarkStudiedCreate>>,
+  TError,
+  { pageId: string },
+  TContext
+> => {
+  const mutationOptions = getProgressPagesMarkStudiedCreateMutationOptions(options);
 
-      const mutationOptions = getProgressPagesMarkStudiedCreateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
+  return useMutation(mutationOptions);
+};

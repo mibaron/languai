@@ -5,7 +5,7 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import type { FillBlankDetailPartType } from './fillBlankDetailPartType';
+import type { FillBlankDetailPartType } from "./fillBlankDetailPartType";
 
 export interface FillBlankDetail {
   /** @maxLength 500 */

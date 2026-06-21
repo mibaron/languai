@@ -5,10 +5,7 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
   MutationFunction,
   QueryFunction,
@@ -16,408 +13,429 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query";
 
 import type {
   PacksListParams,
   PacksSubscriptionsListParams,
   PaginatedPackList,
   SubscribeRequestRequest,
-  UserPackSubscription
-} from '.././model';
+  UserPackSubscription,
+} from ".././model";
 
-import { axiosInstance } from '../../../client';
+import { axiosInstance } from "../../../client";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
-      type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
-
-
-
+type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
 /**
  * @summary List available packs
  */
-export const packsList = (
-    params?: PacksListParams,
- signal?: AbortSignal
+export const packsList = (params?: PacksListParams, signal?: AbortSignal) => {
+  return axiosInstance<PaginatedPackList>({ url: `/api/v1/packs/`, method: "GET", params, signal });
+};
+
+export const getPacksListQueryKey = (params?: PacksListParams) => {
+  return [`/api/v1/packs/`, ...(params ? [params] : [])] as const;
+};
+
+export const getPacksListQueryOptions = <
+  TData = Awaited<ReturnType<typeof packsList>>,
+  TError = unknown,
+>(
+  params?: PacksListParams,
+  options?: { query?: UseQueryOptions<Awaited<ReturnType<typeof packsList>>, TError, TData> },
 ) => {
-      
-      
-      return axiosInstance<PaginatedPackList>(
-      {url: `/api/v1/packs/`, method: 'GET',
-        params, signal
-    },
-      );
-    }
-  
+  const { query: queryOptions } = options ?? {};
 
+  const queryKey = queryOptions?.queryKey ?? getPacksListQueryKey(params);
 
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof packsList>>> = ({ signal }) =>
+    packsList(params, signal);
 
-export const getPacksListQueryKey = (params?: PacksListParams,) => {
-    return [
-    `/api/v1/packs/`, ...(params ? [params]: [])
-    ] as const;
-    }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof packsList>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    
-export const getPacksListQueryOptions = <TData = Awaited<ReturnType<typeof packsList>>, TError = unknown>(params?: PacksListParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof packsList>>, TError, TData>, }
-) => {
-
-const {query: queryOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getPacksListQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof packsList>>> = ({ signal }) => packsList(params, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof packsList>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type PacksListQueryResult = NonNullable<Awaited<ReturnType<typeof packsList>>>
-export type PacksListQueryError = unknown
-
+export type PacksListQueryResult = NonNullable<Awaited<ReturnType<typeof packsList>>>;
+export type PacksListQueryError = unknown;
 
 /**
  * @summary List available packs
  */
 
 export function usePacksList<TData = Awaited<ReturnType<typeof packsList>>, TError = unknown>(
- params?: PacksListParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof packsList>>, TError, TData>, }
-  
- ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  params?: PacksListParams,
+  options?: { query?: UseQueryOptions<Awaited<ReturnType<typeof packsList>>, TError, TData> },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getPacksListQueryOptions(params, options);
 
-  const queryOptions = getPacksListQueryOptions(params,options)
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
+/**
+ * @summary Archive a pack subscription
+ */
+export const packsArchiveCreate = (packId: string, signal?: AbortSignal) => {
+  return axiosInstance<UserPackSubscription>({
+    url: `/api/v1/packs/${packId}/archive/`,
+    method: "POST",
+    signal,
+  });
+};
 
+export const getPacksArchiveCreateMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof packsArchiveCreate>>,
+    TError,
+    { packId: string },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof packsArchiveCreate>>,
+  TError,
+  { packId: string },
+  TContext
+> => {
+  const mutationKey = ["packsArchiveCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof packsArchiveCreate>>,
+    { packId: string }
+  > = (props) => {
+    const { packId } = props ?? {};
+
+    return packsArchiveCreate(packId);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PacksArchiveCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof packsArchiveCreate>>
+>;
+
+export type PacksArchiveCreateMutationError = unknown;
 
 /**
  * @summary Archive a pack subscription
  */
-export const packsArchiveCreate = (
-    packId: string,
- signal?: AbortSignal
-) => {
-      
-      
-      return axiosInstance<UserPackSubscription>(
-      {url: `/api/v1/packs/${packId}/archive/`, method: 'POST', signal
-    },
-      );
-    }
-  
+export const usePacksArchiveCreate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof packsArchiveCreate>>,
+    TError,
+    { packId: string },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof packsArchiveCreate>>,
+  TError,
+  { packId: string },
+  TContext
+> => {
+  const mutationOptions = getPacksArchiveCreateMutationOptions(options);
 
-
-export const getPacksArchiveCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof packsArchiveCreate>>, TError,{packId: string}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof packsArchiveCreate>>, TError,{packId: string}, TContext> => {
-
-const mutationKey = ['packsArchiveCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof packsArchiveCreate>>, {packId: string}> = (props) => {
-          const {packId} = props ?? {};
-
-          return  packsArchiveCreate(packId,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PacksArchiveCreateMutationResult = NonNullable<Awaited<ReturnType<typeof packsArchiveCreate>>>
-    
-    export type PacksArchiveCreateMutationError = unknown
-
-    /**
- * @summary Archive a pack subscription
- */
-export const usePacksArchiveCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof packsArchiveCreate>>, TError,{packId: string}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof packsArchiveCreate>>,
-        TError,
-        {packId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getPacksArchiveCreateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Unarchive a pack subscription
  */
-export const packsUnarchiveCreate = (
-    packId: string,
- signal?: AbortSignal
-) => {
-      
-      
-      return axiosInstance<UserPackSubscription>(
-      {url: `/api/v1/packs/${packId}/unarchive/`, method: 'POST', signal
-    },
-      );
-    }
-  
+export const packsUnarchiveCreate = (packId: string, signal?: AbortSignal) => {
+  return axiosInstance<UserPackSubscription>({
+    url: `/api/v1/packs/${packId}/unarchive/`,
+    method: "POST",
+    signal,
+  });
+};
 
+export const getPacksUnarchiveCreateMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof packsUnarchiveCreate>>,
+    TError,
+    { packId: string },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof packsUnarchiveCreate>>,
+  TError,
+  { packId: string },
+  TContext
+> => {
+  const mutationKey = ["packsUnarchiveCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getPacksUnarchiveCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof packsUnarchiveCreate>>, TError,{packId: string}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof packsUnarchiveCreate>>, TError,{packId: string}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof packsUnarchiveCreate>>,
+    { packId: string }
+  > = (props) => {
+    const { packId } = props ?? {};
 
-const mutationKey = ['packsUnarchiveCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return packsUnarchiveCreate(packId);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type PacksUnarchiveCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof packsUnarchiveCreate>>
+>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof packsUnarchiveCreate>>, {packId: string}> = (props) => {
-          const {packId} = props ?? {};
+export type PacksUnarchiveCreateMutationError = unknown;
 
-          return  packsUnarchiveCreate(packId,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PacksUnarchiveCreateMutationResult = NonNullable<Awaited<ReturnType<typeof packsUnarchiveCreate>>>
-    
-    export type PacksUnarchiveCreateMutationError = unknown
-
-    /**
+/**
  * @summary Unarchive a pack subscription
  */
-export const usePacksUnarchiveCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof packsUnarchiveCreate>>, TError,{packId: string}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof packsUnarchiveCreate>>,
-        TError,
-        {packId: string},
-        TContext
-      > => {
+export const usePacksUnarchiveCreate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof packsUnarchiveCreate>>,
+    TError,
+    { packId: string },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof packsUnarchiveCreate>>,
+  TError,
+  { packId: string },
+  TContext
+> => {
+  const mutationOptions = getPacksUnarchiveCreateMutationOptions(options);
 
-      const mutationOptions = getPacksUnarchiveCreateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Unsubscribe from a pack
  */
-export const packsUnsubscribeDestroy = (
-    packId: string,
- ) => {
-      
-      
-      return axiosInstance<void>(
-      {url: `/api/v1/packs/${packId}/unsubscribe/`, method: 'DELETE'
-    },
-      );
-    }
-  
+export const packsUnsubscribeDestroy = (packId: string) => {
+  return axiosInstance<void>({ url: `/api/v1/packs/${packId}/unsubscribe/`, method: "DELETE" });
+};
 
+export const getPacksUnsubscribeDestroyMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof packsUnsubscribeDestroy>>,
+    TError,
+    { packId: string },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof packsUnsubscribeDestroy>>,
+  TError,
+  { packId: string },
+  TContext
+> => {
+  const mutationKey = ["packsUnsubscribeDestroy"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getPacksUnsubscribeDestroyMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof packsUnsubscribeDestroy>>, TError,{packId: string}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof packsUnsubscribeDestroy>>, TError,{packId: string}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof packsUnsubscribeDestroy>>,
+    { packId: string }
+  > = (props) => {
+    const { packId } = props ?? {};
 
-const mutationKey = ['packsUnsubscribeDestroy'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return packsUnsubscribeDestroy(packId);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type PacksUnsubscribeDestroyMutationResult = NonNullable<
+  Awaited<ReturnType<typeof packsUnsubscribeDestroy>>
+>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof packsUnsubscribeDestroy>>, {packId: string}> = (props) => {
-          const {packId} = props ?? {};
+export type PacksUnsubscribeDestroyMutationError = unknown;
 
-          return  packsUnsubscribeDestroy(packId,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PacksUnsubscribeDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof packsUnsubscribeDestroy>>>
-    
-    export type PacksUnsubscribeDestroyMutationError = unknown
-
-    /**
+/**
  * @summary Unsubscribe from a pack
  */
-export const usePacksUnsubscribeDestroy = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof packsUnsubscribeDestroy>>, TError,{packId: string}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof packsUnsubscribeDestroy>>,
-        TError,
-        {packId: string},
-        TContext
-      > => {
+export const usePacksUnsubscribeDestroy = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof packsUnsubscribeDestroy>>,
+    TError,
+    { packId: string },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof packsUnsubscribeDestroy>>,
+  TError,
+  { packId: string },
+  TContext
+> => {
+  const mutationOptions = getPacksUnsubscribeDestroyMutationOptions(options);
 
-      const mutationOptions = getPacksUnsubscribeDestroyMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Subscribe to a pack
  */
 export const packsSubscribeCreate = (
-    subscribeRequestRequest: SubscribeRequestRequest,
- signal?: AbortSignal
+  subscribeRequestRequest: SubscribeRequestRequest,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return axiosInstance<UserPackSubscription>(
-      {url: `/api/v1/packs/subscribe/`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: subscribeRequestRequest, signal
-    },
-      );
-    }
-  
+  return axiosInstance<UserPackSubscription>({
+    url: `/api/v1/packs/subscribe/`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: subscribeRequestRequest,
+    signal,
+  });
+};
 
+export const getPacksSubscribeCreateMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof packsSubscribeCreate>>,
+    TError,
+    { data: SubscribeRequestRequest },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof packsSubscribeCreate>>,
+  TError,
+  { data: SubscribeRequestRequest },
+  TContext
+> => {
+  const mutationKey = ["packsSubscribeCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getPacksSubscribeCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof packsSubscribeCreate>>, TError,{data: SubscribeRequestRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof packsSubscribeCreate>>, TError,{data: SubscribeRequestRequest}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof packsSubscribeCreate>>,
+    { data: SubscribeRequestRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-const mutationKey = ['packsSubscribeCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return packsSubscribeCreate(data);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type PacksSubscribeCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof packsSubscribeCreate>>
+>;
+export type PacksSubscribeCreateMutationBody = SubscribeRequestRequest;
+export type PacksSubscribeCreateMutationError = unknown;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof packsSubscribeCreate>>, {data: SubscribeRequestRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  packsSubscribeCreate(data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PacksSubscribeCreateMutationResult = NonNullable<Awaited<ReturnType<typeof packsSubscribeCreate>>>
-    export type PacksSubscribeCreateMutationBody = SubscribeRequestRequest
-    export type PacksSubscribeCreateMutationError = unknown
-
-    /**
+/**
  * @summary Subscribe to a pack
  */
-export const usePacksSubscribeCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof packsSubscribeCreate>>, TError,{data: SubscribeRequestRequest}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof packsSubscribeCreate>>,
-        TError,
-        {data: SubscribeRequestRequest},
-        TContext
-      > => {
+export const usePacksSubscribeCreate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof packsSubscribeCreate>>,
+    TError,
+    { data: SubscribeRequestRequest },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof packsSubscribeCreate>>,
+  TError,
+  { data: SubscribeRequestRequest },
+  TContext
+> => {
+  const mutationOptions = getPacksSubscribeCreateMutationOptions(options);
 
-      const mutationOptions = getPacksSubscribeCreateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary List user's pack subscriptions
  */
 export const packsSubscriptionsList = (
-    params?: PacksSubscriptionsListParams,
- signal?: AbortSignal
+  params?: PacksSubscriptionsListParams,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return axiosInstance<UserPackSubscription[]>(
-      {url: `/api/v1/packs/subscriptions/`, method: 'GET',
-        params, signal
-    },
-      );
-    }
-  
+  return axiosInstance<UserPackSubscription[]>({
+    url: `/api/v1/packs/subscriptions/`,
+    method: "GET",
+    params,
+    signal,
+  });
+};
 
+export const getPacksSubscriptionsListQueryKey = (params?: PacksSubscriptionsListParams) => {
+  return [`/api/v1/packs/subscriptions/`, ...(params ? [params] : [])] as const;
+};
 
-
-export const getPacksSubscriptionsListQueryKey = (params?: PacksSubscriptionsListParams,) => {
-    return [
-    `/api/v1/packs/subscriptions/`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getPacksSubscriptionsListQueryOptions = <TData = Awaited<ReturnType<typeof packsSubscriptionsList>>, TError = unknown>(params?: PacksSubscriptionsListParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof packsSubscriptionsList>>, TError, TData>, }
+export const getPacksSubscriptionsListQueryOptions = <
+  TData = Awaited<ReturnType<typeof packsSubscriptionsList>>,
+  TError = unknown,
+>(
+  params?: PacksSubscriptionsListParams,
+  options?: {
+    query?: UseQueryOptions<Awaited<ReturnType<typeof packsSubscriptionsList>>, TError, TData>;
+  },
 ) => {
+  const { query: queryOptions } = options ?? {};
 
-const {query: queryOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getPacksSubscriptionsListQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getPacksSubscriptionsListQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof packsSubscriptionsList>>> = ({ signal }) =>
+    packsSubscriptionsList(params, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof packsSubscriptionsList>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof packsSubscriptionsList>>> = ({ signal }) => packsSubscriptionsList(params, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof packsSubscriptionsList>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type PacksSubscriptionsListQueryResult = NonNullable<Awaited<ReturnType<typeof packsSubscriptionsList>>>
-export type PacksSubscriptionsListQueryError = unknown
-
+export type PacksSubscriptionsListQueryResult = NonNullable<
+  Awaited<ReturnType<typeof packsSubscriptionsList>>
+>;
+export type PacksSubscriptionsListQueryError = unknown;
 
 /**
  * @summary List user's pack subscriptions
  */
 
-export function usePacksSubscriptionsList<TData = Awaited<ReturnType<typeof packsSubscriptionsList>>, TError = unknown>(
- params?: PacksSubscriptionsListParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof packsSubscriptionsList>>, TError, TData>, }
-  
- ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+export function usePacksSubscriptionsList<
+  TData = Awaited<ReturnType<typeof packsSubscriptionsList>>,
+  TError = unknown,
+>(
+  params?: PacksSubscriptionsListParams,
+  options?: {
+    query?: UseQueryOptions<Awaited<ReturnType<typeof packsSubscriptionsList>>, TError, TData>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getPacksSubscriptionsListQueryOptions(params, options);
 
-  const queryOptions = getPacksSubscriptionsListQueryOptions(params,options)
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-

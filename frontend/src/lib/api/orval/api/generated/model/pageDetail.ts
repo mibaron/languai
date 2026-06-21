@@ -5,8 +5,8 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import type { PagePart } from './pagePart';
-import type { PageLexicalItem } from './pageLexicalItem';
+import type { PagePart } from "./pagePart";
+import type { PageLexicalItem } from "./pageLexicalItem";
 
 export interface PageDetail {
   readonly id: string;

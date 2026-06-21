@@ -8,17 +8,16 @@
 
 /**
  * * `note` - Teaching Note
-* `fill_blank` - Fill in the Blank
-* `conversation` - Conversation
-* `table` - Table
+ * `fill_blank` - Fill in the Blank
+ * `conversation` - Conversation
+ * `table` - Table
  */
-export type PartTypeEnum = typeof PartTypeEnum[keyof typeof PartTypeEnum];
-
+export type PartTypeEnum = (typeof PartTypeEnum)[keyof typeof PartTypeEnum];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PartTypeEnum = {
-  note: 'note',
-  fill_blank: 'fill_blank',
-  conversation: 'conversation',
-  table: 'table',
+  note: "note",
+  fill_blank: "fill_blank",
+  conversation: "conversation",
+  table: "table",
 } as const;

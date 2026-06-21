@@ -8,15 +8,14 @@
 
 /**
  * * `table` - Table
-* `notes` - Notes
-* `grid` - Grid
+ * `notes` - Notes
+ * `grid` - Grid
  */
-export type ContentTypeEnum = typeof ContentTypeEnum[keyof typeof ContentTypeEnum];
-
+export type ContentTypeEnum = (typeof ContentTypeEnum)[keyof typeof ContentTypeEnum];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ContentTypeEnum = {
-  table: 'table',
-  notes: 'notes',
-  grid: 'grid',
+  table: "table",
+  notes: "notes",
+  grid: "grid",
 } as const;

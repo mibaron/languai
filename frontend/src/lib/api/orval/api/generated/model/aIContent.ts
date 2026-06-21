@@ -5,7 +5,7 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import type { ActionTypeEnum } from './actionTypeEnum';
+import type { ActionTypeEnum } from "./actionTypeEnum";
 
 export interface AIContent {
   readonly id: string;

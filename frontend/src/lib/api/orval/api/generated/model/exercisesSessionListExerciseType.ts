@@ -6,15 +6,15 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ExercisesSessionListExerciseType = typeof ExercisesSessionListExerciseType[keyof typeof ExercisesSessionListExerciseType];
-
+export type ExercisesSessionListExerciseType =
+  (typeof ExercisesSessionListExerciseType)[keyof typeof ExercisesSessionListExerciseType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ExercisesSessionListExerciseType = {
-  error_correction: 'error_correction',
-  fill_blank: 'fill_blank',
-  flashcard: 'flashcard',
-  matching: 'matching',
-  mcq_recognition: 'mcq_recognition',
-  sentence_order: 'sentence_order',
+  error_correction: "error_correction",
+  fill_blank: "fill_blank",
+  flashcard: "flashcard",
+  matching: "matching",
+  mcq_recognition: "mcq_recognition",
+  sentence_order: "sentence_order",
 } as const;

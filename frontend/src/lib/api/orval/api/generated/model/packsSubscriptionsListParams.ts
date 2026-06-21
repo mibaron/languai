@@ -5,8 +5,8 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import type { PacksSubscriptionsListStatus } from './packsSubscriptionsListStatus';
+import type { PacksSubscriptionsListStatus } from "./packsSubscriptionsListStatus";
 
 export type PacksSubscriptionsListParams = {
-status?: PacksSubscriptionsListStatus;
+  status?: PacksSubscriptionsListStatus;
 };

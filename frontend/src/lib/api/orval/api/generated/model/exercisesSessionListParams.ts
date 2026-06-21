@@ -5,15 +5,15 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import type { ExercisesSessionListExerciseType } from './exercisesSessionListExerciseType';
+import type { ExercisesSessionListExerciseType } from "./exercisesSessionListExerciseType";
 
 export type ExercisesSessionListParams = {
-/**
- * Type of exercises to generate
- */
-exercise_type: ExercisesSessionListExerciseType;
-/**
- * Maximum exercises in session (default 20)
- */
-max_items?: number;
+  /**
+   * Filter by exercise type
+   */
+  exercise_type?: ExercisesSessionListExerciseType;
+  /**
+   * Maximum exercises in session (default 20)
+   */
+  max_items?: number;
 };

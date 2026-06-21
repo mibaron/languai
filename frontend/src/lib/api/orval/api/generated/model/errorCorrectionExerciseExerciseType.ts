@@ -6,10 +6,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type StoredFlashcardDetailExerciseType = typeof StoredFlashcardDetailExerciseType[keyof typeof StoredFlashcardDetailExerciseType];
-
+export type ErrorCorrectionExerciseExerciseType =
+  (typeof ErrorCorrectionExerciseExerciseType)[keyof typeof ErrorCorrectionExerciseExerciseType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const StoredFlashcardDetailExerciseType = {
-  flashcard: 'flashcard',
+export const ErrorCorrectionExerciseExerciseType = {
+  error_correction: "error_correction",
 } as const;

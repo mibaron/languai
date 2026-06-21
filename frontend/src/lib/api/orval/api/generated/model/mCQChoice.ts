@@ -6,7 +6,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface StoredMCQChoice {
+export interface MCQChoice {
   readonly id: string;
   /** @maxLength 255 */
   text: string;

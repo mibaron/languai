@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 
-import type { MCQExercise as MCQExerciseType } from "./types";
+import type { MCQExercise as MCQExerciseType } from "@/lib/api/orval/api/generated/model";
 
 interface MCQExerciseProps {
   exercise: MCQExerciseType;
@@ -21,10 +21,10 @@ export function MCQExercise({
     <div className="flex flex-1 flex-col">
       <div className="flex flex-col items-center gap-2 px-6 pt-12">
         <span className="text-sm font-medium text-muted-foreground">
-          {exercise.prompt_hint}
+          Pick the correct answer
         </span>
         <span className="text-center text-2xl font-bold tracking-tight text-foreground">
-          {exercise.prompt_text}
+          {exercise.question}
         </span>
       </div>
 

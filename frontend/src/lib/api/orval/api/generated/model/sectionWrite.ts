@@ -5,8 +5,8 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import type { CategoryEnum } from './categoryEnum';
-import type { ContentTypeEnum } from './contentTypeEnum';
+import type { CategoryEnum } from "./categoryEnum";
+import type { ContentTypeEnum } from "./contentTypeEnum";
 
 export interface SectionWrite {
   readonly id: string;

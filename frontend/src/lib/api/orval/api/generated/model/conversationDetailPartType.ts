@@ -6,10 +6,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ConversationDetailPartType = typeof ConversationDetailPartType[keyof typeof ConversationDetailPartType];
-
+export type ConversationDetailPartType =
+  (typeof ConversationDetailPartType)[keyof typeof ConversationDetailPartType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ConversationDetailPartType = {
-  conversation: 'conversation',
+  conversation: "conversation",
 } as const;

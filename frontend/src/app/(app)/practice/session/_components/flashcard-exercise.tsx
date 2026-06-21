@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 
-import type { FlashcardExercise as FlashcardExerciseType } from "./types";
+import type { FlashcardExercise as FlashcardExerciseType } from "@/lib/api/orval/api/generated/model";
 
 interface FlashcardExerciseProps {
   exercise: FlashcardExerciseType;
@@ -38,8 +38,8 @@ export function FlashcardExercise({
           <span className="text-2xl font-bold tracking-tight text-foreground">
             {exercise.front_text}
           </span>
-          {exercise.front_hint && (
-            <span className="text-sm text-muted-foreground">{exercise.front_hint}</span>
+          {exercise.front_context && (
+            <span className="text-sm text-muted-foreground">{exercise.front_context}</span>
           )}
 
           {isRevealed ? (
@@ -48,9 +48,9 @@ export function FlashcardExercise({
               <span className="text-xl font-semibold text-brand">
                 {exercise.back_text}
               </span>
-              {exercise.back_extra && (
+              {exercise.back_context && (
                 <span className="text-sm text-muted-foreground">
-                  {exercise.back_extra}
+                  {exercise.back_context}
                 </span>
               )}
             </>

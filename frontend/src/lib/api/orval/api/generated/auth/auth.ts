@@ -5,10 +5,7 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
   MutationFunction,
   QueryFunction,
@@ -16,8 +13,8 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query";
 
 import type {
   AuthResponse,
@@ -29,716 +26,741 @@ import type {
   RegisterRequest,
   ResetPasswordRequest,
   User,
-  UserRequest
-} from '.././model';
+  UserRequest,
+} from ".././model";
 
-import { axiosInstance } from '../../../client';
+import { axiosInstance } from "../../../client";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
-      type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
-
-
-
+type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
 /**
  * @summary Change password
  */
 export const authChangePasswordCreate = (
-    changePasswordRequest: ChangePasswordRequest,
- signal?: AbortSignal
+  changePasswordRequest: ChangePasswordRequest,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return axiosInstance<void>(
-      {url: `/api/v1/auth/change-password/`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: changePasswordRequest, signal
-    },
-      );
-    }
-  
+  return axiosInstance<void>({
+    url: `/api/v1/auth/change-password/`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: changePasswordRequest,
+    signal,
+  });
+};
 
+export const getAuthChangePasswordCreateMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authChangePasswordCreate>>,
+    TError,
+    { data: ChangePasswordRequest },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof authChangePasswordCreate>>,
+  TError,
+  { data: ChangePasswordRequest },
+  TContext
+> => {
+  const mutationKey = ["authChangePasswordCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getAuthChangePasswordCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authChangePasswordCreate>>, TError,{data: ChangePasswordRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof authChangePasswordCreate>>, TError,{data: ChangePasswordRequest}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof authChangePasswordCreate>>,
+    { data: ChangePasswordRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-const mutationKey = ['authChangePasswordCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return authChangePasswordCreate(data);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type AuthChangePasswordCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof authChangePasswordCreate>>
+>;
+export type AuthChangePasswordCreateMutationBody = ChangePasswordRequest;
+export type AuthChangePasswordCreateMutationError = unknown;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authChangePasswordCreate>>, {data: ChangePasswordRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  authChangePasswordCreate(data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AuthChangePasswordCreateMutationResult = NonNullable<Awaited<ReturnType<typeof authChangePasswordCreate>>>
-    export type AuthChangePasswordCreateMutationBody = ChangePasswordRequest
-    export type AuthChangePasswordCreateMutationError = unknown
-
-    /**
+/**
  * @summary Change password
  */
-export const useAuthChangePasswordCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authChangePasswordCreate>>, TError,{data: ChangePasswordRequest}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof authChangePasswordCreate>>,
-        TError,
-        {data: ChangePasswordRequest},
-        TContext
-      > => {
+export const useAuthChangePasswordCreate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authChangePasswordCreate>>,
+    TError,
+    { data: ChangePasswordRequest },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof authChangePasswordCreate>>,
+  TError,
+  { data: ChangePasswordRequest },
+  TContext
+> => {
+  const mutationOptions = getAuthChangePasswordCreateMutationOptions(options);
 
-      const mutationOptions = getAuthChangePasswordCreateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Request password reset email
  */
 export const authForgotPasswordCreate = (
-    forgotPasswordRequest: ForgotPasswordRequest,
- signal?: AbortSignal
+  forgotPasswordRequest: ForgotPasswordRequest,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return axiosInstance<void>(
-      {url: `/api/v1/auth/forgot-password/`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: forgotPasswordRequest, signal
-    },
-      );
-    }
-  
+  return axiosInstance<void>({
+    url: `/api/v1/auth/forgot-password/`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: forgotPasswordRequest,
+    signal,
+  });
+};
 
+export const getAuthForgotPasswordCreateMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authForgotPasswordCreate>>,
+    TError,
+    { data: ForgotPasswordRequest },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof authForgotPasswordCreate>>,
+  TError,
+  { data: ForgotPasswordRequest },
+  TContext
+> => {
+  const mutationKey = ["authForgotPasswordCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getAuthForgotPasswordCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authForgotPasswordCreate>>, TError,{data: ForgotPasswordRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof authForgotPasswordCreate>>, TError,{data: ForgotPasswordRequest}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof authForgotPasswordCreate>>,
+    { data: ForgotPasswordRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-const mutationKey = ['authForgotPasswordCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return authForgotPasswordCreate(data);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type AuthForgotPasswordCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof authForgotPasswordCreate>>
+>;
+export type AuthForgotPasswordCreateMutationBody = ForgotPasswordRequest;
+export type AuthForgotPasswordCreateMutationError = unknown;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authForgotPasswordCreate>>, {data: ForgotPasswordRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  authForgotPasswordCreate(data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AuthForgotPasswordCreateMutationResult = NonNullable<Awaited<ReturnType<typeof authForgotPasswordCreate>>>
-    export type AuthForgotPasswordCreateMutationBody = ForgotPasswordRequest
-    export type AuthForgotPasswordCreateMutationError = unknown
-
-    /**
+/**
  * @summary Request password reset email
  */
-export const useAuthForgotPasswordCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authForgotPasswordCreate>>, TError,{data: ForgotPasswordRequest}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof authForgotPasswordCreate>>,
-        TError,
-        {data: ForgotPasswordRequest},
-        TContext
-      > => {
+export const useAuthForgotPasswordCreate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authForgotPasswordCreate>>,
+    TError,
+    { data: ForgotPasswordRequest },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof authForgotPasswordCreate>>,
+  TError,
+  { data: ForgotPasswordRequest },
+  TContext
+> => {
+  const mutationOptions = getAuthForgotPasswordCreateMutationOptions(options);
 
-      const mutationOptions = getAuthForgotPasswordCreateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Login or register with Google
  */
-export const authGoogleCreate = (
-    googleLoginRequest: GoogleLoginRequest,
- signal?: AbortSignal
-) => {
-      
-      
-      return axiosInstance<AuthResponse>(
-      {url: `/api/v1/auth/google/`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: googleLoginRequest, signal
-    },
-      );
-    }
-  
+export const authGoogleCreate = (googleLoginRequest: GoogleLoginRequest, signal?: AbortSignal) => {
+  return axiosInstance<AuthResponse>({
+    url: `/api/v1/auth/google/`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: googleLoginRequest,
+    signal,
+  });
+};
 
+export const getAuthGoogleCreateMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authGoogleCreate>>,
+    TError,
+    { data: GoogleLoginRequest },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof authGoogleCreate>>,
+  TError,
+  { data: GoogleLoginRequest },
+  TContext
+> => {
+  const mutationKey = ["authGoogleCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getAuthGoogleCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authGoogleCreate>>, TError,{data: GoogleLoginRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof authGoogleCreate>>, TError,{data: GoogleLoginRequest}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof authGoogleCreate>>,
+    { data: GoogleLoginRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-const mutationKey = ['authGoogleCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return authGoogleCreate(data);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type AuthGoogleCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof authGoogleCreate>>
+>;
+export type AuthGoogleCreateMutationBody = GoogleLoginRequest;
+export type AuthGoogleCreateMutationError = unknown;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authGoogleCreate>>, {data: GoogleLoginRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  authGoogleCreate(data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AuthGoogleCreateMutationResult = NonNullable<Awaited<ReturnType<typeof authGoogleCreate>>>
-    export type AuthGoogleCreateMutationBody = GoogleLoginRequest
-    export type AuthGoogleCreateMutationError = unknown
-
-    /**
+/**
  * @summary Login or register with Google
  */
-export const useAuthGoogleCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authGoogleCreate>>, TError,{data: GoogleLoginRequest}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof authGoogleCreate>>,
-        TError,
-        {data: GoogleLoginRequest},
-        TContext
-      > => {
+export const useAuthGoogleCreate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authGoogleCreate>>,
+    TError,
+    { data: GoogleLoginRequest },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof authGoogleCreate>>,
+  TError,
+  { data: GoogleLoginRequest },
+  TContext
+> => {
+  const mutationOptions = getAuthGoogleCreateMutationOptions(options);
 
-      const mutationOptions = getAuthGoogleCreateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Login and receive auth token
  */
-export const authLoginCreate = (
-    loginRequest: LoginRequest,
- signal?: AbortSignal
-) => {
-      
-      
-      return axiosInstance<AuthResponse>(
-      {url: `/api/v1/auth/login/`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: loginRequest, signal
-    },
-      );
-    }
-  
+export const authLoginCreate = (loginRequest: LoginRequest, signal?: AbortSignal) => {
+  return axiosInstance<AuthResponse>({
+    url: `/api/v1/auth/login/`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: loginRequest,
+    signal,
+  });
+};
 
+export const getAuthLoginCreateMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authLoginCreate>>,
+    TError,
+    { data: LoginRequest },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof authLoginCreate>>,
+  TError,
+  { data: LoginRequest },
+  TContext
+> => {
+  const mutationKey = ["authLoginCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getAuthLoginCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authLoginCreate>>, TError,{data: LoginRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof authLoginCreate>>, TError,{data: LoginRequest}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof authLoginCreate>>,
+    { data: LoginRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-const mutationKey = ['authLoginCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return authLoginCreate(data);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type AuthLoginCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof authLoginCreate>>
+>;
+export type AuthLoginCreateMutationBody = LoginRequest;
+export type AuthLoginCreateMutationError = unknown;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authLoginCreate>>, {data: LoginRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  authLoginCreate(data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AuthLoginCreateMutationResult = NonNullable<Awaited<ReturnType<typeof authLoginCreate>>>
-    export type AuthLoginCreateMutationBody = LoginRequest
-    export type AuthLoginCreateMutationError = unknown
-
-    /**
+/**
  * @summary Login and receive auth token
  */
-export const useAuthLoginCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authLoginCreate>>, TError,{data: LoginRequest}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof authLoginCreate>>,
-        TError,
-        {data: LoginRequest},
-        TContext
-      > => {
+export const useAuthLoginCreate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authLoginCreate>>,
+    TError,
+    { data: LoginRequest },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof authLoginCreate>>,
+  TError,
+  { data: LoginRequest },
+  TContext
+> => {
+  const mutationOptions = getAuthLoginCreateMutationOptions(options);
 
-      const mutationOptions = getAuthLoginCreateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Logout and invalidate token
  */
-export const authLogoutCreate = (
-    
- signal?: AbortSignal
-) => {
-      
-      
-      return axiosInstance<void>(
-      {url: `/api/v1/auth/logout/`, method: 'POST', signal
-    },
-      );
-    }
-  
+export const authLogoutCreate = (signal?: AbortSignal) => {
+  return axiosInstance<void>({ url: `/api/v1/auth/logout/`, method: "POST", signal });
+};
 
+export const getAuthLogoutCreateMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authLogoutCreate>>,
+    TError,
+    void,
+    TContext
+  >;
+}): UseMutationOptions<Awaited<ReturnType<typeof authLogoutCreate>>, TError, void, TContext> => {
+  const mutationKey = ["authLogoutCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getAuthLogoutCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authLogoutCreate>>, TError,void, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof authLogoutCreate>>, TError,void, TContext> => {
+  const mutationFn: MutationFunction<Awaited<ReturnType<typeof authLogoutCreate>>, void> = () => {
+    return authLogoutCreate();
+  };
 
-const mutationKey = ['authLogoutCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+  return { mutationFn, ...mutationOptions };
+};
 
-      
+export type AuthLogoutCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof authLogoutCreate>>
+>;
 
+export type AuthLogoutCreateMutationError = unknown;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authLogoutCreate>>, void> = () => {
-          
-
-          return  authLogoutCreate()
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AuthLogoutCreateMutationResult = NonNullable<Awaited<ReturnType<typeof authLogoutCreate>>>
-    
-    export type AuthLogoutCreateMutationError = unknown
-
-    /**
+/**
  * @summary Logout and invalidate token
  */
-export const useAuthLogoutCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authLogoutCreate>>, TError,void, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof authLogoutCreate>>,
-        TError,
-        void,
-        TContext
-      > => {
+export const useAuthLogoutCreate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authLogoutCreate>>,
+    TError,
+    void,
+    TContext
+  >;
+}): UseMutationResult<Awaited<ReturnType<typeof authLogoutCreate>>, TError, void, TContext> => {
+  const mutationOptions = getAuthLogoutCreateMutationOptions(options);
 
-      const mutationOptions = getAuthLogoutCreateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Get current user profile
  */
-export const authMeRetrieve = (
-    
- signal?: AbortSignal
-) => {
-      
-      
-      return axiosInstance<User>(
-      {url: `/api/v1/auth/me/`, method: 'GET', signal
-    },
-      );
-    }
-  
-
-
+export const authMeRetrieve = (signal?: AbortSignal) => {
+  return axiosInstance<User>({ url: `/api/v1/auth/me/`, method: "GET", signal });
+};
 
 export const getAuthMeRetrieveQueryKey = () => {
-    return [
-    `/api/v1/auth/me/`
-    ] as const;
-    }
+  return [`/api/v1/auth/me/`] as const;
+};
 
-    
-export const getAuthMeRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof authMeRetrieve>>, TError = unknown>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof authMeRetrieve>>, TError, TData>, }
-) => {
+export const getAuthMeRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof authMeRetrieve>>,
+  TError = unknown,
+>(options?: {
+  query?: UseQueryOptions<Awaited<ReturnType<typeof authMeRetrieve>>, TError, TData>;
+}) => {
+  const { query: queryOptions } = options ?? {};
 
-const {query: queryOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getAuthMeRetrieveQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getAuthMeRetrieveQueryKey();
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof authMeRetrieve>>> = ({ signal }) =>
+    authMeRetrieve(signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof authMeRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof authMeRetrieve>>> = ({ signal }) => authMeRetrieve(signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof authMeRetrieve>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type AuthMeRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof authMeRetrieve>>>
-export type AuthMeRetrieveQueryError = unknown
-
+export type AuthMeRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof authMeRetrieve>>>;
+export type AuthMeRetrieveQueryError = unknown;
 
 /**
  * @summary Get current user profile
  */
 
-export function useAuthMeRetrieve<TData = Awaited<ReturnType<typeof authMeRetrieve>>, TError = unknown>(
-  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof authMeRetrieve>>, TError, TData>, }
-  
- ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+export function useAuthMeRetrieve<
+  TData = Awaited<ReturnType<typeof authMeRetrieve>>,
+  TError = unknown,
+>(options?: {
+  query?: UseQueryOptions<Awaited<ReturnType<typeof authMeRetrieve>>, TError, TData>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getAuthMeRetrieveQueryOptions(options);
 
-  const queryOptions = getAuthMeRetrieveQueryOptions(options)
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
+/**
+ * @summary Update current user profile
+ */
+export const authMeUpdate = (userRequest: UserRequest) => {
+  return axiosInstance<User>({
+    url: `/api/v1/auth/me/`,
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    data: userRequest,
+  });
+};
 
+export const getAuthMeUpdateMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authMeUpdate>>,
+    TError,
+    { data: UserRequest },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof authMeUpdate>>,
+  TError,
+  { data: UserRequest },
+  TContext
+> => {
+  const mutationKey = ["authMeUpdate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof authMeUpdate>>,
+    { data: UserRequest }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return authMeUpdate(data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AuthMeUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof authMeUpdate>>>;
+export type AuthMeUpdateMutationBody = UserRequest;
+export type AuthMeUpdateMutationError = unknown;
 
 /**
  * @summary Update current user profile
  */
-export const authMeUpdate = (
-    userRequest: UserRequest,
- ) => {
-      
-      
-      return axiosInstance<User>(
-      {url: `/api/v1/auth/me/`, method: 'PUT',
-      headers: {'Content-Type': 'application/json', },
-      data: userRequest
-    },
-      );
-    }
-  
+export const useAuthMeUpdate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authMeUpdate>>,
+    TError,
+    { data: UserRequest },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof authMeUpdate>>,
+  TError,
+  { data: UserRequest },
+  TContext
+> => {
+  const mutationOptions = getAuthMeUpdateMutationOptions(options);
 
-
-export const getAuthMeUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authMeUpdate>>, TError,{data: UserRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof authMeUpdate>>, TError,{data: UserRequest}, TContext> => {
-
-const mutationKey = ['authMeUpdate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authMeUpdate>>, {data: UserRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  authMeUpdate(data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AuthMeUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof authMeUpdate>>>
-    export type AuthMeUpdateMutationBody = UserRequest
-    export type AuthMeUpdateMutationError = unknown
-
-    /**
- * @summary Update current user profile
- */
-export const useAuthMeUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authMeUpdate>>, TError,{data: UserRequest}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof authMeUpdate>>,
-        TError,
-        {data: UserRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getAuthMeUpdateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Partially update current user profile
  */
-export const authMePartialUpdate = (
-    patchedUserRequest: PatchedUserRequest,
- ) => {
-      
-      
-      return axiosInstance<User>(
-      {url: `/api/v1/auth/me/`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: patchedUserRequest
-    },
-      );
-    }
-  
+export const authMePartialUpdate = (patchedUserRequest: PatchedUserRequest) => {
+  return axiosInstance<User>({
+    url: `/api/v1/auth/me/`,
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    data: patchedUserRequest,
+  });
+};
 
+export const getAuthMePartialUpdateMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authMePartialUpdate>>,
+    TError,
+    { data: PatchedUserRequest },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof authMePartialUpdate>>,
+  TError,
+  { data: PatchedUserRequest },
+  TContext
+> => {
+  const mutationKey = ["authMePartialUpdate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getAuthMePartialUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authMePartialUpdate>>, TError,{data: PatchedUserRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof authMePartialUpdate>>, TError,{data: PatchedUserRequest}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof authMePartialUpdate>>,
+    { data: PatchedUserRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-const mutationKey = ['authMePartialUpdate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return authMePartialUpdate(data);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type AuthMePartialUpdateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof authMePartialUpdate>>
+>;
+export type AuthMePartialUpdateMutationBody = PatchedUserRequest;
+export type AuthMePartialUpdateMutationError = unknown;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authMePartialUpdate>>, {data: PatchedUserRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  authMePartialUpdate(data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AuthMePartialUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof authMePartialUpdate>>>
-    export type AuthMePartialUpdateMutationBody = PatchedUserRequest
-    export type AuthMePartialUpdateMutationError = unknown
-
-    /**
+/**
  * @summary Partially update current user profile
  */
-export const useAuthMePartialUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authMePartialUpdate>>, TError,{data: PatchedUserRequest}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof authMePartialUpdate>>,
-        TError,
-        {data: PatchedUserRequest},
-        TContext
-      > => {
+export const useAuthMePartialUpdate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authMePartialUpdate>>,
+    TError,
+    { data: PatchedUserRequest },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof authMePartialUpdate>>,
+  TError,
+  { data: PatchedUserRequest },
+  TContext
+> => {
+  const mutationOptions = getAuthMePartialUpdateMutationOptions(options);
 
-      const mutationOptions = getAuthMePartialUpdateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Delete current user account
  */
-export const authMeDestroy = (
-    
- ) => {
-      
-      
-      return axiosInstance<void>(
-      {url: `/api/v1/auth/me/`, method: 'DELETE'
-    },
-      );
-    }
-  
+export const authMeDestroy = () => {
+  return axiosInstance<void>({ url: `/api/v1/auth/me/`, method: "DELETE" });
+};
 
+export const getAuthMeDestroyMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<Awaited<ReturnType<typeof authMeDestroy>>, TError, void, TContext>;
+}): UseMutationOptions<Awaited<ReturnType<typeof authMeDestroy>>, TError, void, TContext> => {
+  const mutationKey = ["authMeDestroy"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getAuthMeDestroyMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authMeDestroy>>, TError,void, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof authMeDestroy>>, TError,void, TContext> => {
+  const mutationFn: MutationFunction<Awaited<ReturnType<typeof authMeDestroy>>, void> = () => {
+    return authMeDestroy();
+  };
 
-const mutationKey = ['authMeDestroy'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+  return { mutationFn, ...mutationOptions };
+};
 
-      
+export type AuthMeDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof authMeDestroy>>>;
 
+export type AuthMeDestroyMutationError = unknown;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authMeDestroy>>, void> = () => {
-          
-
-          return  authMeDestroy()
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AuthMeDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof authMeDestroy>>>
-    
-    export type AuthMeDestroyMutationError = unknown
-
-    /**
+/**
  * @summary Delete current user account
  */
-export const useAuthMeDestroy = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authMeDestroy>>, TError,void, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof authMeDestroy>>,
-        TError,
-        void,
-        TContext
-      > => {
+export const useAuthMeDestroy = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<Awaited<ReturnType<typeof authMeDestroy>>, TError, void, TContext>;
+}): UseMutationResult<Awaited<ReturnType<typeof authMeDestroy>>, TError, void, TContext> => {
+  const mutationOptions = getAuthMeDestroyMutationOptions(options);
 
-      const mutationOptions = getAuthMeDestroyMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Register a new user
  */
-export const authRegisterCreate = (
-    registerRequest: RegisterRequest,
- signal?: AbortSignal
-) => {
-      
-      
-      return axiosInstance<AuthResponse>(
-      {url: `/api/v1/auth/register/`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: registerRequest, signal
-    },
-      );
-    }
-  
+export const authRegisterCreate = (registerRequest: RegisterRequest, signal?: AbortSignal) => {
+  return axiosInstance<AuthResponse>({
+    url: `/api/v1/auth/register/`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: registerRequest,
+    signal,
+  });
+};
 
+export const getAuthRegisterCreateMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authRegisterCreate>>,
+    TError,
+    { data: RegisterRequest },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof authRegisterCreate>>,
+  TError,
+  { data: RegisterRequest },
+  TContext
+> => {
+  const mutationKey = ["authRegisterCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getAuthRegisterCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authRegisterCreate>>, TError,{data: RegisterRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof authRegisterCreate>>, TError,{data: RegisterRequest}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof authRegisterCreate>>,
+    { data: RegisterRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-const mutationKey = ['authRegisterCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return authRegisterCreate(data);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type AuthRegisterCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof authRegisterCreate>>
+>;
+export type AuthRegisterCreateMutationBody = RegisterRequest;
+export type AuthRegisterCreateMutationError = unknown;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authRegisterCreate>>, {data: RegisterRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  authRegisterCreate(data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AuthRegisterCreateMutationResult = NonNullable<Awaited<ReturnType<typeof authRegisterCreate>>>
-    export type AuthRegisterCreateMutationBody = RegisterRequest
-    export type AuthRegisterCreateMutationError = unknown
-
-    /**
+/**
  * @summary Register a new user
  */
-export const useAuthRegisterCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authRegisterCreate>>, TError,{data: RegisterRequest}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof authRegisterCreate>>,
-        TError,
-        {data: RegisterRequest},
-        TContext
-      > => {
+export const useAuthRegisterCreate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authRegisterCreate>>,
+    TError,
+    { data: RegisterRequest },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof authRegisterCreate>>,
+  TError,
+  { data: RegisterRequest },
+  TContext
+> => {
+  const mutationOptions = getAuthRegisterCreateMutationOptions(options);
 
-      const mutationOptions = getAuthRegisterCreateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Reset password with token
  */
 export const authResetPasswordCreate = (
-    resetPasswordRequest: ResetPasswordRequest,
- signal?: AbortSignal
+  resetPasswordRequest: ResetPasswordRequest,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return axiosInstance<void>(
-      {url: `/api/v1/auth/reset-password/`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: resetPasswordRequest, signal
-    },
-      );
-    }
-  
+  return axiosInstance<void>({
+    url: `/api/v1/auth/reset-password/`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: resetPasswordRequest,
+    signal,
+  });
+};
 
+export const getAuthResetPasswordCreateMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authResetPasswordCreate>>,
+    TError,
+    { data: ResetPasswordRequest },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof authResetPasswordCreate>>,
+  TError,
+  { data: ResetPasswordRequest },
+  TContext
+> => {
+  const mutationKey = ["authResetPasswordCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getAuthResetPasswordCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authResetPasswordCreate>>, TError,{data: ResetPasswordRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof authResetPasswordCreate>>, TError,{data: ResetPasswordRequest}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof authResetPasswordCreate>>,
+    { data: ResetPasswordRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-const mutationKey = ['authResetPasswordCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return authResetPasswordCreate(data);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type AuthResetPasswordCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof authResetPasswordCreate>>
+>;
+export type AuthResetPasswordCreateMutationBody = ResetPasswordRequest;
+export type AuthResetPasswordCreateMutationError = unknown;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authResetPasswordCreate>>, {data: ResetPasswordRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  authResetPasswordCreate(data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AuthResetPasswordCreateMutationResult = NonNullable<Awaited<ReturnType<typeof authResetPasswordCreate>>>
-    export type AuthResetPasswordCreateMutationBody = ResetPasswordRequest
-    export type AuthResetPasswordCreateMutationError = unknown
-
-    /**
+/**
  * @summary Reset password with token
  */
-export const useAuthResetPasswordCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authResetPasswordCreate>>, TError,{data: ResetPasswordRequest}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof authResetPasswordCreate>>,
-        TError,
-        {data: ResetPasswordRequest},
-        TContext
-      > => {
+export const useAuthResetPasswordCreate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authResetPasswordCreate>>,
+    TError,
+    { data: ResetPasswordRequest },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof authResetPasswordCreate>>,
+  TError,
+  { data: ResetPasswordRequest },
+  TContext
+> => {
+  const mutationOptions = getAuthResetPasswordCreateMutationOptions(options);
 
-      const mutationOptions = getAuthResetPasswordCreateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
+  return useMutation(mutationOptions);
+};

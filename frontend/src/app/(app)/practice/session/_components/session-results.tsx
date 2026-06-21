@@ -1,7 +1,6 @@
 "use client";
 
 import { ProgressRing } from "@/components/composites/progress-ring";
-import { cn } from "@/lib/utils";
 
 import type { SessionResult } from "./types";
 
@@ -38,16 +37,6 @@ export function SessionResults({ result, onExit }: SessionResultsProps) {
           </div>
           <div className="text-xs text-red-600/70 dark:text-red-400/70">Incorrect</div>
         </div>
-        {result.newItems > 0 && (
-          <div className={cn(
-            "flex-1 rounded-xl bg-blue-50 py-3 text-center dark:bg-blue-500/15",
-          )}>
-            <div className="text-lg font-bold text-blue-600 dark:text-blue-400">
-              {result.newItems}
-            </div>
-            <div className="text-xs text-blue-600/70 dark:text-blue-400/70">New</div>
-          </div>
-        )}
       </div>
 
       <button

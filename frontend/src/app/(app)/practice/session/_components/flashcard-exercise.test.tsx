@@ -3,17 +3,18 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 import { FlashcardExercise } from "./flashcard-exercise";
-import type { FlashcardExercise as FlashcardExerciseType } from "./types";
+import type { FlashcardExercise as FlashcardExerciseType } from "@/lib/api/orval/api/generated/model";
 
 const mockExercise: FlashcardExerciseType = {
+  id: "abc-123",
   exercise_type: "flashcard",
   item_id: "abc-123",
-  skill_type: "recognition",
-  is_new: true,
+  item_text: "der Tisch",
+  item_translation: "the table",
   front_text: "der Tisch",
-  front_hint: "noun",
+  front_context: "noun",
   back_text: "the table",
-  back_extra: "masculine",
+  back_context: "masculine",
 };
 
 describe("FlashcardExercise", () => {

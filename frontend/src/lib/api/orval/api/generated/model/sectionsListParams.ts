@@ -5,34 +5,34 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import type { SectionsListCategory } from './sectionsListCategory';
-import type { SectionsListContentType } from './sectionsListContentType';
+import type { SectionsListCategory } from "./sectionsListCategory";
+import type { SectionsListContentType } from "./sectionsListContentType";
 
 export type SectionsListParams = {
-/**
- * * `grammar` - Grammatik
-* `vocab` - Wortschatz
-* `verbs` - Verben
-* `phrases` - Phrasen
- */
-category?: SectionsListCategory;
-/**
- * * `table` - Table
-* `notes` - Notes
-* `grid` - Grid
- */
-content_type?: SectionsListContentType;
-level__code?: string;
-/**
- * Which field to use when ordering the results.
- */
-ordering?: string;
-/**
- * A page number within the paginated result set.
- */
-page?: number;
-/**
- * A search term.
- */
-search?: string;
+  /**
+   * * `grammar` - Grammatik
+   * `vocab` - Wortschatz
+   * `verbs` - Verben
+   * `phrases` - Phrasen
+   */
+  category?: SectionsListCategory;
+  /**
+   * * `table` - Table
+   * `notes` - Notes
+   * `grid` - Grid
+   */
+  content_type?: SectionsListContentType;
+  level__code?: string;
+  /**
+   * Which field to use when ordering the results.
+   */
+  ordering?: string;
+  /**
+   * A page number within the paginated result set.
+   */
+  page?: number;
+  /**
+   * A search term.
+   */
+  search?: string;
 };

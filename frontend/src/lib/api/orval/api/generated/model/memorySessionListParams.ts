@@ -7,12 +7,12 @@
  */
 
 export type MemorySessionListParams = {
-/**
- * Maximum items in session (default 20)
- */
-max_items?: number;
-/**
- * Skill type filter (recognition, production, listening, spelling)
- */
-skill_type?: string;
+  /**
+   * Maximum items in session (default 20)
+   */
+  max_items?: number;
+  /**
+   * Skill type filter (recognition, production, listening, spelling)
+   */
+  skill_type?: string;
 };

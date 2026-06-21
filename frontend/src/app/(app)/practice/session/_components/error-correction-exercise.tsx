@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
-import type { ErrorCorrectionExercise as ErrorCorrectionExerciseType } from "./types";
+import type { ErrorCorrectionExercise as ErrorCorrectionExerciseType } from "@/lib/api/orval/api/generated/model";
 
 interface ErrorCorrectionExerciseProps {
   exercise: ErrorCorrectionExerciseType;

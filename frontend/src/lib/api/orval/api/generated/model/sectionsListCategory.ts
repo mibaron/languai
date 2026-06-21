@@ -6,13 +6,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type SectionsListCategory = typeof SectionsListCategory[keyof typeof SectionsListCategory];
-
+export type SectionsListCategory = (typeof SectionsListCategory)[keyof typeof SectionsListCategory];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SectionsListCategory = {
-  grammar: 'grammar',
-  phrases: 'phrases',
-  verbs: 'verbs',
-  vocab: 'vocab',
+  grammar: "grammar",
+  phrases: "phrases",
+  verbs: "verbs",
+  vocab: "vocab",
 } as const;

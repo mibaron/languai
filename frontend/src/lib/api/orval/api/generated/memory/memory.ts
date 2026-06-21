@@ -5,10 +5,7 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
   MutationFunction,
   QueryFunction,
@@ -16,154 +13,161 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query";
 
 import type {
   MemorySessionListParams,
   ReviewRequestRequest,
   ReviewResponse,
-  SessionItem
-} from '.././model';
+  SessionItem,
+} from ".././model";
 
-import { axiosInstance } from '../../../client';
+import { axiosInstance } from "../../../client";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
-      type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
-
-
-
+type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
 /**
  * @summary Submit a review result
  */
 export const memoryReviewCreate = (
-    reviewRequestRequest: ReviewRequestRequest,
- signal?: AbortSignal
+  reviewRequestRequest: ReviewRequestRequest,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return axiosInstance<ReviewResponse>(
-      {url: `/api/v1/memory/review/`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: reviewRequestRequest, signal
-    },
-      );
-    }
-  
+  return axiosInstance<ReviewResponse>({
+    url: `/api/v1/memory/review/`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: reviewRequestRequest,
+    signal,
+  });
+};
 
+export const getMemoryReviewCreateMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof memoryReviewCreate>>,
+    TError,
+    { data: ReviewRequestRequest },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof memoryReviewCreate>>,
+  TError,
+  { data: ReviewRequestRequest },
+  TContext
+> => {
+  const mutationKey = ["memoryReviewCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getMemoryReviewCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof memoryReviewCreate>>, TError,{data: ReviewRequestRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof memoryReviewCreate>>, TError,{data: ReviewRequestRequest}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof memoryReviewCreate>>,
+    { data: ReviewRequestRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-const mutationKey = ['memoryReviewCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return memoryReviewCreate(data);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type MemoryReviewCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof memoryReviewCreate>>
+>;
+export type MemoryReviewCreateMutationBody = ReviewRequestRequest;
+export type MemoryReviewCreateMutationError = unknown;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof memoryReviewCreate>>, {data: ReviewRequestRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  memoryReviewCreate(data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type MemoryReviewCreateMutationResult = NonNullable<Awaited<ReturnType<typeof memoryReviewCreate>>>
-    export type MemoryReviewCreateMutationBody = ReviewRequestRequest
-    export type MemoryReviewCreateMutationError = unknown
-
-    /**
+/**
  * @summary Submit a review result
  */
-export const useMemoryReviewCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof memoryReviewCreate>>, TError,{data: ReviewRequestRequest}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof memoryReviewCreate>>,
-        TError,
-        {data: ReviewRequestRequest},
-        TContext
-      > => {
+export const useMemoryReviewCreate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof memoryReviewCreate>>,
+    TError,
+    { data: ReviewRequestRequest },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof memoryReviewCreate>>,
+  TError,
+  { data: ReviewRequestRequest },
+  TContext
+> => {
+  const mutationOptions = getMemoryReviewCreateMutationOptions(options);
 
-      const mutationOptions = getMemoryReviewCreateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Get a practice session
  */
-export const memorySessionList = (
-    params?: MemorySessionListParams,
- signal?: AbortSignal
+export const memorySessionList = (params?: MemorySessionListParams, signal?: AbortSignal) => {
+  return axiosInstance<SessionItem[]>({
+    url: `/api/v1/memory/session/`,
+    method: "GET",
+    params,
+    signal,
+  });
+};
+
+export const getMemorySessionListQueryKey = (params?: MemorySessionListParams) => {
+  return [`/api/v1/memory/session/`, ...(params ? [params] : [])] as const;
+};
+
+export const getMemorySessionListQueryOptions = <
+  TData = Awaited<ReturnType<typeof memorySessionList>>,
+  TError = unknown,
+>(
+  params?: MemorySessionListParams,
+  options?: {
+    query?: UseQueryOptions<Awaited<ReturnType<typeof memorySessionList>>, TError, TData>;
+  },
 ) => {
-      
-      
-      return axiosInstance<SessionItem[]>(
-      {url: `/api/v1/memory/session/`, method: 'GET',
-        params, signal
-    },
-      );
-    }
-  
+  const { query: queryOptions } = options ?? {};
 
+  const queryKey = queryOptions?.queryKey ?? getMemorySessionListQueryKey(params);
 
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof memorySessionList>>> = ({ signal }) =>
+    memorySessionList(params, signal);
 
-export const getMemorySessionListQueryKey = (params?: MemorySessionListParams,) => {
-    return [
-    `/api/v1/memory/session/`, ...(params ? [params]: [])
-    ] as const;
-    }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof memorySessionList>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    
-export const getMemorySessionListQueryOptions = <TData = Awaited<ReturnType<typeof memorySessionList>>, TError = unknown>(params?: MemorySessionListParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof memorySessionList>>, TError, TData>, }
-) => {
-
-const {query: queryOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getMemorySessionListQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof memorySessionList>>> = ({ signal }) => memorySessionList(params, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof memorySessionList>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type MemorySessionListQueryResult = NonNullable<Awaited<ReturnType<typeof memorySessionList>>>
-export type MemorySessionListQueryError = unknown
-
+export type MemorySessionListQueryResult = NonNullable<
+  Awaited<ReturnType<typeof memorySessionList>>
+>;
+export type MemorySessionListQueryError = unknown;
 
 /**
  * @summary Get a practice session
  */
 
-export function useMemorySessionList<TData = Awaited<ReturnType<typeof memorySessionList>>, TError = unknown>(
- params?: MemorySessionListParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof memorySessionList>>, TError, TData>, }
-  
- ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+export function useMemorySessionList<
+  TData = Awaited<ReturnType<typeof memorySessionList>>,
+  TError = unknown,
+>(
+  params?: MemorySessionListParams,
+  options?: {
+    query?: UseQueryOptions<Awaited<ReturnType<typeof memorySessionList>>, TError, TData>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getMemorySessionListQueryOptions(params, options);
 
-  const queryOptions = getMemorySessionListQueryOptions(params,options)
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-

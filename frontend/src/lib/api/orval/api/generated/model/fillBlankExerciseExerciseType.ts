@@ -6,10 +6,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type StoredSentenceOrderDetailExerciseType = typeof StoredSentenceOrderDetailExerciseType[keyof typeof StoredSentenceOrderDetailExerciseType];
-
+export type FillBlankExerciseExerciseType =
+  (typeof FillBlankExerciseExerciseType)[keyof typeof FillBlankExerciseExerciseType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const StoredSentenceOrderDetailExerciseType = {
-  sentence_order: 'sentence_order',
+export const FillBlankExerciseExerciseType = {
+  fill_blank: "fill_blank",
 } as const;

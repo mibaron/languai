@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
-import type { FillBlankExercise as FillBlankExerciseType } from "./types";
+import type { FillBlankExercise as FillBlankExerciseType } from "@/lib/api/orval/api/generated/model";
 
 interface FillBlankExerciseProps {
   exercise: FillBlankExerciseType;

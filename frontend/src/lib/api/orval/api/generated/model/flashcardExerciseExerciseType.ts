@@ -6,10 +6,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type StoredMCQDetailExerciseType = typeof StoredMCQDetailExerciseType[keyof typeof StoredMCQDetailExerciseType];
-
+export type FlashcardExerciseExerciseType =
+  (typeof FlashcardExerciseExerciseType)[keyof typeof FlashcardExerciseExerciseType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const StoredMCQDetailExerciseType = {
-  mcq_recognition: 'mcq_recognition',
+export const FlashcardExerciseExerciseType = {
+  flashcard: "flashcard",
 } as const;

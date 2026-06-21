@@ -5,7 +5,7 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import type { TableDetailPartType } from './tableDetailPartType';
+import type { TableDetailPartType } from "./tableDetailPartType";
 
 export interface TableDetail {
   readonly headers: readonly string[];

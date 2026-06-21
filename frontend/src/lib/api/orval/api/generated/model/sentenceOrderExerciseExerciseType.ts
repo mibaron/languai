@@ -6,10 +6,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type StoredMatchingDetailExerciseType = typeof StoredMatchingDetailExerciseType[keyof typeof StoredMatchingDetailExerciseType];
-
+export type SentenceOrderExerciseExerciseType =
+  (typeof SentenceOrderExerciseExerciseType)[keyof typeof SentenceOrderExerciseExerciseType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const StoredMatchingDetailExerciseType = {
-  matching: 'matching',
+export const SentenceOrderExerciseExerciseType = {
+  sentence_order: "sentence_order",
 } as const;

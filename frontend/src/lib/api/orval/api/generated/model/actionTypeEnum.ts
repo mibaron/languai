@@ -8,15 +8,14 @@
 
 /**
  * * `examples` - More Examples
-* `quiz` - Quiz / Question
-* `explanation` - Explanation
+ * `quiz` - Quiz / Question
+ * `explanation` - Explanation
  */
-export type ActionTypeEnum = typeof ActionTypeEnum[keyof typeof ActionTypeEnum];
-
+export type ActionTypeEnum = (typeof ActionTypeEnum)[keyof typeof ActionTypeEnum];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ActionTypeEnum = {
-  examples: 'examples',
-  quiz: 'quiz',
-  explanation: 'explanation',
+  examples: "examples",
+  quiz: "quiz",
+  explanation: "explanation",
 } as const;

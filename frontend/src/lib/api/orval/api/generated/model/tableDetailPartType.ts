@@ -6,10 +6,9 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type TableDetailPartType = typeof TableDetailPartType[keyof typeof TableDetailPartType];
-
+export type TableDetailPartType = (typeof TableDetailPartType)[keyof typeof TableDetailPartType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TableDetailPartType = {
-  table: 'table',
+  table: "table",
 } as const;

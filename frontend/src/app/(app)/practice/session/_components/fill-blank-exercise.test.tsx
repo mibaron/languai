@@ -3,13 +3,14 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 import { FillBlankExercise } from "./fill-blank-exercise";
-import type { FillBlankExercise as FillBlankExerciseType } from "./types";
+import type { FillBlankExercise as FillBlankExerciseType } from "@/lib/api/orval/api/generated/model";
 
 const mockExercise: FillBlankExerciseType = {
+  id: "ex-1",
   exercise_type: "fill_blank",
   item_id: "abc-123",
-  skill_type: "recognition",
-  is_new: false,
+  item_text: "Können Sie mir helfen?",
+  item_translation: "Can you help me?",
   text_before: "Können",
   text_after: "mir helfen?",
   answer: "Sie",

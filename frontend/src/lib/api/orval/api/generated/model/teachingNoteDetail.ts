@@ -5,7 +5,7 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import type { TeachingNoteDetailPartType } from './teachingNoteDetailPartType';
+import type { TeachingNoteDetailPartType } from "./teachingNoteDetailPartType";
 
 export interface TeachingNoteDetail {
   content: string;

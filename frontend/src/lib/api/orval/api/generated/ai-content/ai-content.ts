@@ -5,10 +5,7 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
   MutationFunction,
   QueryFunction,
@@ -16,8 +13,8 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query";
 
 import type {
   AIContent,
@@ -29,659 +26,648 @@ import type {
   PaginatedUserAIContentList,
   ShareKeyResponse,
   SharedAIContent,
-  UserCreditResponse
-} from '.././model';
+  UserCreditResponse,
+} from ".././model";
 
-import { axiosInstance } from '../../../client';
+import { axiosInstance } from "../../../client";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
-      type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
-
-
-
+type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
 /**
  * @summary Save AI content to user collection
  */
-export const aiSaveCreate = (
-    id: string,
- signal?: AbortSignal
-) => {
-      
-      
-      return axiosInstance<void>(
-      {url: `/api/v1/ai/${id}/save/`, method: 'POST', signal
-    },
-      );
-    }
-  
+export const aiSaveCreate = (id: string, signal?: AbortSignal) => {
+  return axiosInstance<void>({ url: `/api/v1/ai/${id}/save/`, method: "POST", signal });
+};
 
+export const getAiSaveCreateMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof aiSaveCreate>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof aiSaveCreate>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationKey = ["aiSaveCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getAiSaveCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof aiSaveCreate>>, TError,{id: string}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof aiSaveCreate>>, TError,{id: string}, TContext> => {
+  const mutationFn: MutationFunction<Awaited<ReturnType<typeof aiSaveCreate>>, { id: string }> = (
+    props,
+  ) => {
+    const { id } = props ?? {};
 
-const mutationKey = ['aiSaveCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return aiSaveCreate(id);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type AiSaveCreateMutationResult = NonNullable<Awaited<ReturnType<typeof aiSaveCreate>>>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof aiSaveCreate>>, {id: string}> = (props) => {
-          const {id} = props ?? {};
+export type AiSaveCreateMutationError = unknown;
 
-          return  aiSaveCreate(id,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AiSaveCreateMutationResult = NonNullable<Awaited<ReturnType<typeof aiSaveCreate>>>
-    
-    export type AiSaveCreateMutationError = unknown
-
-    /**
+/**
  * @summary Save AI content to user collection
  */
-export const useAiSaveCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof aiSaveCreate>>, TError,{id: string}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof aiSaveCreate>>,
-        TError,
-        {id: string},
-        TContext
-      > => {
+export const useAiSaveCreate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof aiSaveCreate>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof aiSaveCreate>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationOptions = getAiSaveCreateMutationOptions(options);
 
-      const mutationOptions = getAiSaveCreateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Delete a generated AI content entry
  */
-export const aiContentDestroy = (
-    id: string,
- ) => {
-      
-      
-      return axiosInstance<void>(
-      {url: `/api/v1/ai/content/${id}/`, method: 'DELETE'
-    },
-      );
-    }
-  
+export const aiContentDestroy = (id: string) => {
+  return axiosInstance<void>({ url: `/api/v1/ai/content/${id}/`, method: "DELETE" });
+};
 
+export const getAiContentDestroyMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof aiContentDestroy>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof aiContentDestroy>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationKey = ["aiContentDestroy"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getAiContentDestroyMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof aiContentDestroy>>, TError,{id: string}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof aiContentDestroy>>, TError,{id: string}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof aiContentDestroy>>,
+    { id: string }
+  > = (props) => {
+    const { id } = props ?? {};
 
-const mutationKey = ['aiContentDestroy'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return aiContentDestroy(id);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type AiContentDestroyMutationResult = NonNullable<
+  Awaited<ReturnType<typeof aiContentDestroy>>
+>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof aiContentDestroy>>, {id: string}> = (props) => {
-          const {id} = props ?? {};
+export type AiContentDestroyMutationError = unknown;
 
-          return  aiContentDestroy(id,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AiContentDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof aiContentDestroy>>>
-    
-    export type AiContentDestroyMutationError = unknown
-
-    /**
+/**
  * @summary Delete a generated AI content entry
  */
-export const useAiContentDestroy = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof aiContentDestroy>>, TError,{id: string}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof aiContentDestroy>>,
-        TError,
-        {id: string},
-        TContext
-      > => {
+export const useAiContentDestroy = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof aiContentDestroy>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof aiContentDestroy>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationOptions = getAiContentDestroyMutationOptions(options);
 
-      const mutationOptions = getAiContentDestroyMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary Get user credit balance
  */
-export const aiCreditRetrieve = (
-    
- signal?: AbortSignal
-) => {
-      
-      
-      return axiosInstance<UserCreditResponse>(
-      {url: `/api/v1/ai/credit/`, method: 'GET', signal
-    },
-      );
-    }
-  
-
-
+export const aiCreditRetrieve = (signal?: AbortSignal) => {
+  return axiosInstance<UserCreditResponse>({ url: `/api/v1/ai/credit/`, method: "GET", signal });
+};
 
 export const getAiCreditRetrieveQueryKey = () => {
-    return [
-    `/api/v1/ai/credit/`
-    ] as const;
-    }
+  return [`/api/v1/ai/credit/`] as const;
+};
 
-    
-export const getAiCreditRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof aiCreditRetrieve>>, TError = unknown>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof aiCreditRetrieve>>, TError, TData>, }
-) => {
+export const getAiCreditRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof aiCreditRetrieve>>,
+  TError = unknown,
+>(options?: {
+  query?: UseQueryOptions<Awaited<ReturnType<typeof aiCreditRetrieve>>, TError, TData>;
+}) => {
+  const { query: queryOptions } = options ?? {};
 
-const {query: queryOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getAiCreditRetrieveQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getAiCreditRetrieveQueryKey();
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof aiCreditRetrieve>>> = ({ signal }) =>
+    aiCreditRetrieve(signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof aiCreditRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof aiCreditRetrieve>>> = ({ signal }) => aiCreditRetrieve(signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof aiCreditRetrieve>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type AiCreditRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof aiCreditRetrieve>>>
-export type AiCreditRetrieveQueryError = unknown
-
+export type AiCreditRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof aiCreditRetrieve>>>;
+export type AiCreditRetrieveQueryError = unknown;
 
 /**
  * @summary Get user credit balance
  */
 
-export function useAiCreditRetrieve<TData = Awaited<ReturnType<typeof aiCreditRetrieve>>, TError = unknown>(
-  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof aiCreditRetrieve>>, TError, TData>, }
-  
- ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+export function useAiCreditRetrieve<
+  TData = Awaited<ReturnType<typeof aiCreditRetrieve>>,
+  TError = unknown,
+>(options?: {
+  query?: UseQueryOptions<Awaited<ReturnType<typeof aiCreditRetrieve>>, TError, TData>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getAiCreditRetrieveQueryOptions(options);
 
-  const queryOptions = getAiCreditRetrieveQueryOptions(options)
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
 
 /**
  * @summary Generate AI content for a learning item (cache-first)
  */
 export const aiGenerateCreate = (
-    aIGenerateRequestRequest: AIGenerateRequestRequest,
- signal?: AbortSignal
+  aIGenerateRequestRequest: AIGenerateRequestRequest,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return axiosInstance<AIContent>(
-      {url: `/api/v1/ai/generate/`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: aIGenerateRequestRequest, signal
-    },
-      );
-    }
-  
+  return axiosInstance<AIContent>({
+    url: `/api/v1/ai/generate/`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: aIGenerateRequestRequest,
+    signal,
+  });
+};
 
+export const getAiGenerateCreateMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof aiGenerateCreate>>,
+    TError,
+    { data: AIGenerateRequestRequest },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof aiGenerateCreate>>,
+  TError,
+  { data: AIGenerateRequestRequest },
+  TContext
+> => {
+  const mutationKey = ["aiGenerateCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getAiGenerateCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof aiGenerateCreate>>, TError,{data: AIGenerateRequestRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof aiGenerateCreate>>, TError,{data: AIGenerateRequestRequest}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof aiGenerateCreate>>,
+    { data: AIGenerateRequestRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-const mutationKey = ['aiGenerateCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return aiGenerateCreate(data);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type AiGenerateCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof aiGenerateCreate>>
+>;
+export type AiGenerateCreateMutationBody = AIGenerateRequestRequest;
+export type AiGenerateCreateMutationError = unknown;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof aiGenerateCreate>>, {data: AIGenerateRequestRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  aiGenerateCreate(data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AiGenerateCreateMutationResult = NonNullable<Awaited<ReturnType<typeof aiGenerateCreate>>>
-    export type AiGenerateCreateMutationBody = AIGenerateRequestRequest
-    export type AiGenerateCreateMutationError = unknown
-
-    /**
+/**
  * @summary Generate AI content for a learning item (cache-first)
  */
-export const useAiGenerateCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof aiGenerateCreate>>, TError,{data: AIGenerateRequestRequest}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof aiGenerateCreate>>,
-        TError,
-        {data: AIGenerateRequestRequest},
-        TContext
-      > => {
+export const useAiGenerateCreate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof aiGenerateCreate>>,
+    TError,
+    { data: AIGenerateRequestRequest },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof aiGenerateCreate>>,
+  TError,
+  { data: AIGenerateRequestRequest },
+  TContext
+> => {
+  const mutationOptions = getAiGenerateCreateMutationOptions(options);
 
-      const mutationOptions = getAiGenerateCreateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary List all generated content for a learning item
  */
 export const aiItemContentCreate = (
-    aIItemContentRequestRequest: AIItemContentRequestRequest,
- signal?: AbortSignal
+  aIItemContentRequestRequest: AIItemContentRequestRequest,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return axiosInstance<AIContent[]>(
-      {url: `/api/v1/ai/item-content/`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: aIItemContentRequestRequest, signal
-    },
-      );
-    }
-  
+  return axiosInstance<AIContent[]>({
+    url: `/api/v1/ai/item-content/`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: aIItemContentRequestRequest,
+    signal,
+  });
+};
 
+export const getAiItemContentCreateMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof aiItemContentCreate>>,
+    TError,
+    { data: AIItemContentRequestRequest },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof aiItemContentCreate>>,
+  TError,
+  { data: AIItemContentRequestRequest },
+  TContext
+> => {
+  const mutationKey = ["aiItemContentCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
-export const getAiItemContentCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof aiItemContentCreate>>, TError,{data: AIItemContentRequestRequest}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof aiItemContentCreate>>, TError,{data: AIItemContentRequestRequest}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof aiItemContentCreate>>,
+    { data: AIItemContentRequestRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-const mutationKey = ['aiItemContentCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+    return aiItemContentCreate(data);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type AiItemContentCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof aiItemContentCreate>>
+>;
+export type AiItemContentCreateMutationBody = AIItemContentRequestRequest;
+export type AiItemContentCreateMutationError = unknown;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof aiItemContentCreate>>, {data: AIItemContentRequestRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  aiItemContentCreate(data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AiItemContentCreateMutationResult = NonNullable<Awaited<ReturnType<typeof aiItemContentCreate>>>
-    export type AiItemContentCreateMutationBody = AIItemContentRequestRequest
-    export type AiItemContentCreateMutationError = unknown
-
-    /**
+/**
  * @summary List all generated content for a learning item
  */
-export const useAiItemContentCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof aiItemContentCreate>>, TError,{data: AIItemContentRequestRequest}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof aiItemContentCreate>>,
-        TError,
-        {data: AIItemContentRequestRequest},
-        TContext
-      > => {
+export const useAiItemContentCreate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof aiItemContentCreate>>,
+    TError,
+    { data: AIItemContentRequestRequest },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof aiItemContentCreate>>,
+  TError,
+  { data: AIItemContentRequestRequest },
+  TContext
+> => {
+  const mutationOptions = getAiItemContentCreateMutationOptions(options);
 
-      const mutationOptions = getAiItemContentCreateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
+  return useMutation(mutationOptions);
+};
+/**
  * @summary List active LLM models
  */
-export const aiModelsList = (
-    params?: AiModelsListParams,
- signal?: AbortSignal
+export const aiModelsList = (params?: AiModelsListParams, signal?: AbortSignal) => {
+  return axiosInstance<LLMModel[]>({ url: `/api/v1/ai/models/`, method: "GET", params, signal });
+};
+
+export const getAiModelsListQueryKey = (params?: AiModelsListParams) => {
+  return [`/api/v1/ai/models/`, ...(params ? [params] : [])] as const;
+};
+
+export const getAiModelsListQueryOptions = <
+  TData = Awaited<ReturnType<typeof aiModelsList>>,
+  TError = unknown,
+>(
+  params?: AiModelsListParams,
+  options?: { query?: UseQueryOptions<Awaited<ReturnType<typeof aiModelsList>>, TError, TData> },
 ) => {
-      
-      
-      return axiosInstance<LLMModel[]>(
-      {url: `/api/v1/ai/models/`, method: 'GET',
-        params, signal
-    },
-      );
-    }
-  
+  const { query: queryOptions } = options ?? {};
 
+  const queryKey = queryOptions?.queryKey ?? getAiModelsListQueryKey(params);
 
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof aiModelsList>>> = ({ signal }) =>
+    aiModelsList(params, signal);
 
-export const getAiModelsListQueryKey = (params?: AiModelsListParams,) => {
-    return [
-    `/api/v1/ai/models/`, ...(params ? [params]: [])
-    ] as const;
-    }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof aiModelsList>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    
-export const getAiModelsListQueryOptions = <TData = Awaited<ReturnType<typeof aiModelsList>>, TError = unknown>(params?: AiModelsListParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof aiModelsList>>, TError, TData>, }
-) => {
-
-const {query: queryOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getAiModelsListQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof aiModelsList>>> = ({ signal }) => aiModelsList(params, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof aiModelsList>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type AiModelsListQueryResult = NonNullable<Awaited<ReturnType<typeof aiModelsList>>>
-export type AiModelsListQueryError = unknown
-
+export type AiModelsListQueryResult = NonNullable<Awaited<ReturnType<typeof aiModelsList>>>;
+export type AiModelsListQueryError = unknown;
 
 /**
  * @summary List active LLM models
  */
 
 export function useAiModelsList<TData = Awaited<ReturnType<typeof aiModelsList>>, TError = unknown>(
- params?: AiModelsListParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof aiModelsList>>, TError, TData>, }
-  
- ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  params?: AiModelsListParams,
+  options?: { query?: UseQueryOptions<Awaited<ReturnType<typeof aiModelsList>>, TError, TData> },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getAiModelsListQueryOptions(params, options);
 
-  const queryOptions = getAiModelsListQueryOptions(params,options)
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
 /**
  * @summary List user's saved AI content
  */
-export const aiSavedList = (
-    params?: AiSavedListParams,
- signal?: AbortSignal
+export const aiSavedList = (params?: AiSavedListParams, signal?: AbortSignal) => {
+  return axiosInstance<PaginatedUserAIContentList>({
+    url: `/api/v1/ai/saved/`,
+    method: "GET",
+    params,
+    signal,
+  });
+};
+
+export const getAiSavedListQueryKey = (params?: AiSavedListParams) => {
+  return [`/api/v1/ai/saved/`, ...(params ? [params] : [])] as const;
+};
+
+export const getAiSavedListQueryOptions = <
+  TData = Awaited<ReturnType<typeof aiSavedList>>,
+  TError = unknown,
+>(
+  params?: AiSavedListParams,
+  options?: { query?: UseQueryOptions<Awaited<ReturnType<typeof aiSavedList>>, TError, TData> },
 ) => {
-      
-      
-      return axiosInstance<PaginatedUserAIContentList>(
-      {url: `/api/v1/ai/saved/`, method: 'GET',
-        params, signal
-    },
-      );
-    }
-  
+  const { query: queryOptions } = options ?? {};
 
+  const queryKey = queryOptions?.queryKey ?? getAiSavedListQueryKey(params);
 
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof aiSavedList>>> = ({ signal }) =>
+    aiSavedList(params, signal);
 
-export const getAiSavedListQueryKey = (params?: AiSavedListParams,) => {
-    return [
-    `/api/v1/ai/saved/`, ...(params ? [params]: [])
-    ] as const;
-    }
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof aiSavedList>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    
-export const getAiSavedListQueryOptions = <TData = Awaited<ReturnType<typeof aiSavedList>>, TError = unknown>(params?: AiSavedListParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof aiSavedList>>, TError, TData>, }
-) => {
-
-const {query: queryOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getAiSavedListQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof aiSavedList>>> = ({ signal }) => aiSavedList(params, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof aiSavedList>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type AiSavedListQueryResult = NonNullable<Awaited<ReturnType<typeof aiSavedList>>>
-export type AiSavedListQueryError = unknown
-
+export type AiSavedListQueryResult = NonNullable<Awaited<ReturnType<typeof aiSavedList>>>;
+export type AiSavedListQueryError = unknown;
 
 /**
  * @summary List user's saved AI content
  */
 
 export function useAiSavedList<TData = Awaited<ReturnType<typeof aiSavedList>>, TError = unknown>(
- params?: AiSavedListParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof aiSavedList>>, TError, TData>, }
-  
- ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  params?: AiSavedListParams,
+  options?: { query?: UseQueryOptions<Awaited<ReturnType<typeof aiSavedList>>, TError, TData> },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getAiSavedListQueryOptions(params, options);
 
-  const queryOptions = getAiSavedListQueryOptions(params,options)
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-/**
- * @summary Remove AI content from user collection
- */
-export const aiSavedDestroy = (
-    id: string,
- ) => {
-      
-      
-      return axiosInstance<void>(
-      {url: `/api/v1/ai/saved/${id}/`, method: 'DELETE'
-    },
-      );
-    }
-  
-
-
-export const getAiSavedDestroyMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof aiSavedDestroy>>, TError,{id: string}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof aiSavedDestroy>>, TError,{id: string}, TContext> => {
-
-const mutationKey = ['aiSavedDestroy'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof aiSavedDestroy>>, {id: string}> = (props) => {
-          const {id} = props ?? {};
-
-          return  aiSavedDestroy(id,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AiSavedDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof aiSavedDestroy>>>
-    
-    export type AiSavedDestroyMutationError = unknown
-
-    /**
- * @summary Remove AI content from user collection
- */
-export const useAiSavedDestroy = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof aiSavedDestroy>>, TError,{id: string}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof aiSavedDestroy>>,
-        TError,
-        {id: string},
-        TContext
-      > => {
-
-      const mutationOptions = getAiSavedDestroyMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
- * @summary Generate share key for saved AI content
- */
-export const aiSavedShareCreate = (
-    id: string,
- signal?: AbortSignal
-) => {
-      
-      
-      return axiosInstance<ShareKeyResponse>(
-      {url: `/api/v1/ai/saved/${id}/share/`, method: 'POST', signal
-    },
-      );
-    }
-  
-
-
-export const getAiSavedShareCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof aiSavedShareCreate>>, TError,{id: string}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof aiSavedShareCreate>>, TError,{id: string}, TContext> => {
-
-const mutationKey = ['aiSavedShareCreate'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof aiSavedShareCreate>>, {id: string}> = (props) => {
-          const {id} = props ?? {};
-
-          return  aiSavedShareCreate(id,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AiSavedShareCreateMutationResult = NonNullable<Awaited<ReturnType<typeof aiSavedShareCreate>>>
-    
-    export type AiSavedShareCreateMutationError = unknown
-
-    /**
- * @summary Generate share key for saved AI content
- */
-export const useAiSavedShareCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof aiSavedShareCreate>>, TError,{id: string}, TContext>, }
- ): UseMutationResult<
-        Awaited<ReturnType<typeof aiSavedShareCreate>>,
-        TError,
-        {id: string},
-        TContext
-      > => {
-
-      const mutationOptions = getAiSavedShareCreateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    /**
- * @summary View shared AI content by share key
- */
-export const aiSharedRetrieve = (
-    shareKey: string,
- signal?: AbortSignal
-) => {
-      
-      
-      return axiosInstance<SharedAIContent>(
-      {url: `/api/v1/ai/shared/${shareKey}/`, method: 'GET', signal
-    },
-      );
-    }
-  
-
-
-
-export const getAiSharedRetrieveQueryKey = (shareKey?: string,) => {
-    return [
-    `/api/v1/ai/shared/${shareKey}/`
-    ] as const;
-    }
-
-    
-export const getAiSharedRetrieveQueryOptions = <TData = Awaited<ReturnType<typeof aiSharedRetrieve>>, TError = unknown>(shareKey: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof aiSharedRetrieve>>, TError, TData>, }
-) => {
-
-const {query: queryOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getAiSharedRetrieveQueryKey(shareKey);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof aiSharedRetrieve>>> = ({ signal }) => aiSharedRetrieve(shareKey, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(shareKey), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof aiSharedRetrieve>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type AiSharedRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof aiSharedRetrieve>>>
-export type AiSharedRetrieveQueryError = unknown
-
-
-/**
- * @summary View shared AI content by share key
- */
-
-export function useAiSharedRetrieve<TData = Awaited<ReturnType<typeof aiSharedRetrieve>>, TError = unknown>(
- shareKey: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof aiSharedRetrieve>>, TError, TData>, }
-  
- ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getAiSharedRetrieveQueryOptions(shareKey,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
+/**
+ * @summary Remove AI content from user collection
+ */
+export const aiSavedDestroy = (id: string) => {
+  return axiosInstance<void>({ url: `/api/v1/ai/saved/${id}/`, method: "DELETE" });
+};
 
+export const getAiSavedDestroyMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof aiSavedDestroy>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof aiSavedDestroy>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationKey = ["aiSavedDestroy"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
 
+  const mutationFn: MutationFunction<Awaited<ReturnType<typeof aiSavedDestroy>>, { id: string }> = (
+    props,
+  ) => {
+    const { id } = props ?? {};
+
+    return aiSavedDestroy(id);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AiSavedDestroyMutationResult = NonNullable<Awaited<ReturnType<typeof aiSavedDestroy>>>;
+
+export type AiSavedDestroyMutationError = unknown;
+
+/**
+ * @summary Remove AI content from user collection
+ */
+export const useAiSavedDestroy = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof aiSavedDestroy>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof aiSavedDestroy>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationOptions = getAiSavedDestroyMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+/**
+ * @summary Generate share key for saved AI content
+ */
+export const aiSavedShareCreate = (id: string, signal?: AbortSignal) => {
+  return axiosInstance<ShareKeyResponse>({
+    url: `/api/v1/ai/saved/${id}/share/`,
+    method: "POST",
+    signal,
+  });
+};
+
+export const getAiSavedShareCreateMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof aiSavedShareCreate>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof aiSavedShareCreate>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationKey = ["aiSavedShareCreate"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof aiSavedShareCreate>>,
+    { id: string }
+  > = (props) => {
+    const { id } = props ?? {};
+
+    return aiSavedShareCreate(id);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AiSavedShareCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof aiSavedShareCreate>>
+>;
+
+export type AiSavedShareCreateMutationError = unknown;
+
+/**
+ * @summary Generate share key for saved AI content
+ */
+export const useAiSavedShareCreate = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof aiSavedShareCreate>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof aiSavedShareCreate>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationOptions = getAiSavedShareCreateMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+/**
+ * @summary View shared AI content by share key
+ */
+export const aiSharedRetrieve = (shareKey: string, signal?: AbortSignal) => {
+  return axiosInstance<SharedAIContent>({
+    url: `/api/v1/ai/shared/${shareKey}/`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getAiSharedRetrieveQueryKey = (shareKey?: string) => {
+  return [`/api/v1/ai/shared/${shareKey}/`] as const;
+};
+
+export const getAiSharedRetrieveQueryOptions = <
+  TData = Awaited<ReturnType<typeof aiSharedRetrieve>>,
+  TError = unknown,
+>(
+  shareKey: string,
+  options?: {
+    query?: UseQueryOptions<Awaited<ReturnType<typeof aiSharedRetrieve>>, TError, TData>;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getAiSharedRetrieveQueryKey(shareKey);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof aiSharedRetrieve>>> = ({ signal }) =>
+    aiSharedRetrieve(shareKey, signal);
+
+  return { queryKey, queryFn, enabled: !!shareKey, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof aiSharedRetrieve>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type AiSharedRetrieveQueryResult = NonNullable<Awaited<ReturnType<typeof aiSharedRetrieve>>>;
+export type AiSharedRetrieveQueryError = unknown;
+
+/**
+ * @summary View shared AI content by share key
+ */
+
+export function useAiSharedRetrieve<
+  TData = Awaited<ReturnType<typeof aiSharedRetrieve>>,
+  TError = unknown,
+>(
+  shareKey: string,
+  options?: {
+    query?: UseQueryOptions<Awaited<ReturnType<typeof aiSharedRetrieve>>, TError, TData>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getAiSharedRetrieveQueryOptions(shareKey, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}

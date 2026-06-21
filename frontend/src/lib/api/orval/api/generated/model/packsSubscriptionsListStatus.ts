@@ -6,12 +6,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type PacksSubscriptionsListStatus = typeof PacksSubscriptionsListStatus[keyof typeof PacksSubscriptionsListStatus];
-
+export type PacksSubscriptionsListStatus =
+  (typeof PacksSubscriptionsListStatus)[keyof typeof PacksSubscriptionsListStatus];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PacksSubscriptionsListStatus = {
-  active: 'active',
-  archived: 'archived',
-  completed: 'completed',
+  active: "active",
+  archived: "archived",
+  completed: "completed",
 } as const;

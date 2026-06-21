@@ -5,7 +5,7 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import type { SectionProgress } from './sectionProgress';
+import type { SectionProgress } from "./sectionProgress";
 
 export interface PaginatedSectionProgressList {
   count: number;

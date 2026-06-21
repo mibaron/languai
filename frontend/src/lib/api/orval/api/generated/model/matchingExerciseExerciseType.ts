@@ -6,10 +6,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type StoredFillBlankDetailExerciseType = typeof StoredFillBlankDetailExerciseType[keyof typeof StoredFillBlankDetailExerciseType];
-
+export type MatchingExerciseExerciseType =
+  (typeof MatchingExerciseExerciseType)[keyof typeof MatchingExerciseExerciseType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const StoredFillBlankDetailExerciseType = {
-  fill_blank: 'fill_blank',
+export const MatchingExerciseExerciseType = {
+  matching: "matching",
 } as const;

@@ -5,8 +5,8 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import type { PartTypeEnum } from './partTypeEnum';
-import type { PagePartDetail } from './pagePartDetail';
+import type { PartTypeEnum } from "./partTypeEnum";
+import type { PagePartDetail } from "./pagePartDetail";
 
 export interface PagePart {
   readonly id: string;

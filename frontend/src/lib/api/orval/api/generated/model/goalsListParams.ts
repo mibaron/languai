@@ -7,12 +7,12 @@
  */
 
 export type GoalsListParams = {
-/**
- * Which field to use when ordering the results.
- */
-ordering?: string;
-/**
- * A search term.
- */
-search?: string;
+  /**
+   * Which field to use when ordering the results.
+   */
+  ordering?: string;
+  /**
+   * A search term.
+   */
+  search?: string;
 };

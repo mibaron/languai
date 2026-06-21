@@ -8,17 +8,16 @@
 
 /**
  * * `grammar` - Grammatik
-* `vocab` - Wortschatz
-* `verbs` - Verben
-* `phrases` - Phrasen
+ * `vocab` - Wortschatz
+ * `verbs` - Verben
+ * `phrases` - Phrasen
  */
-export type CategoryEnum = typeof CategoryEnum[keyof typeof CategoryEnum];
-
+export type CategoryEnum = (typeof CategoryEnum)[keyof typeof CategoryEnum];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CategoryEnum = {
-  grammar: 'grammar',
-  vocab: 'vocab',
-  verbs: 'verbs',
-  phrases: 'phrases',
+  grammar: "grammar",
+  vocab: "vocab",
+  verbs: "verbs",
+  phrases: "phrases",
 } as const;

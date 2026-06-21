@@ -5,7 +5,7 @@
  * API for the Langu-AI German language learning platform
  * OpenAPI spec version: 1.0.0
  */
-import type { UserAIContent } from './userAIContent';
+import type { UserAIContent } from "./userAIContent";
 
 export interface PaginatedUserAIContentList {
   count: number;

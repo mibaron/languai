@@ -8,15 +8,15 @@
 
 /**
  * * `active` - Active
-* `archived` - Archived
-* `completed` - Completed
+ * `archived` - Archived
+ * `completed` - Completed
  */
-export type SubscriptionStatusEnum = typeof SubscriptionStatusEnum[keyof typeof SubscriptionStatusEnum];
-
+export type SubscriptionStatusEnum =
+  (typeof SubscriptionStatusEnum)[keyof typeof SubscriptionStatusEnum];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SubscriptionStatusEnum = {
-  active: 'active',
-  archived: 'archived',
-  completed: 'completed',
+  active: "active",
+  archived: "archived",
+  completed: "completed",
 } as const;

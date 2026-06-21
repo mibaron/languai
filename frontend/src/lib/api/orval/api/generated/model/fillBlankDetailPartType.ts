@@ -6,10 +6,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type FillBlankDetailPartType = typeof FillBlankDetailPartType[keyof typeof FillBlankDetailPartType];
-
+export type FillBlankDetailPartType =
+  (typeof FillBlankDetailPartType)[keyof typeof FillBlankDetailPartType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const FillBlankDetailPartType = {
-  fill_blank: 'fill_blank',
+  fill_blank: "fill_blank",
 } as const;

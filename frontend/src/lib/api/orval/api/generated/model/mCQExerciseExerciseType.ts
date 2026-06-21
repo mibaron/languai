@@ -6,17 +6,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- * * `creator` - Pack Creator
-* `engine` - Auto-generated
-* `ai` - AI-generated
- */
-export type SourceEnum = typeof SourceEnum[keyof typeof SourceEnum];
-
+export type MCQExerciseExerciseType =
+  (typeof MCQExerciseExerciseType)[keyof typeof MCQExerciseExerciseType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const SourceEnum = {
-  creator: 'creator',
-  engine: 'engine',
-  ai: 'ai',
+export const MCQExerciseExerciseType = {
+  mcq_recognition: "mcq_recognition",
 } as const;

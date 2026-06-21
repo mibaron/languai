@@ -9,7 +9,7 @@ import type {
   SentenceOrderExercise,
   ErrorCorrectionExercise,
   MatchingExercise,
-} from "./types";
+} from "@/lib/api/orval/api/generated/model";
 
 const baseProps = {
   isRevealed: false,
@@ -22,23 +22,25 @@ const baseProps = {
 };
 
 const flashcard: FlashcardExercise = {
+  id: "1",
   exercise_type: "flashcard",
   item_id: "1",
-  skill_type: "recognition",
-  is_new: false,
+  item_text: "Hund",
+  item_translation: "Dog",
   front_text: "Hund",
-  front_hint: "noun",
+  front_context: "noun",
   back_text: "Dog",
-  back_extra: "",
+  back_context: "",
 };
 
 const mcq: MCQExercise = {
+  id: "2",
   exercise_type: "mcq_recognition",
   item_id: "2",
-  skill_type: "recognition",
-  is_new: false,
-  prompt_text: "What is Hund?",
-  prompt_hint: "Translate",
+  item_text: "Hund",
+  item_translation: "Dog",
+  question: "What is Hund?",
+  explanation: "",
   choices: [
     { id: "a", text: "Dog" },
     { id: "b", text: "Cat" },
@@ -47,10 +49,11 @@ const mcq: MCQExercise = {
 };
 
 const fillBlank: FillBlankExercise = {
+  id: "3",
   exercise_type: "fill_blank",
   item_id: "3",
-  skill_type: "recognition",
-  is_new: false,
+  item_text: "Ich bin Student.",
+  item_translation: "I am a student.",
   text_before: "Ich",
   text_after: "Student.",
   answer: "bin",
@@ -60,20 +63,22 @@ const fillBlank: FillBlankExercise = {
 };
 
 const sentenceOrder: SentenceOrderExercise = {
+  id: "4",
   exercise_type: "sentence_order",
   item_id: "4",
-  skill_type: "recognition",
-  is_new: false,
+  item_text: "Ich bin",
+  item_translation: "I am",
   jumbled_words: ["bin", "Ich"],
   correct_answers: [["Ich", "bin"]],
   hint: "",
 };
 
 const errorCorrection: ErrorCorrectionExercise = {
+  id: "5",
   exercise_type: "error_correction",
   item_id: "5",
-  skill_type: "recognition",
-  is_new: false,
+  item_text: "Ich bin gut.",
+  item_translation: "I am good.",
   sentence: "Ich bist gut.",
   error_start: 4,
   error_end: 8,
@@ -83,10 +88,11 @@ const errorCorrection: ErrorCorrectionExercise = {
 };
 
 const matching: MatchingExercise = {
+  id: "6",
   exercise_type: "matching",
   item_id: "6",
-  skill_type: "recognition",
-  is_new: false,
+  item_text: "Ja",
+  item_translation: "Yes",
   instruction: "Match pairs",
   pairs: [{ left: "Ja", right: "Yes" }],
 };
