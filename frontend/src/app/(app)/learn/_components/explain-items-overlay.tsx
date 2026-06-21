@@ -1,8 +1,16 @@
 "use client";
 
 import type { PageLexicalItem } from "@/lib/api/orval/api/generated/model";
+import type { CategoryEnum } from "@/lib/api/orval/api/generated/model/categoryEnum";
 import { Sparkles } from "lucide-react";
 import { AIItemContext } from "@/types/ai-content";
+
+const itemTypeToCategory: Record<string, CategoryEnum> = {
+  vocab: "vocab",
+  verb: "verbs",
+  phrase: "phrases",
+  grammar_rule: "grammar",
+};
 
 interface ExplainItemsOverlayProps {
   items: readonly PageLexicalItem[];
@@ -40,7 +48,7 @@ export function ExplainItemsOverlay({
               onClick={() =>
                 onExplain({
                   levelCode,
-                  category: li.type,
+                  category: itemTypeToCategory[li.type] ?? "vocab",
                   sectionTitle: pageTitle,
                   itemCells: [li.text, li.translation],
                   itemOrder: li.order ?? 0,
