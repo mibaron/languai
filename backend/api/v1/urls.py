@@ -40,6 +40,7 @@ from apps.users.views import (
     LogoutView,
     MeView,
     OnboardingView,
+    RedeemVoucherView,
     RegisterView,
     ResetPasswordView,
 )
@@ -115,6 +116,8 @@ urlpatterns = [
         ResetPackProgressView.as_view(),
         name="pack-progress-reset",
     ),
+    # Vouchers
+    path("vouchers/redeem/", RedeemVoucherView.as_view(), name="voucher-redeem"),
     # Nested routes
     path("sections/<uuid:section_pk>/items/", include(items_router.urls)),
     path("", include(router.urls)),

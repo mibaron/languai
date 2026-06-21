@@ -34,3 +34,6 @@ class User(AbstractUser):
 
     def __str__(self) -> str:
         return self.username
+
+
+from apps.users.voucher_models import Voucher  # noqa: E402, F401

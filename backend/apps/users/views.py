@@ -22,6 +22,8 @@ from .serializers import (
     LoginSerializer,
     OnboardingCompleteSerializer,
     OnboardingStatusSerializer,
+    RedeemVoucherResponseSerializer,
+    RedeemVoucherSerializer,
     RegisterSerializer,
     ResetPasswordSerializer,
     UserSerializer,
@@ -362,5 +364,60 @@ class OnboardingView(APIView):
                 "current_level": user.current_level,
                 "pack_ids": subscribed_pack_ids,
                 "learning_goal": user.learning_goal_id,
+            }
+        )
+
+
+class RedeemVoucherView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = RedeemVoucherSerializer
+
+    @extend_schema(
+        summary="Redeem a voucher code",
+        tags=["vouchers"],
+        request=RedeemVoucherSerializer,
+        responses={
+            200: RedeemVoucherResponseSerializer,
+            400: None,
+            404: None,
+        },
+    )
+    def post(self, request: Request) -> Response:
+        from django.db import transaction
+        from django.utils import timezone
+
+        from .voucher_models import Voucher
+
+        serializer = RedeemVoucherSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        code = serializer.validated_data["code"].strip().upper()
+
+        try:
+            voucher = Voucher.objects.get(code__iexact=code)
+        except Voucher.DoesNotExist:
+            return Response(
+                {"error": {"code": "voucher_not_found", "message": "Invalid voucher code"}},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if voucher.is_used:
+            return Response(
+                {"error": {"code": "voucher_already_used", "message": "This voucher has already been used"}},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        with transaction.atomic():
+            voucher.used_by = request.user
+            voucher.used_at = timezone.now()
+            voucher.save(update_fields=["used_by", "used_at"])
+
+            request.user.credit_balance += voucher.amount
+            request.user.save(update_fields=["credit_balance"])
+
+        return Response(
+            {
+                "amount": str(voucher.amount),
+                "new_balance": str(request.user.credit_balance),
             }
         )

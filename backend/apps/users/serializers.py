@@ -127,3 +127,12 @@ class OnboardingCompleteSerializer(serializers.Serializer):
     native_language = serializers.CharField(max_length=10)
     pack_ids = serializers.ListField(child=serializers.UUIDField(), min_length=1)
     learning_goal = serializers.UUIDField(required=False, allow_null=True)
+
+
+class RedeemVoucherSerializer(serializers.Serializer):
+    code = serializers.CharField(max_length=50)
+
+
+class RedeemVoucherResponseSerializer(serializers.Serializer):
+    amount = serializers.DecimalField(max_digits=5, decimal_places=2)
+    new_balance = serializers.DecimalField(max_digits=10, decimal_places=6)
